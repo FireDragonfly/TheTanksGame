@@ -10,5 +10,11 @@ public class Tank extends GameObject {
         super(texture, x, y, width, height);
     }
 
-    //public float getX();
+    public void setX(float x) {
+        bounds.setX(x);
+    }
+
+    public void setY(float y) {
+        bounds.setY(y);
+    }
 }

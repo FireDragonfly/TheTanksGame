@@ -3,6 +3,7 @@ package com.hvitalii.thetanksgame.View;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.hvitalii.thetanksgame.Model.Tank;
@@ -12,6 +13,7 @@ public class GameScreen implements Screen {
     private Texture tankTexture;
     private SpriteBatch batch;
     private Tank tank;
+    private OrthographicCamera camera;
 
     private float positionY = 0F;
 
@@ -28,6 +30,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         positionY++;
+        tank.setY(positionY);
         batch.begin();
         tank.draw(batch);
         batch.end();
