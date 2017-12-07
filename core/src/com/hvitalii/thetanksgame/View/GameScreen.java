@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.hvitalii.thetanksgame.Model.Tank;
+import com.hvitalii.thetanksgame.Objects.Tank;
 
 public class GameScreen implements Screen {
 
@@ -21,7 +21,7 @@ public class GameScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
         tankTexture = new Texture(Gdx.files.internal("t1.png"));
-        tank = new Tank(tankTexture, 0 ,0, 64, 64);
+        tank = new Tank(0 ,0, 64, 64);
     }
 
     @Override
