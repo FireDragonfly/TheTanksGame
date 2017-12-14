@@ -4,15 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.hvitalii.thetanksgame.Model.Tank;
 
 public class GameScreen implements Screen {
 
-    private Texture tankTexture;
     private SpriteBatch batch;
-    private Tank tank;
     private OrthographicCamera camera;
 
     private float positionY = 0F;
@@ -20,19 +16,19 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        tankTexture = new Texture(Gdx.files.internal("t1.png"));
-        tank = new Tank(tankTexture, 0 ,0, 64, 64);
+//        tankTexture = new Texture(Gdx.files.internal("t1.png"));
+//        tank = new PlayerTank(0 ,0, 64, 64);
+        Gdx.gl.glClearColor(1 ,0, 0, 1);
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0 ,0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         positionY++;
-        tank.setY(positionY);
+//        tank.setY(positionY);
         batch.begin();
-        tank.draw(batch);
+//        tank.draw(batch);
         batch.end();
     }
 
@@ -58,7 +54,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        tankTexture.dispose();
+//        tankTexture.dispose();
         batch.dispose();
     }
 }
