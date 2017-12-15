@@ -23,6 +23,7 @@ abstract class GameObject extends Rectangle {
         public static final int BLOCK = 0;
         public static final int BOT = 1;
         public static final int USER = 2;
+        public static final int BULLET = 3;
     }
 
     public static class Levels {

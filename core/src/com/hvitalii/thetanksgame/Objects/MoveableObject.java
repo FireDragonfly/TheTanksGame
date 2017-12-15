@@ -2,7 +2,6 @@ package com.hvitalii.thetanksgame.Objects;
 
 
 import com.badlogic.gdx.math.Rectangle;
-import com.hvitalii.thetanksgame.Constants.*;
 
 abstract class MoveableObject extends GameObject{
 
