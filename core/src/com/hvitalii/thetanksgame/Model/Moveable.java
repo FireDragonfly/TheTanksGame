@@ -9,8 +9,8 @@ abstract class Moveable extends Rectangle {
     private float previousDirection;
 
 
-    Moveable(float direction, float speed) {
-        super();
+    Moveable(Rectangle rectangle, float direction, float speed) {
+        super(rectangle);
         this.speed = speed;
         this.direction = direction;
         previousDirection = direction;

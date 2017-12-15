@@ -11,40 +11,45 @@ public class PlayerTankView{
 
     private TextureAtlas atlas;
     private Sprite[] sprites;
-    private PlayerTankModel tank;
+    private PlayerTankModel model;
 
-    public PlayerTankView(TextureAtlas atlas, PlayerTankModel tank) {
+    public PlayerTankView(TextureAtlas atlas, PlayerTankModel model) {
         sprites = new Sprite[2];
         this.atlas = atlas;
-        this.tank = tank;
+        this.model = model;
         for (int i = 0; i < 2; i++) {
-            sprites[i] = new Sprite(atlas.findRegion(ObjectsConstants.PLAYER_TANKS_NAMES[tank.getLevel()], i));
-            sprites[i].setColor(Colors.PLAYERS_COLORS[tank.getPlayerNumber()]);
+            sprites[i] = new Sprite(atlas.findRegion(ObjectsConstants.PLAYER_TANKS_NAMES[model.getLevel()], i));
+            sprites[i].setBounds(model.x, model.y, model.width, model.height);
+            sprites[i].setColor(Colors.PLAYERS_COLORS[model.getPlayerNumber()]);
             sprites[i].setOriginCenter();
-        }
-    }
-
-    private void updateSprites() {
-        if (tank.isDirectionChanged()) {
-            for (int i = 0; i < 2; i++) {
-                sprites[i].setRotation(tank.getDirection());
-            }
-        }
-        for (int i = 0; i < 2; i++) {
-            sprites[0].setX(tank.getX());
-            sprites[0].setY(tank.getY());
         }
     }
 
     public void draw(SpriteBatch batch) {
         updateSprites();
-        sprites[tank.getAnimationFrame()].draw(batch);
+        sprites[model.getAnimationFrame()].draw(batch);
 
     }
 
     public void levelChanged() {
         for (int i = 0; i < 2; i++) {
-            sprites[i].setRegion(atlas.findRegion(ObjectsConstants.PLAYER_TANKS_NAMES[tank.getLevel()], i));
+            sprites[i].setRegion(atlas.findRegion(ObjectsConstants.PLAYER_TANKS_NAMES[model.getLevel()], i));
         }
+    }
+
+    private void updateSprites() {
+        if (model.isDirectionChanged()) {
+            for (int i = 0; i < 2; i++) {
+                sprites[i].setRotation(model.getDirection());
+            }
+        }
+        for (int i = 0; i < 2; i++) {
+            sprites[i].setX(model.getX());
+            sprites[i].setY(model.getY());
+        }
+    }
+
+    public TextureAtlas getAtlas() {
+        return atlas;
     }
 }

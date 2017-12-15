@@ -25,6 +25,13 @@ public class ObjectsConstants {
             "bot_heavy"
     };
 
+    public static class Size {
+        public static final float BULLET = 4;
+        public static final float TANK = 16;
+        public static final float TILE = 8;
+        public static final float BLOCK = 16;
+    }
+
     public static class Direction {
         public static final float UP = 0;
         public static final float LEFT = 90;
@@ -79,8 +86,5 @@ public class ObjectsConstants {
                 new Color(0.5f, 1, 0, 1),
                 new Color(1, 0.5f, 0, 1)
         };
-
-
-
     }
 }

@@ -1,16 +1,17 @@
 package com.hvitalii.thetanksgame.Model;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.hvitalii.thetanksgame.Constants.BotAttributes;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 
-public class BotTankModel extends Tank {
+public class BotTankModel extends TankModel {
 
     private int botType;
     private int armourAmount;
     private boolean isBonusCarrier;
 
-    public BotTankModel() {
-        super(Direction.DOWN, Speed.NORMAL);
+    public BotTankModel(Rectangle rectangle) {
+        super(rectangle, Direction.DOWN, Speed.NORMAL);
     }
 
     public int getBotType() {

@@ -1,24 +1,27 @@
 package com.hvitalii.thetanksgame.Model;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 
-abstract class Tank extends Moveable {
+abstract class TankModel extends Moveable {
 
+    private int bulletsMax;
     private int bulletsAmount;
     private int bulletsType;
     private int shieldEnergy;
 
     private int animationFrame;
 
-    public Tank(float direction, float speed) {
-        this(direction, speed, 1, BulletsTypes.NORMAL, 0);
+    public TankModel(Rectangle rectangle, float direction, float speed) {
+        this(rectangle, direction, speed, 1, BulletsTypes.NORMAL, 0);
     }
 
-    public Tank(float direction, float speed, int bulletsAmount, int bulletsType, int shieldEnergy) {
-        super(direction, speed);
+    public TankModel(Rectangle rectangle, float direction, float speed, int bulletsAmount, int bulletsType, int shieldEnergy) {
+        super(rectangle, direction, speed);
         setBulletsAmount(bulletsAmount);
         setBulletsType(bulletsType);
         setShieldEnergy(shieldEnergy);
+        bulletsMax = 1;
     }
 
     public int getBulletsAmount() {
@@ -33,6 +36,18 @@ abstract class Tank extends Moveable {
         }
     }
 
+    public void addBullet() {
+        if (bulletsAmount < bulletsMax) {
+            bulletsAmount++;
+        }
+    }
+
+    public void removeBullet() {
+        if (bulletsAmount > 0) {
+            bulletsAmount--;
+        }
+    }
+
     public int getBulletsType() {
         return bulletsType;
     }
@@ -44,6 +59,14 @@ abstract class Tank extends Moveable {
             this.bulletsType = BulletsTypes.NORMAL;
         }
 
+    }
+
+    public void setBulletsMax(int bulletsMax) {
+        this.bulletsMax = bulletsMax;
+    }
+
+    public int getBulletsMax() {
+        return bulletsMax;
     }
 
     public int getShieldEnergy() {
