@@ -1,13 +1,16 @@
-package com.hvitalii.thetanksgame.Objects;
+package com.hvitalii.thetanksgame.Model;
 
-public class BotTank extends Tank {
+import com.hvitalii.thetanksgame.Constants.BotAttributes;
+import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
+
+public class BotTankModel extends Tank {
 
     private int botType;
     private int armourAmount;
     private boolean isBonusCarrier;
 
-    public BotTank() {
-        super(Types.BOT, Direction.DOWN, Speed.NORMAL);
+    public BotTankModel() {
+        super(Direction.DOWN, Speed.NORMAL);
     }
 
     public int getBotType() {
@@ -28,11 +31,7 @@ public class BotTank extends Tank {
     }
 
     public void setArmourAmount(int armourAmount) {
-        if (armourAmount >= 0) {
-            this.armourAmount = armourAmount;
-        } else {
-            this.armourAmount = 0;
-        }
+        this.armourAmount = armourAmount;
     }
 
     public boolean isBonusCarrier() {
@@ -41,22 +40,5 @@ public class BotTank extends Tank {
 
     public void setBonusCarrier(boolean bonusCarrier) {
         isBonusCarrier = bonusCarrier;
-    }
-
-    @Override
-    public int[] getVisualCondition() {
-        int[] condition = new int[6];
-        condition[0] = getType();
-        condition[1] = botType;
-        condition[2] = isBonusCarrier ? 1 : 0;
-        condition[3] = armourAmount;
-        condition[4] = getDirection();
-        condition[5] = getAnimationFrame();
-        return condition;
-    }
-
-    @Override
-    public void move(int direction) {
-        switchAnimationFrame();
     }
 }

@@ -1,10 +1,11 @@
-package com.hvitalii.thetanksgame.Objects;
+package com.hvitalii.thetanksgame.Constants;
 
-import com.hvitalii.thetanksgame.Objects.GameObject.*;
+import com.hvitalii.thetanksgame.Model.BotTankModel;
+import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 
 public class BotAttributes {
 
-    public static Attributes[] botTypes = new Attributes[] {
+    public static final Attributes[] botTypes = new Attributes[] {
             new SmallBot(),
             new APCBot(),
             new FastBot(),
@@ -12,7 +13,7 @@ public class BotAttributes {
     };
 
     public static abstract class Attributes {
-        public abstract void loadAttributes(BotTank tank);
+        public abstract void loadAttributes(BotTankModel tank);
     }
 
     public static class SmallBot extends Attributes{
@@ -21,7 +22,7 @@ public class BotAttributes {
         public static final int BULLET_TYPE = BulletsTypes.NORMAL;
 
         @Override
-        public void loadAttributes(BotTank tank) {
+        public void loadAttributes(BotTankModel tank) {
             tank.setArmourAmount(ARMOUR_EMOUNT);
             tank.setSpeed(SPEED);
             tank.setBulletsType(BULLET_TYPE);
@@ -34,7 +35,7 @@ public class BotAttributes {
         public static final int BULLET_TYPE = BulletsTypes.NORMAL;
 
         @Override
-        public void loadAttributes(BotTank tank) {
+        public void loadAttributes(BotTankModel tank) {
             tank.setArmourAmount(ARMOUR_EMOUNT);
             tank.setSpeed(SPEED);
             tank.setBulletsType(BULLET_TYPE);
@@ -47,7 +48,7 @@ public class BotAttributes {
         public static final int BULLET_TYPE = BulletsTypes.FAST;
 
         @Override
-        public void loadAttributes(BotTank tank) {
+        public void loadAttributes(BotTankModel tank) {
             tank.setArmourAmount(ARMOUR_EMOUNT);
             tank.setSpeed(SPEED);
             tank.setBulletsType(BULLET_TYPE);
@@ -60,7 +61,7 @@ public class BotAttributes {
         public static final int BULLET_TYPE = BulletsTypes.NORMAL;
 
         @Override
-        public void loadAttributes(BotTank tank) {
+        public void loadAttributes(BotTankModel tank) {
             tank.setArmourAmount(ARMOUR_EMOUNT);
             tank.setSpeed(SPEED);
             tank.setBulletsType(BULLET_TYPE);

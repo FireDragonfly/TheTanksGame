@@ -3,7 +3,7 @@
 //import com.badlogic.gdx.Game;
 //import com.badlogic.gdx.Screen;
 //import com.badlogic.gdx.assets.AssetManager;
-//import com.hvitalii.thetanksgame.AssetsHandler;
+//import com.hvitalii.thetanksgame.Utils.AssetsHandler;
 //import com.hvitalii.thetanksgame.TheTanksGame;
 //
 //public class LoadingScreen implements Screen{

@@ -1,6 +1,8 @@
-package com.hvitalii.thetanksgame.Objects;
+package com.hvitalii.thetanksgame.Model;
 
-abstract class Tank extends MoveableObject{
+import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
+
+abstract class Tank extends Moveable {
 
     private int bulletsAmount;
     private int bulletsType;
@@ -8,12 +10,12 @@ abstract class Tank extends MoveableObject{
 
     private int animationFrame;
 
-    public Tank(int type, int direction, float speed) {
-        this(type, direction, speed, 1, BulletsTypes.NORMAL, 0);
+    public Tank(float direction, float speed) {
+        this(direction, speed, 1, BulletsTypes.NORMAL, 0);
     }
 
-    public Tank(int type, int direction, float speed, int bulletsAmount, int bulletsType, int shieldEnergy) {
-        super(type, direction, speed);
+    public Tank(float direction, float speed, int bulletsAmount, int bulletsType, int shieldEnergy) {
+        super(direction, speed);
         setBulletsAmount(bulletsAmount);
         setBulletsType(bulletsType);
         setShieldEnergy(shieldEnergy);
