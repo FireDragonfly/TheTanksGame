@@ -17,9 +17,9 @@ public class BotAttributes {
     }
 
     public static class SmallBot extends Attributes{
-        public static final int ARMOUR_EMOUNT = 0;
-        public static final float SPEED = Speed.NORMAL;
-        public static final int BULLET_TYPE = BulletsTypes.NORMAL;
+        static final int ARMOUR_EMOUNT = 0;
+        static final float SPEED = Speed.SLOW;
+        static final int BULLET_TYPE = BulletsTypes.NORMAL;
 
         @Override
         public void loadAttributes(BotTankModel tank) {
@@ -30,9 +30,9 @@ public class BotAttributes {
     }
 
     public static class APCBot extends Attributes{
-        public static final int ARMOUR_EMOUNT = 0;
-        public static final float SPEED = Speed.FAST;
-        public static final int BULLET_TYPE = BulletsTypes.NORMAL;
+        static final int ARMOUR_EMOUNT = 0;
+        static final float SPEED = Speed.FAST;
+        static final int BULLET_TYPE = BulletsTypes.NORMAL;
 
         @Override
         public void loadAttributes(BotTankModel tank) {
@@ -43,9 +43,9 @@ public class BotAttributes {
     }
 
     public static class FastBot extends Attributes{
-        public static final int ARMOUR_EMOUNT = 0;
-        public static final float SPEED = Speed.NORMAL;
-        public static final int BULLET_TYPE = BulletsTypes.FAST;
+        static final int ARMOUR_EMOUNT = 0;
+        static final float SPEED = Speed.NORMAL;
+        static final int BULLET_TYPE = BulletsTypes.FAST;
 
         @Override
         public void loadAttributes(BotTankModel tank) {
@@ -56,9 +56,9 @@ public class BotAttributes {
     }
 
     public static class HeavyBot extends Attributes{
-        public static final int ARMOUR_EMOUNT = 2;
-        public static final float SPEED = Speed.NORMAL;
-        public static final int BULLET_TYPE = BulletsTypes.NORMAL;
+        static final int ARMOUR_EMOUNT = 2;
+        static final float SPEED = Speed.SLOW;
+        static final int BULLET_TYPE = BulletsTypes.NORMAL;
 
         @Override
         public void loadAttributes(BotTankModel tank) {

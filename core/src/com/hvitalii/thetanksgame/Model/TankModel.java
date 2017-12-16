@@ -3,7 +3,7 @@ package com.hvitalii.thetanksgame.Model;
 import com.badlogic.gdx.math.Rectangle;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 
-abstract class TankModel extends Moveable {
+public abstract class TankModel extends Moveable {
 
     private int bulletsMax;
     private int bulletsAmount;

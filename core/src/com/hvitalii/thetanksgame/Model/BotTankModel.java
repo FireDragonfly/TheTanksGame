@@ -8,10 +8,11 @@ public class BotTankModel extends TankModel {
 
     private int botType;
     private int armourAmount;
-    private boolean isBonusCarrier;
+    private int bonus;
 
-    public BotTankModel(Rectangle rectangle) {
+    public BotTankModel(Rectangle rectangle, int bonus) {
         super(rectangle, Direction.DOWN, Speed.NORMAL);
+        this.bonus = bonus;
     }
 
     public int getBotType() {
@@ -36,10 +37,10 @@ public class BotTankModel extends TankModel {
     }
 
     public boolean isBonusCarrier() {
-        return isBonusCarrier;
+        return bonus >= 0;
     }
 
-    public void setBonusCarrier(boolean bonusCarrier) {
-        isBonusCarrier = bonusCarrier;
+    public void setBonusCarrier(int bonus) {
+        this.bonus = bonus;
     }
 }

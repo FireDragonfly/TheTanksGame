@@ -82,7 +82,7 @@ public class ObjectsConstants {
         public static final Color BONUSED_TANK = new Color(1,0.1f,0.5f,1);
 
         public static final Color ARMOUR_COLORS[] = {
-                new Color(0, 0.5f, 1, 1),
+                new Color(1, 1, 1, 1),
                 new Color(0.5f, 1, 0, 1),
                 new Color(1, 0.5f, 0, 1)
         };

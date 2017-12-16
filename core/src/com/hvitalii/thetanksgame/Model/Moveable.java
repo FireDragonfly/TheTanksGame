@@ -2,7 +2,7 @@ package com.hvitalii.thetanksgame.Model;
 
 import com.badlogic.gdx.math.Rectangle;
 
-abstract class Moveable extends Rectangle {
+public abstract class Moveable extends Rectangle {
 
     private float speed;
     private float direction;

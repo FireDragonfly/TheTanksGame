@@ -8,11 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.hvitalii.thetanksgame.Controller.BulletController;
-import com.hvitalii.thetanksgame.Controller.PlayerTankController;
-import com.hvitalii.thetanksgame.Controller.Controller;
-import com.hvitalii.thetanksgame.Controller.TankController;
+import com.hvitalii.thetanksgame.Constants.GameConstants.*;
+import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
+import com.hvitalii.thetanksgame.Controller.*;
 import com.hvitalii.thetanksgame.Utils.AssetsHandler;
 
 public class GameScreen implements Screen {
@@ -40,17 +40,17 @@ public class GameScreen implements Screen {
     public void show() {
         bullets = new Array<BulletController>();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 208, 224);
-        //viewport = new FitViewport(416, 448, camera);
+        camera.setToOrtho(false, Resolution.WIDTH, Resolution.HEIGHT);
+        viewport = new FitViewport(Resolution.WIDTH, Resolution.HEIGHT, camera);
 
         batch = new SpriteBatch();
         textureAtlas = assetsHandler.getAssetManager().get("atlas.atlas");
         //textureAtlas = assetsHandler.getAssetManager().get("debugging_atlas.atlas");
         frame = 0;
-        float colorValue = 0.00390625f * 63;
-        Gdx.gl.glClearColor(colorValue ,colorValue, colorValue, 1);
+        //float colorValue = 0.00390625f * 63;
+        Gdx.gl.glClearColor(0 ,0, 0, 1);
         Rectangle rectangle = new Rectangle(0, 0, 16, 16);
-        tank = new PlayerTankController(this, rectangle, textureAtlas, 0, 3);
+        tank = new BotTankController(this, rectangle, textureAtlas, BotTypes.APC, 0);
     }
 
     @Override
@@ -58,11 +58,13 @@ public class GameScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         frame++;
+
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).update();
         }
         tank.update();
+
         batch.begin();
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).draw(batch);
@@ -81,7 +83,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        //viewport.update(width, height);
+        viewport.update(width, height);
     }
 
     @Override
