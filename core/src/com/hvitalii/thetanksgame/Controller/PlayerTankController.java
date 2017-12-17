@@ -36,6 +36,7 @@ public class PlayerTankController implements TankController {
     @Override
     public void update() {
         if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+            if (!model.isLocked())
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 move(Direction.UP);
             } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
@@ -79,23 +80,34 @@ public class PlayerTankController implements TankController {
     }
 
     @Override
-    public void hitOn(BulletController bullet) {
-
+    public boolean hitOn(BulletController bullet) {
+        if (bullet.getOwnerType() != Types.USER){
+            if (model.getShieldEnergy() <= 0) {
+                screen.destructTank(this);
+            }
+        } else {
+            model.lock();
+        }
+        return true;
     }
 
     private void fire() {
-        if (model.getBulletsAmount() > 0) {
-            model.removeBullet();
-            BulletController bullet = new BulletController(
-                    screen,
-                    bulletStartPosition(),
-                    view.getAtlas(),
-                    model.getBulletsType(),
-                    model.getDirection(),
-                    this,
-                    Types.USER
-            );
-            screen.spawnBullet(bullet);
+        long time = new Date().getTime();
+        if ((time - lastShotTime) > 100) {
+            if (model.getBulletsAmount() > 0) {
+                model.removeBullet();
+                BulletController bullet = new BulletController(
+                        screen,
+                        bulletStartPosition(),
+                        view.getAtlas(),
+                        model.getBulletsType(),
+                        model.getDirection(),
+                        this,
+                        Types.USER
+                );
+                screen.spawnBullet(bullet);
+                lastShotTime = time;
+            }
         }
     }
 

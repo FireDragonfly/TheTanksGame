@@ -48,8 +48,7 @@ public class BattleFieldController{
         int trimmedY = (int) trimToGrid(y) / 8;
         TankController tank = model.getTank(trimmedX, trimmedY);
         if (tank != null) {
-            tank.hitOn(bullet);
-            return true;
+            return tank.hitOn(bullet);
         }
         return false;
     }
@@ -63,7 +62,7 @@ public class BattleFieldController{
     public boolean isPositionFree(TankModel tank, float x, float y) {
         int trimmedX = (int) trimToGrid(x) / 8;
         int trimmedY = (int) trimToGrid(y) / 8;
-        return model.hasImpermeableTileAt(trimmedX, trimmedY) && !model.hasTankAt(tank, trimmedX, trimmedY);
+        return !model.hasImpermeableTileAt(trimmedX, trimmedY) && !model.hasTankAt(tank, trimmedX, trimmedY);
     }
 
     private void tankPositionUpdate() {

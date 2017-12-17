@@ -177,9 +177,9 @@ public class BattleFieldModel {
         if ((impermeableBlocksLayer[y][x] == 0)
                 && (borderLayer[y][x] == 0)
                 && (permeableBlocksLayer[y][x] == 0)) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     public byte[][] getImpermeableBlocksLayer() {

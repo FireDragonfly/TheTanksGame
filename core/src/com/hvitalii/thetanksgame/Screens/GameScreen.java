@@ -100,8 +100,12 @@ public class GameScreen implements Screen {
         bullets.add(bullet);
     }
 
-    public void destroyBullet(BulletController bullet) {
+    public void destructBullet(BulletController bullet) {
         bullets.removeValue(bullet, true);
+    }
+
+    public void destructTank(TankController tank) {
+        tanks.removeValue(tank, true);
     }
 
     public BattleFieldController getBattleField() {

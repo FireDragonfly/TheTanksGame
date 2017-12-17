@@ -25,6 +25,7 @@ public class BotTankView {
                 sprites[i].setColor(ObjectsConstants.Colors.ARMOUR_COLORS[model.getArmourAmount()]);
             }
             sprites[i].setOriginCenter();
+            sprites[i].setRotation(model.getDirection());
         }
     }
 

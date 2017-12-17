@@ -71,18 +71,22 @@ public class BotTankController implements TankController {
     }
 
     private void fire() {
-        if (model.getBulletsAmount() > 0) {
-            model.removeBullet();
-            BulletController bullet = new BulletController(
-                    screen,
-                    bulletStartPosition(),
-                    view.getAtlas(),
-                    model.getBulletsType(),
-                    model.getDirection(),
-                    this,
-                    Types.BOT
-            );
-            screen.spawnBullet(bullet);
+        long time = new Date().getTime();
+        if ((time - lastShotTime) > 100) {
+            if (model.getBulletsAmount() > 0) {
+                model.removeBullet();
+                BulletController bullet = new BulletController(
+                        screen,
+                        bulletStartPosition(),
+                        view.getAtlas(),
+                        model.getBulletsType(),
+                        model.getDirection(),
+                        this,
+                        Types.BOT
+                );
+                screen.spawnBullet(bullet);
+                lastShotTime = time;
+            }
         }
     }
 
@@ -97,8 +101,18 @@ public class BotTankController implements TankController {
     }
 
     @Override
-    public void hitOn(BulletController bullet) {
-
+    public boolean hitOn(BulletController bullet) {
+        if (bullet.getOwnerType() != Types.BOT){
+            if (model.getShieldEnergy() <= 0) {
+                if (model.getArmourAmount() > 0) {
+                    model.setArmourAmount(model.getArmourAmount() - 1);
+                } else {
+                    screen.destructTank(this);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     private void move(float direction) {

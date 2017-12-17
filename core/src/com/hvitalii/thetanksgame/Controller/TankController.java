@@ -7,6 +7,6 @@ public interface TankController extends Controller{
     public void bulletDestroyed();
     public Rectangle getBounds();
     public TankModel getModel();
-    public void hitOn(BulletController bullet);
+    public boolean hitOn(BulletController bullet);
 //    public boolean isDestructed();
 }

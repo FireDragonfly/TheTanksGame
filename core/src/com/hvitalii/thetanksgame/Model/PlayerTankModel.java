@@ -4,11 +4,14 @@ import com.badlogic.gdx.math.Rectangle;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Constants.PlayerLevelsAtributes;
 
+import java.util.Date;
+
 public class PlayerTankModel extends TankModel {
 
     private int playerNumber;
     private int level;
     private int livesAmount;
+    private long locked;
 
 
     public PlayerTankModel(Rectangle rectangle, int playerNumber) {
@@ -20,6 +23,7 @@ public class PlayerTankModel extends TankModel {
         this.playerNumber = playerNumber;
         setLevel(level);
         livesAmount = 2;
+        locked = 0;
     }
 
     public int getPlayerNumber() {
@@ -51,4 +55,12 @@ public class PlayerTankModel extends TankModel {
     public void setLivesAmount(int livesAmount) {
         this.livesAmount = livesAmount;
     }
+
+    public void lock() {
+        locked = new Date().getTime() + 1000 * 3;
+    }
+
+    public boolean isLocked() {
+        return (locked -  new Date().getTime()) > 0;
+     }
 }
