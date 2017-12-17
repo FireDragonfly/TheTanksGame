@@ -4,12 +4,10 @@ package com.hvitalii.thetanksgame.Constants;
 import com.badlogic.gdx.graphics.Color;
 
 public class ObjectsConstants {
-//    public static class Types {
-//        public static final int BLOCK = 0;
-//        public static final int BOT = 1;
-//        public static final int USER = 2;
-//        public static final int BULLET = 3;
-//    }
+    public static class Types {
+        public static final int BOT = 0;
+        public static final int USER = 1;
+    }
 
     public static final String[] PLAYER_TANKS_NAMES = {
             "player_L1",
@@ -71,6 +69,32 @@ public class ObjectsConstants {
         public static final int NORMAL = 0;
         public static final int FAST = 1;
         public static final int AP = 2;
+    }
+
+    public static class TilesTypes {
+        public static final int NULL = 0;
+        public static final int GRAY = 1;
+        public static final int BRICK = 2;
+        public static final int DESTROYED_BRICK = 3;
+        public static final int CONCRETE = 4;
+        public static final int WATER_1 = 5;
+        public static final int WATER_2 = 6;
+        public static final int ICE = 7;
+        public static final int GRASS = 8;
+        public static final int EAGLE_0_0 = 9;
+        public static final int EAGLE_1_0 = 10;
+        public static final int EAGLE_0_1 = 11;
+        public static final int EAGLE_1_1 = 12;
+        public static final int DESTROYED_EAGLE_0_0 = 13;
+        public static final int DESTROYED_EAGLE_1_0 = 14;
+        public static final int DESTROYED_EAGLE_0_1 = 15;
+        public static final int DESTROYED_EAGLE_1_1 = 16;
+        public static final int BOT_IMG = 17;
+        public static final int PLAYER_IMG = 18;
+        public static final int BOT_SPAWN = 19;
+        public static final int PLAYER_1_SPAWN = 20;
+        public static final int PLAYER_2_SPAWN = 21;
+
     }
 
     public static class Colors {

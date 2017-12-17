@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Model.BotTankModel;
+import com.hvitalii.thetanksgame.Model.TankModel;
 import com.hvitalii.thetanksgame.Screens.GameScreen;
+import com.hvitalii.thetanksgame.Utils.MathUtils;
 import com.hvitalii.thetanksgame.View.BotTankView;
 
 import java.util.Date;
@@ -18,6 +20,7 @@ public class BotTankController implements TankController {
     private BotTankModel model;
     private BotTankView view;
     private long lastShotTime;
+    private float shift;
 
     public BotTankController(GameScreen screen, Rectangle rectangle, TextureAtlas atlas, int botType) {
         this(screen, rectangle, atlas, botType, -1);
@@ -29,6 +32,7 @@ public class BotTankController implements TankController {
         model.setBotType(botType);
         view = new BotTankView(atlas, model);
         lastShotTime = 0;
+        shift = 0;
     }
 
     @Override
@@ -75,28 +79,31 @@ public class BotTankController implements TankController {
                     view.getAtlas(),
                     model.getBulletsType(),
                     model.getDirection(),
-                    this
+                    this,
+                    Types.BOT
             );
             screen.spawnBullet(bullet);
         }
     }
 
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(model);
+    }
+
+    @Override
+    public TankModel getModel() {
+        return model;
+    }
+
+    @Override
+    public void hitOn(BulletController bullet) {
+
+    }
+
     private void move(float direction) {
-        model.switchAnimationFrame();
-        model.setDirection(direction);
-        if (direction == Direction.UP) {
-            float newPosition = model.getY() + model.getSpeed();
-            model.setY(newPosition);
-        } else if (direction == Direction.DOWN) {
-            float newPosition = model.getY() - model.getSpeed();
-            model.setY(newPosition);
-        } else if (direction == Direction.LEFT) {
-            float newPosition = model.getX() - model.getSpeed();
-            model.setX(newPosition);
-        } else if (direction == Direction.RIGHT) {
-            float newPosition = model.getX() + model.getSpeed();
-            model.setX(newPosition);
-        }
+        BattleFieldController battleField = screen.getBattleField();
+        model.move(battleField, direction);
     }
 
     private Rectangle bulletStartPosition() {

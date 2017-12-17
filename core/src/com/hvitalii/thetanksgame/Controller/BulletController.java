@@ -15,14 +15,24 @@ public class BulletController implements Controller{
     private BulletModel model;
     private BulletView view;
 
-    public BulletController(GameScreen screen, Rectangle rectangle, TextureAtlas atlas, int bulletType, float direction, TankController owner) {
+    public BulletController(GameScreen screen, Rectangle rectangle, TextureAtlas atlas, int bulletType, float direction, TankController owner, int ownerType) {
         this.screen = screen;
-        model = new BulletModel(rectangle, bulletType, direction, owner);
+        model = new BulletModel(rectangle, bulletType, direction, owner, ownerType);
         view = new BulletView(atlas, model);
     }
 
     @Override
     public void update() {
+//        if (model.getOwner() != null) {
+//            if (model.getOwner().isDestructed()) {
+//                model.setOwner(null);
+//            }
+//        }
+        if ((model.getX() > Resolution.SCREEN_WIDTH) || (model.getX() < 0) ||
+                (model.getY() > Resolution.SCREEN_HEIGHT) || (model.getY() < 0)){
+            destroy();
+        }
+
         move();
     }
 
@@ -32,12 +42,6 @@ public class BulletController implements Controller{
     }
 
     private void move() {
-        if ((model.getX() > Resolution.WIDTH) || (model.getX() < 0) ||
-                (model.getY() > Resolution.HEIGHT) || (model.getY() < 0)){
-            destroy();
-        }
-
-
         if (model.getDirection() == Direction.UP) {
             float newPosition = model.getY() + model.getSpeed();
             model.setY(newPosition);

@@ -9,11 +9,13 @@ public class BulletModel extends Moveable{
 
     private int bulletType;
     private TankController owner;
+    private int ownerType;
 
-    public BulletModel(Rectangle rectangle, int bulletType, float direction, TankController owner) {
+    public BulletModel(Rectangle rectangle, int bulletType, float direction, TankController owner, int ownerType) {
         super(rectangle, direction, Speed.NORMAL_BULLET_SPEED);
         setBulletType(bulletType);
         this.owner = owner;
+        this.ownerType = ownerType;
     }
 
     public int getBulletType() {
@@ -32,5 +34,13 @@ public class BulletModel extends Moveable{
 
     public TankController getOwner() {
         return owner;
+    }
+
+    public void setOwner(TankController owner) {
+        this.owner = owner;
+    }
+
+    public int getOwnerType() {
+        return ownerType;
     }
 }

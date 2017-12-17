@@ -28,7 +28,6 @@ public class PlayerTankView{
     public void draw(SpriteBatch batch) {
         updateSprites();
         sprites[model.getAnimationFrame()].draw(batch);
-
     }
 
     public void levelChanged() {
