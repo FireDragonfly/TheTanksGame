@@ -2,6 +2,7 @@ package com.hvitalii.thetanksgame.Model;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
+import com.hvitalii.thetanksgame.Controller.BulletController;
 import com.hvitalii.thetanksgame.Controller.TankController;
 
 import java.util.Scanner;
@@ -12,20 +13,21 @@ public class BattleFieldModel {
 
     private int height;
     private int width;
-    private byte[][] permeableBlocksLayer;
-    private byte[][] impermeableBlocksLayer;
+    private byte[][] bottomBlocksLayer;
     private byte[][] topBlocksLayer;
     private byte[][] borderLayer;
     private TankController[][] tanksLayer;
+//    private BulletController[][] bulletLayer;
 
     public BattleFieldModel() {
         height = Resolution.FIELD_HEIGHT;
         width = Resolution.FIELD_WIDTH;
-        permeableBlocksLayer = new byte[height][width];
-        impermeableBlocksLayer = new byte[height][width];
+        bottomBlocksLayer = new byte[height][width];
         topBlocksLayer = new byte[height][width];
         borderLayer = new byte[height][width];
         tanksLayer = new TankController[height][width];
+//        bulletLayer = new BulletController[height][width];
+//        initMap();
         loadBorder();
     }
 
@@ -48,49 +50,49 @@ public class BattleFieldModel {
                         borderLayer[i][j] = block;
                         break;
                     case TilesTypes.BRICK:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.DESTROYED_BRICK:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.CONCRETE:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.WATER_1:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.WATER_2:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.ICE:
-                        permeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.GRASS:
                         topBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.EAGLE_0_0:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.EAGLE_1_0:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.EAGLE_0_1:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.EAGLE_1_1:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.DESTROYED_EAGLE_0_0:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.DESTROYED_EAGLE_1_0:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.DESTROYED_EAGLE_0_1:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.DESTROYED_EAGLE_1_1:
-                        impermeableBlocksLayer[i][j] = block;
+                        bottomBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.BOT_IMG:
                         borderLayer[i][j] = block;
@@ -98,17 +100,92 @@ public class BattleFieldModel {
                     case TilesTypes.PLAYER_IMG:
                         borderLayer[i][j] = block;
                         break;
-                    case TilesTypes.BOT_SPAWN:
-                        permeableBlocksLayer[i][j] = block;
-                        break;
-                    case TilesTypes.PLAYER_1_SPAWN:
-                        permeableBlocksLayer[i][j] = block;
-                        break;
-                    case TilesTypes.PLAYER_2_SPAWN:
-                        permeableBlocksLayer[i][j] = block;
-                        break;
+//                    case TilesTypes.BOT_SPAWN:
+//                        permeableBlocksLayer[i][j] = block;
+//                        break;
+//                    case TilesTypes.PLAYER_1_SPAWN:
+//                        permeableBlocksLayer[i][j] = block;
+//                        break;
+//                    case TilesTypes.PLAYER_2_SPAWN:
+//                        permeableBlocksLayer[i][j] = block;
+//                        break;
                 }
             }
+        }
+    }
+
+    public void set(byte type, int x, int y){
+        if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
+            return;
+        }
+        switch (type) {
+            case TilesTypes.NULL:
+                borderLayer[y][x] = type;
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.GRAY:
+                borderLayer[y][x] = type;
+                break;
+            case TilesTypes.BRICK:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.DESTROYED_BRICK:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.CONCRETE:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.WATER_1:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.WATER_2:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.ICE:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.GRASS:
+                topBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.EAGLE_0_0:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.EAGLE_1_0:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.EAGLE_0_1:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.EAGLE_1_1:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.DESTROYED_EAGLE_0_0:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.DESTROYED_EAGLE_1_0:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.DESTROYED_EAGLE_0_1:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.DESTROYED_EAGLE_1_1:
+                bottomBlocksLayer[y][x] = type;
+                break;
+            case TilesTypes.BOT_IMG:
+                borderLayer[y][x] = type;
+                break;
+            case TilesTypes.PLAYER_IMG:
+                borderLayer[y][x] = type;
+                break;
+//                    case TilesTypes.BOT_SPAWN:
+//                        permeableBlocksLayer[i][j] = block;
+//                        break;
+//                    case TilesTypes.PLAYER_1_SPAWN:
+//                        permeableBlocksLayer[i][j] = block;
+//                        break;
+//                    case TilesTypes.PLAYER_2_SPAWN:
+//                        permeableBlocksLayer[i][j] = block;
+//                        break;
         }
     }
 
@@ -138,17 +215,16 @@ public class BattleFieldModel {
     }
 
     public byte get(int x, int y) {
-        if (impermeableBlocksLayer[y][x] != 0) {
+        if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
+            return TilesTypes.NULL;
+        }
+        if (bottomBlocksLayer[y][x] != 0) {
 
-            return impermeableBlocksLayer[y][x];
+            return bottomBlocksLayer[y][x];
 
         } else if (borderLayer[y][x] != 0) {
 
             return borderLayer[y][x];
-
-        } else if (permeableBlocksLayer[y][x] != 0) {
-
-            return permeableBlocksLayer[y][x];
 
         } else if (topBlocksLayer[y][x] != 0) {
 
@@ -162,43 +238,98 @@ public class BattleFieldModel {
     }
 
     public TankController getTank(int x, int y) {
+        if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
+            return null;
+        }
         return tanksLayer[y][x];
     }
 
+//    public BulletController getBullet(int x, int y) {
+//        if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
+//            return null;
+//        }
+//        return bulletLayer[y][x];
+//    }
+
     public boolean hasTankAt(int x, int y) {
+        if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
+            return false;
+        }
         return (tanksLayer[y][x] != null);
     }
 
     public boolean hasTankAt(TankModel tank, int x, int y) {
+        if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
+            return false;
+        }
         return ((tanksLayer[y][x] != null) && (tank != tanksLayer[y][x].getModel()));
     }
 
     public boolean hasImpermeableTileAt(int x, int y) {
-        if ((impermeableBlocksLayer[y][x] == 0)
-                && (borderLayer[y][x] == 0)
-                && (permeableBlocksLayer[y][x] == 0)) {
+        if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
+            return true;
+        }
+        if ((bottomBlocksLayer[y][x] == 0)
+                && (bottomBlocksLayer[y][x] != TilesTypes.ICE)
+                && (borderLayer[y][x] == 0)) {
             return false;
         }
         return true;
     }
 
-    public byte[][] getImpermeableBlocksLayer() {
-        return impermeableBlocksLayer;
+    public byte getImpermeableForBulletTileAt(int x, int y) {
+        if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
+            return TilesTypes.NULL;
+        }
+        if (bottomBlocksLayer[y][x] != 0) {
+
+            return bottomBlocksLayer[y][x];
+
+        } else if (borderLayer[y][x] != 0) {
+
+            return borderLayer[y][x];
+
+        } else  {
+
+            return TilesTypes.NULL;
+
+        }
+    }
+
+    public byte[][] getBottomBlocksLayer() {
+        return bottomBlocksLayer;
     }
 
     public TankController[][] getTanksLayer() {
         return tanksLayer;
     }
 
+//    public BulletController[][] getBulletLayer() {
+//        return bulletLayer;
+//    }
+
     public byte[][] getBorderLayer() {
         return borderLayer;
     }
 
-    public void cler() {
-        permeableBlocksLayer = new byte[height][width];
-        impermeableBlocksLayer = new byte[height][width];
+    public void clear() {
+        bottomBlocksLayer = new byte[height][width];
         borderLayer = new byte[height][width];
+        topBlocksLayer = new byte[height][width];
         tanksLayer = new TankController[height][width];
+//        bulletLayer = new BulletController[height][width];
+    }
+
+    private void initMap() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                bottomBlocksLayer[i][j] = 0;
+                borderLayer[i][j] = 0;
+                topBlocksLayer[i][j] = 0;
+                tanksLayer[i][j] = null;
+//                bulletLayer[i][j] = null;
+            }
+        }
     }
 }
 

@@ -6,27 +6,25 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
+import com.hvitalii.thetanksgame.GameController;
 import com.hvitalii.thetanksgame.Model.BulletModel;
-import com.hvitalii.thetanksgame.Screens.GameScreen;
 import com.hvitalii.thetanksgame.View.BulletView;
 
 public class BulletController implements Controller{
 
-    private GameScreen screen;
+    private GameController state;
     private BulletModel model;
     private BulletView view;
 
-    public BulletController(GameScreen screen, Rectangle rectangle, TextureAtlas atlas, int bulletType, float direction, TankController owner, int ownerType) {
-        this.screen = screen;
+    public BulletController(GameController state, Rectangle rectangle, TextureAtlas atlas, int bulletType, float direction, TankController owner, int ownerType) {
+        this.state = state;
         model = new BulletModel(rectangle, bulletType, direction, owner, ownerType);
         view = new BulletView(atlas, model);
     }
 
     @Override
-    public void update() {
+    public void update(long frame) {
         float direction = model.getDirection();
-
-        move();
 
 //        if (model.getOwner() != null) {
 //            if (model.getOwner().isDestructed()) {
@@ -53,6 +51,8 @@ public class BulletController implements Controller{
         } else if (direction == Direction.RIGHT) {
             checkCollision(dot2, dot4);
         }
+
+        move();
     }
 
     @Override
@@ -63,14 +63,27 @@ public class BulletController implements Controller{
     public int getOwnerType() {
         return model.getOwnerType();
     }
+    public TankController getOwner() {
+        return model.getOwner();
+
+    }
 
     public void destruct() {
-        screen.destructBullet(this);
+        state.destructBullet(this);
         model.getOwner().bulletDestroyed();
     }
 
+    public Rectangle getBounds() {
+        return new Rectangle(model);
+    }
+
+    public int getType() {
+        return model.getBulletType();
+    }
+
     private void checkCollision(Vector2 dot1, Vector2 dot2) {
-        BattleFieldController battleField = screen.getBattleField();
+        BattleFieldController battleField = state.getBattleField();
+
         if (battleField.hitTank(this, dot1.x, dot1.y)) {
             destruct();
         } else if (battleField.hitTank(this, dot2.x, dot2.y)){

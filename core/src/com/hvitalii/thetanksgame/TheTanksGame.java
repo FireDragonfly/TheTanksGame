@@ -9,17 +9,24 @@ import com.hvitalii.thetanksgame.Utils.ResourcesHandler;
 
 public class TheTanksGame extends Game {
 
+	private ResourcesHandler resourcesHandler;
+
 	@Override
 	public void create () {
-	    ResourcesHandler resourcesHandler = new ResourcesHandler();
+	    resourcesHandler = new ResourcesHandler();
 	    resourcesHandler.loadAssets();
-		GameScreen gameScreen = new GameScreen(resourcesHandler);
+	    GameController state = new GameController(resourcesHandler, 1);
+		GameScreen gameScreen = new GameScreen(state);
 	    setScreen(gameScreen);
 	}
 
-    @Override
+	public ResourcesHandler getResourcesHandler() {
+		return resourcesHandler;
+	}
+
+	@Override
     public void dispose() {
         super.dispose();
-
+		resourcesHandler.dispose();
     }
 }

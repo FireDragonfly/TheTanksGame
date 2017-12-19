@@ -1,6 +1,7 @@
 package com.hvitalii.thetanksgame.Model;
 
 import com.badlogic.gdx.math.Rectangle;
+import com.hvitalii.thetanksgame.Constants.ObjectsConstants;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Constants.PlayerLevelsAtributes;
 
@@ -63,4 +64,9 @@ public class PlayerTankModel extends TankModel {
     public boolean isLocked() {
         return (locked -  new Date().getTime()) > 0;
      }
+
+    public void reset() {
+        setLevel(Levels.FIRST);
+        locked = 0;
+    }
 }

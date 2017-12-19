@@ -41,9 +41,9 @@ public class ObjectsConstants {
         public static final float FAST_BULLET_SPEED = 4F;
         public static final float NORMAL_BULLET_SPEED = 2F;
         public static final float FAST = 1F;
-        public static final float NORMAL = 0.5F;
-        public static final float SLOW = 0.334F;
-        public static final float VERY_SLOW = 0.25F;
+        public static final float NORMAL = 0.75F;
+        public static final float SLOW = 0.5F;
+        public static final float VERY_SLOW = 0.334F;
     }
 
     public static class Levels {
@@ -72,28 +72,28 @@ public class ObjectsConstants {
     }
 
     public static class TilesTypes {
-        public static final int NULL = 0;
-        public static final int GRAY = 1;
-        public static final int BRICK = 2;
-        public static final int DESTROYED_BRICK = 3;
-        public static final int CONCRETE = 4;
-        public static final int WATER_1 = 5;
-        public static final int WATER_2 = 6;
-        public static final int ICE = 7;
-        public static final int GRASS = 8;
-        public static final int EAGLE_0_0 = 9;
-        public static final int EAGLE_1_0 = 10;
-        public static final int EAGLE_0_1 = 11;
-        public static final int EAGLE_1_1 = 12;
-        public static final int DESTROYED_EAGLE_0_0 = 13;
-        public static final int DESTROYED_EAGLE_1_0 = 14;
-        public static final int DESTROYED_EAGLE_0_1 = 15;
-        public static final int DESTROYED_EAGLE_1_1 = 16;
-        public static final int BOT_IMG = 17;
-        public static final int PLAYER_IMG = 18;
-        public static final int BOT_SPAWN = 19;
-        public static final int PLAYER_1_SPAWN = 20;
-        public static final int PLAYER_2_SPAWN = 21;
+        public static final byte NULL = 0;
+        public static final byte GRAY = 1;
+        public static final byte BRICK = 2;
+        public static final byte DESTROYED_BRICK = 3;
+        public static final byte CONCRETE = 4;
+        public static final byte WATER_1 = 5;
+        public static final byte WATER_2 = 6;
+        public static final byte ICE = 7;
+        public static final byte GRASS = 8;
+        public static final byte EAGLE_0_0 = 9;
+        public static final byte EAGLE_1_0 = 10;
+        public static final byte EAGLE_0_1 = 11;
+        public static final byte EAGLE_1_1 = 12;
+        public static final byte DESTROYED_EAGLE_0_0 = 13;
+        public static final byte DESTROYED_EAGLE_1_0 = 14;
+        public static final byte DESTROYED_EAGLE_0_1 = 15;
+        public static final byte DESTROYED_EAGLE_1_1 = 16;
+        public static final byte BOT_IMG = 17;
+        public static final byte PLAYER_IMG = 18;
+        public static final byte BOT_SPAWN = 19;
+        public static final byte PLAYER_1_SPAWN = 20;
+        public static final byte PLAYER_2_SPAWN = 21;
 
     }
 

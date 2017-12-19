@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
+import com.hvitalii.thetanksgame.GameController;
 import com.hvitalii.thetanksgame.Model.BotTankModel;
 import com.hvitalii.thetanksgame.Model.TankModel;
-import com.hvitalii.thetanksgame.Screens.GameScreen;
 import com.hvitalii.thetanksgame.Utils.MathUtils;
 import com.hvitalii.thetanksgame.View.BotTankView;
 
@@ -16,18 +16,23 @@ import java.util.Date;
 
 public class BotTankController implements TankController {
 
-    private GameScreen screen;
+    private GameController state;
     private BotTankModel model;
     private BotTankView view;
     private long lastShotTime;
     private float shift;
 
-    public BotTankController(GameScreen screen, Rectangle rectangle, TextureAtlas atlas, int botType) {
-        this(screen, rectangle, atlas, botType, -1);
+    public BotTankController(GameController state, Rectangle rectangle, TextureAtlas atlas, int botType) {
+        this(state, rectangle, atlas, botType, -1);
     }
 
-    public BotTankController(GameScreen screen, Rectangle rectangle, TextureAtlas atlas, int botType, int bonusType) {
-        this.screen = screen;
+    public BotTankController(GameController state, Rectangle rectangle, TextureAtlas atlas, int botType, float direction) {
+        this(state, rectangle, atlas, botType, -1);
+        model.setDirection(direction);
+    }
+
+    public BotTankController(GameController state, Rectangle rectangle, TextureAtlas atlas, int botType, int bonusType) {
+        this.state = state;
         model = new BotTankModel(rectangle, bonusType);
         model.setBotType(botType);
         view = new BotTankView(atlas, model);
@@ -36,28 +41,128 @@ public class BotTankController implements TankController {
     }
 
     @Override
-    public void update() {
-        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                move(Direction.UP);
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                move(Direction.DOWN);
-            } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                move(Direction.LEFT);
-            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                move(Direction.RIGHT);
+    public void update(long frame) {
+//        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+//            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+//                move(Direction.UP);
+//            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+//                move(Direction.DOWN);
+//            } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+//                move(Direction.LEFT);
+//            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+//                move(Direction.RIGHT);
+//            }
+//
+//            if (Gdx.input.isKeyPressed(Input.Keys.X)){
+//
+//                long time = new Date().getTime();
+//
+//                if ((time - lastShotTime) > 100) {
+//                    fire();
+//                    lastShotTime = time;
+//                }
+//            }
+//        }
+
+        BattleFieldController battleField = state.getBattleField();
+        float direction = model.getDirection();
+        float random = direction;
+
+        if (!model.isDirectionChanged()) {
+            if ((int)(Math.random() * 64) % 64 == 0) {
+                random = randomDirection();
             }
-
-            if (Gdx.input.isKeyPressed(Input.Keys.X)){
-
-                long time = new Date().getTime();
-
-                if ((time - lastShotTime) > 100) {
-                    fire();
-                    lastShotTime = time;
-                }
+            if ((int)(Math.random() * 512) % 512 == 0) {
+                System.out.println("direction changed");
+                direction = randomDirection();
             }
         }
+
+        if (direction == Direction.UP) {
+            float newPosition = model.getY() + model.getSpeed();
+            if (!battleField.isPositionFree(model, model.getX(), newPosition + Size.TANK)
+                    || !battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition + Size.TANK)
+                    ) {
+                if ((model.getDirection() == random) || (model.getDirection() == Math.abs(random - 180))) {
+                    if ((int)(Math.random() * 64) % 32 == 0) {
+                        if ((Math.random() * 100) > 50) {
+                            random += 90;
+                        } else {
+                            random -= 90;
+                        }
+                        random = Math.abs(random);
+                    }
+                }
+                move(random);
+            } else {
+                move(direction);
+            }
+        } else if (direction == Direction.DOWN) {
+            float newPosition = model.getY() - model.getSpeed();
+            if (!battleField.isPositionFree(model, model.getX(), newPosition)
+                    || !battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition)
+                    ) {
+                if ((model.getDirection() == random) || (model.getDirection() == Math.abs(random - 180))) {
+                    if ((int)(Math.random() * 64) % 32 == 0) {
+                        if ((Math.random() * 100) > 50) {
+                            random += 90;
+                        } else {
+                            random -= 90;
+                        }
+                        random = Math.abs(random);
+                    }
+                }
+                move(random);
+            } else {
+                move(direction);
+            }
+        } else if (direction == Direction.LEFT) {
+            float newPosition = model.getX() - model.getSpeed();
+            if (!battleField.isPositionFree(model, newPosition, model.getY())
+                    || !battleField.isPositionFree(model, newPosition, model.getY() + Size.TANK - 0.1f)
+                    ) {
+                if ((model.getDirection() == random) || (model.getDirection() == Math.abs(random - 180))) {
+                    if ((int)(Math.random() * 64) % 32 == 0) {
+                        if ((Math.random() * 100) > 50) {
+                            random += 90;
+                        } else {
+                            random -= 90;
+                        }
+                        random = Math.abs(random);
+                    }
+                }
+                move(random);
+            } else {
+                move(direction);
+            }
+        } else if (direction == Direction.RIGHT) {
+            float newPosition = model.getX() + model.getSpeed();
+            if (!battleField.isPositionFree(model, newPosition  + Size.TANK, model.getY())
+                    || !battleField.isPositionFree(model, newPosition + Size.TANK, model.getY() + Size.TANK - 0.1f)
+                    ) {
+                if ((model.getDirection() == random) || (model.getDirection() == Math.abs(random - 180))) {
+                    if ((int)(Math.random() * 64) % 32 == 0) {
+                        if (Math.random() * 100 > 50) {
+                            random += 90;
+                        } else {
+                            random -= 90;
+                        }
+                        random = Math.abs(random);
+                    }
+                }
+                move(random);
+            } else {
+                move(direction);
+            }
+        }
+
+        int fire = (int)(Math.random() * 64) % 64;
+//        if (fire == 0) System.out.println("/////" + fire);
+//        else System.out.println(fire);
+        if (fire == 0) {
+            fire();
+        }
+
     }
 
     @Override
@@ -76,7 +181,7 @@ public class BotTankController implements TankController {
             if (model.getBulletsAmount() > 0) {
                 model.removeBullet();
                 BulletController bullet = new BulletController(
-                        screen,
+                        state,
                         bulletStartPosition(),
                         view.getAtlas(),
                         model.getBulletsType(),
@@ -84,7 +189,7 @@ public class BotTankController implements TankController {
                         this,
                         Types.BOT
                 );
-                screen.spawnBullet(bullet);
+                state.spawnBullet(bullet);
                 lastShotTime = time;
             }
         }
@@ -106,8 +211,9 @@ public class BotTankController implements TankController {
             if (model.getShieldEnergy() <= 0) {
                 if (model.getArmourAmount() > 0) {
                     model.setArmourAmount(model.getArmourAmount() - 1);
+                    view.armourAmountChanged();
                 } else {
-                    screen.destructTank(this);
+                    state.destructTank(this);
                 }
             }
             return true;
@@ -115,9 +221,18 @@ public class BotTankController implements TankController {
         return false;
     }
 
+    @Override
+    public int getType() {
+        return Types.BOT;
+    }
+
     private void move(float direction) {
-        BattleFieldController battleField = screen.getBattleField();
+        BattleFieldController battleField = state.getBattleField();
         model.move(battleField, direction);
+    }
+
+    private float randomDirection() {
+        return (int)((Math.random() * 359) / 90) * 90;
     }
 
     private Rectangle bulletStartPosition() {

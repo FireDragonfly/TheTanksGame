@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
+import com.hvitalii.thetanksgame.GameController;
 import com.hvitalii.thetanksgame.Model.BattleFieldModel;
 import com.hvitalii.thetanksgame.Model.TankModel;
-import com.hvitalii.thetanksgame.Screens.GameScreen;
 import com.hvitalii.thetanksgame.View.BattleFieldView;
 
 import static com.hvitalii.thetanksgame.Utils.MathUtils.*;
@@ -16,12 +16,12 @@ import static com.hvitalii.thetanksgame.Utils.MathUtils.*;
 
 public class BattleFieldController{
 
-    private GameScreen screen;
+    private GameController state;
     private BattleFieldModel model;
     private BattleFieldView view;
 
-    public BattleFieldController(GameScreen screen, TextureAtlas atlas) {
-        this.screen = screen;
+    public BattleFieldController(GameController state, TextureAtlas atlas) {
+        this.state = state;
         model = new BattleFieldModel();
         view = new BattleFieldView(atlas, model);
     }
@@ -30,17 +30,12 @@ public class BattleFieldController{
         model.loadMap(fileHandle);
     }
 
-    public void update() {
+    public void update(long frame) {
         tankPositionUpdate();
-        waterAnimationUpdate();
-    }
-
-    public void drawBottomLayers(SpriteBatch batch) {
-        view.drawBottomLayers(batch);
-    }
-
-    public void drawTopLayers(SpriteBatch batch) {
-        view.drawTopLayers(batch);
+//        bulletPositionUpdate();
+        if (frame % 32 == 0) {
+            waterAnimationUpdate();
+        }
     }
 
     public boolean hitTank(BulletController bullet, float x, float y) {
@@ -56,7 +51,57 @@ public class BattleFieldController{
     public boolean hitBlock(BulletController bullet, float x, float y) {
         int trimmedX = (int) trimToGrid(x) / 8;
         int trimmedY = (int) trimToGrid(y) / 8;
-        return model.hasImpermeableTileAt(trimmedX, trimmedY);
+
+
+        byte type = model.getImpermeableForBulletTileAt(trimmedX, trimmedY);
+
+        switch (type) {
+            case TilesTypes.NULL:
+            case TilesTypes.WATER_1:
+            case TilesTypes.WATER_2:
+            case TilesTypes.ICE:
+            case TilesTypes.GRASS:
+            case TilesTypes.BOT_IMG:
+            case TilesTypes.PLAYER_IMG:
+                return false;
+        }
+
+        switch (type) {
+            case TilesTypes.GRAY:
+                break;
+            case TilesTypes.BRICK:
+                model.set(TilesTypes.DESTROYED_BRICK, trimmedX, trimmedY);
+                break;
+            case TilesTypes.DESTROYED_BRICK:
+                model.set(TilesTypes.NULL, trimmedX, trimmedY);
+                break;
+            case TilesTypes.CONCRETE:
+                if (bullet.getType() == BulletsTypes.AP){
+                    model.set(TilesTypes.NULL, trimmedX, trimmedY);
+                }
+                break;
+            case TilesTypes.EAGLE_0_0:
+                destructEagle(trimmedX, trimmedY);
+                break;
+            case TilesTypes.EAGLE_1_0:
+                destructEagle(trimmedX - 1, trimmedY);
+                break;
+            case TilesTypes.EAGLE_0_1:
+                destructEagle(trimmedX, trimmedY - 1);
+                break;
+            case TilesTypes.EAGLE_1_1:
+                destructEagle(trimmedX - 1, trimmedY - 1);
+                break;
+//            case TilesTypes.DESTROYED_EAGLE_0_0:
+//                break;
+//            case TilesTypes.DESTROYED_EAGLE_1_0:
+//                break;
+//            case TilesTypes.DESTROYED_EAGLE_0_1:
+//                break;
+//            case TilesTypes.DESTROYED_EAGLE_1_1:
+//                break;
+        }
+        return true;
     }
 
     public boolean isPositionFree(TankModel tank, float x, float y) {
@@ -65,30 +110,81 @@ public class BattleFieldController{
         return !model.hasImpermeableTileAt(trimmedX, trimmedY) && !model.hasTankAt(tank, trimmedX, trimmedY);
     }
 
+//    public BulletController getBulletAt(float x, float y) {
+//        int trimmedX = (int) trimToGrid(x) / 8;
+//        int trimmedY = (int) trimToGrid(y) / 8;
+//        return model.getBullet(trimmedX, trimmedY);
+//    }
+
+    public void drawBottomLayers(SpriteBatch batch) {
+        view.drawBottomLayers(batch);
+    }
+
+    public void drawTopLayers(SpriteBatch batch) {
+        view.drawTopLayers(batch);
+    }
+
     private void tankPositionUpdate() {
         clearTankLayer();
 
-        Array<TankController> tanks = screen.getTanks();
+        Array<TankController> botsTanks = state.getBotsTanks();
+        Array<TankController> playersTanks = state.getPlayersTanks();
         TankController[][] tanksLayer = model.getTanksLayer();
 
         Rectangle bounds;
         int x;
         int y;
 
-        for (int i = 0; i < tanks.size; i++) {
-            bounds = tanks.get(i).getBounds();
+        for (int i = 0; i < playersTanks.size; i++) {
+            bounds = playersTanks.get(i).getBounds();
+            x = (int) clingToGrid(bounds.x) / 8;
+            y = (int) clingToGrid(bounds.y) / 8;
+//            if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
+//                return;
+//            }
+            for (int r = 0; r < 2; r++){
+                for (int c = 0; c < 2; c++) {
+                    tanksLayer[y + r][x + c] = playersTanks.get(i);
+                }
+            }
+        }for (int i = 0; i < botsTanks.size; i++) {
+            bounds = botsTanks.get(i).getBounds();
             x = (int) clingToGrid(bounds.x) / 8;
             y = (int) clingToGrid(bounds.y) / 8;
             for (int r = 0; r < 2; r++){
                 for (int c = 0; c < 2; c++) {
-                    tanksLayer[y + r][x + c] = tanks.get(i);
+                    tanksLayer[y + r][x + c] = botsTanks.get(i);
                 }
             }
         }
     }
 
+//    private void bulletPositionUpdate() {
+//        clearBulletLayer();
+//
+//        Array<BulletController> bullets = state.getBullets();
+//        BulletController[][] bulletLayer = model.getBulletLayer();
+//
+//        Rectangle bounds;
+//        int x;
+//        int y;
+//
+//        for (int i = 0; i < bullets.size; i++) {
+//            bounds = bullets.get(i).getBounds();
+//            x = (int) clingToGrid(bounds.x) / 8;
+//            y = (int) clingToGrid(bounds.y) / 8;
+////            if ((x >= 0)&&(x <= Resolution.FIELD_WIDTH - 1)&&(y >= 0)&&(y <= Resolution.FIELD_HEIGHT - 1)) {
+//                for (int r = 0; r < 2; r++){
+//                    for (int c = 0; c < 2; c++) {
+//                        bulletLayer[y + r][x + c] = bullets.get(i);
+//                    }
+//                }
+////            }
+//        }
+//    }
+
     private void waterAnimationUpdate() {
-        byte[][] impermeableBlocksLayer = model.getImpermeableBlocksLayer();
+        byte[][] impermeableBlocksLayer = model.getBottomBlocksLayer();
         for (int i = 0; i < impermeableBlocksLayer.length; i++) {
             for (int j = 0; j < impermeableBlocksLayer.length; j++) {
                 switch (impermeableBlocksLayer[i][j]) {
@@ -111,4 +207,20 @@ public class BattleFieldController{
             }
         }
     }
+
+    private void destructEagle(int x, int y) {
+        model.set(TilesTypes.DESTROYED_EAGLE_0_0, x, y);
+        model.set(TilesTypes.DESTROYED_EAGLE_1_0, x + 1, y);
+        model.set(TilesTypes.DESTROYED_EAGLE_0_1, x, y + 1);
+        model.set(TilesTypes.DESTROYED_EAGLE_1_1, x + 1, y + 1);
+    }
+
+//    private void clearBulletLayer() {
+//        BulletController[][] bulletLayer = model.getBulletLayer();
+//        for (int i = 0; i < bulletLayer.length; i++) {
+//            for (int j = 0; j < bulletLayer[i].length; j++) {
+//                bulletLayer[i][j] = null;
+//            }
+//        }
+//    }
 }

@@ -36,12 +36,12 @@ public class PlayerTankView{
         }
     }
 
-    private void updateSprites() {
-        if (model.isDirectionChanged()) {
+    public void updateSprites() {
+//        if (model.isDirectionChanged()) {
             for (int i = 0; i < 2; i++) {
                 sprites[i].setRotation(model.getDirection());
             }
-        }
+//        }
         for (int i = 0; i < 2; i++) {
             sprites[i].setX(model.getX());
             sprites[i].setY(model.getY());

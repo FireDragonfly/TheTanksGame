@@ -76,6 +76,13 @@ public class BattleFieldView {
                         updateAndDrawSprite(batch, TilesTypes.DESTROYED_EAGLE_1_1, j, i);
                         break;
                 }
+            }
+        }
+    }
+
+    public void drawTankLayer(SpriteBatch batch) {
+        for (int i = 0; i < model.getHeight(); i++) {
+            for (int j = 0; j < model.getWidth(); j++) {
                 if (model.hasTankAt(j, i)) {
                     updateAndDrawSprite(batch, TilesTypes.PLAYER_IMG, j, i);
                 }
