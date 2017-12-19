@@ -3,6 +3,7 @@ package com.hvitalii.thetanksgame;
 
 import com.badlogic.gdx.Game;
 import com.hvitalii.thetanksgame.Screens.GameScreen;
+import com.hvitalii.thetanksgame.Screens.MainMenuScreen;
 import com.hvitalii.thetanksgame.Utils.ResourcesHandler;
 //import com.hvitalii.thetanksgame.View.GameTextures;
 //import com.hvitalii.thetanksgame.View.LoadingScreen;
@@ -10,14 +11,14 @@ import com.hvitalii.thetanksgame.Utils.ResourcesHandler;
 public class TheTanksGame extends Game {
 
 	private ResourcesHandler resourcesHandler;
+	private MainMenuScreen mainMenuScreen;
 
 	@Override
 	public void create () {
 	    resourcesHandler = new ResourcesHandler();
 	    resourcesHandler.loadAssets();
-	    GameController state = new GameController(resourcesHandler, 1);
-		GameScreen gameScreen = new GameScreen(state);
-	    setScreen(gameScreen);
+	    mainMenuScreen = new MainMenuScreen(resourcesHandler, this);
+	    setScreen(mainMenuScreen);
 	}
 
 	public ResourcesHandler getResourcesHandler() {

@@ -83,16 +83,7 @@ public class BotTankController implements TankController {
             if (!battleField.isPositionFree(model, model.getX(), newPosition + Size.TANK)
                     || !battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition + Size.TANK)
                     ) {
-                if ((model.getDirection() == random) || (model.getDirection() == Math.abs(random - 180))) {
-                    if ((int)(Math.random() * 64) % 32 == 0) {
-                        if ((Math.random() * 100) > 50) {
-                            random += 90;
-                        } else {
-                            random -= 90;
-                        }
-                        random = Math.abs(random);
-                    }
-                }
+                random = randomDirection(random);
                 move(random);
             } else {
                 move(direction);
@@ -102,16 +93,7 @@ public class BotTankController implements TankController {
             if (!battleField.isPositionFree(model, model.getX(), newPosition)
                     || !battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition)
                     ) {
-                if ((model.getDirection() == random) || (model.getDirection() == Math.abs(random - 180))) {
-                    if ((int)(Math.random() * 64) % 32 == 0) {
-                        if ((Math.random() * 100) > 50) {
-                            random += 90;
-                        } else {
-                            random -= 90;
-                        }
-                        random = Math.abs(random);
-                    }
-                }
+                random = randomDirection(random);
                 move(random);
             } else {
                 move(direction);
@@ -121,16 +103,7 @@ public class BotTankController implements TankController {
             if (!battleField.isPositionFree(model, newPosition, model.getY())
                     || !battleField.isPositionFree(model, newPosition, model.getY() + Size.TANK - 0.1f)
                     ) {
-                if ((model.getDirection() == random) || (model.getDirection() == Math.abs(random - 180))) {
-                    if ((int)(Math.random() * 64) % 32 == 0) {
-                        if ((Math.random() * 100) > 50) {
-                            random += 90;
-                        } else {
-                            random -= 90;
-                        }
-                        random = Math.abs(random);
-                    }
-                }
+                random = randomDirection(random);
                 move(random);
             } else {
                 move(direction);
@@ -140,16 +113,7 @@ public class BotTankController implements TankController {
             if (!battleField.isPositionFree(model, newPosition  + Size.TANK, model.getY())
                     || !battleField.isPositionFree(model, newPosition + Size.TANK, model.getY() + Size.TANK - 0.1f)
                     ) {
-                if ((model.getDirection() == random) || (model.getDirection() == Math.abs(random - 180))) {
-                    if ((int)(Math.random() * 64) % 32 == 0) {
-                        if (Math.random() * 100 > 50) {
-                            random += 90;
-                        } else {
-                            random -= 90;
-                        }
-                        random = Math.abs(random);
-                    }
-                }
+                random = randomDirection(random);
                 move(random);
             } else {
                 move(direction);
@@ -233,6 +197,21 @@ public class BotTankController implements TankController {
 
     private float randomDirection() {
         return (int)((Math.random() * 359) / 90) * 90;
+    }
+
+    private float randomDirection(float direction) {
+        if ((model.getDirection() == direction) || (model.getDirection() == Math.abs(direction - 180))) {
+            if ((int)(Math.random() * 64) % 32 == 0) {
+                if ((Math.random() * 100) > 50) {
+                    direction += 90;
+                } else {
+                    direction -= 90;
+                }
+            }
+        }
+        direction = Math.abs(direction);
+        direction = (direction == 360) ? 0 : direction;
+        return direction;
     }
 
     private Rectangle bulletStartPosition() {
