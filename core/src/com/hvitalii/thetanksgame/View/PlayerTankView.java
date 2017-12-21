@@ -3,8 +3,8 @@ package com.hvitalii.thetanksgame.View;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.hvitalii.thetanksgame.Constants.ObjectsConstants;
-import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
+import com.hvitalii.thetanksgame.Constants.GameConstants;
+import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Model.PlayerTankModel;
 
 public class PlayerTankView{
@@ -18,7 +18,7 @@ public class PlayerTankView{
         this.atlas = atlas;
         this.model = model;
         for (int i = 0; i < 2; i++) {
-            sprites[i] = new Sprite(atlas.findRegion(ObjectsConstants.PLAYER_TANKS_NAMES[model.getLevel()], i));
+            sprites[i] = new Sprite(atlas.findRegion(GameConstants.PLAYER_TANKS_NAMES[model.getLevel()], i));
             sprites[i].setBounds(model.x, model.y, model.width, model.height);
             sprites[i].setColor(Colors.PLAYERS_COLORS[model.getPlayerNumber()]);
             sprites[i].setOriginCenter();
@@ -32,7 +32,7 @@ public class PlayerTankView{
 
     public void levelChanged() {
         for (int i = 0; i < 2; i++) {
-            sprites[i].setRegion(atlas.findRegion(ObjectsConstants.PLAYER_TANKS_NAMES[model.getLevel()], i));
+            sprites[i].setRegion(atlas.findRegion(GameConstants.PLAYER_TANKS_NAMES[model.getLevel()], i));
         }
     }
 

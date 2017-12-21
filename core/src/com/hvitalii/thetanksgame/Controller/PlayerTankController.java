@@ -5,10 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.GameController;
 import com.hvitalii.thetanksgame.Model.PlayerTankModel;
 import com.hvitalii.thetanksgame.Model.TankModel;
+import com.hvitalii.thetanksgame.Player;
 import com.hvitalii.thetanksgame.View.PlayerTankView;
 
 import java.util.Date;
@@ -16,58 +18,44 @@ import java.util.Date;
 
 public class PlayerTankController implements TankController {
 
+    private Player player;
     private GameController state;
     private PlayerTankModel model;
     private PlayerTankView view;
+    private int[] controlKeys;
     private long lastShotTime;
     private boolean isFired;
 
-    public PlayerTankController(GameController state, Rectangle rectangle, TextureAtlas atlas, int playerNumber) {
-        this(state, rectangle, atlas, playerNumber, Levels.FIRST);
+    public PlayerTankController(Player player, GameController state, Rectangle rectangle, TextureAtlas atlas, int playerNumber) {
+        this(player, state, rectangle, atlas, playerNumber, Levels.FIRST);
     }
 
-    public PlayerTankController(GameController state, Rectangle rectangle, TextureAtlas atlas, int playerNumber, int level) {
+    public PlayerTankController(Player player, GameController state, Rectangle rectangle, TextureAtlas atlas, int playerNumber, int level) {
+        this.player = player;
         this.state = state;
         model = new PlayerTankModel(rectangle, playerNumber, level);
         view = new PlayerTankView(atlas, model);
+        controlKeys = ControlKeys.DEFAULT_PLAYER_KEYS[playerNumber];
         lastShotTime = 0;
         isFired = false;
     }
 
     @Override
     public void update(long frame) {
-        int up;
-        int down;
-        int left;
-        int right;
-        int fire;
-        if (model.getPlayerNumber() == 0) {
-            up = Input.Keys.W;
-            down = Input.Keys.S;
-            left = Input.Keys.A;
-            right = Input.Keys.D;
-            fire = Input.Keys.B;
-        } else {
-            up = Input.Keys.UP;
-            down = Input.Keys.DOWN;
-            left = Input.Keys.LEFT;
-            right = Input.Keys.RIGHT;
-            fire = Input.Keys.NUMPAD_0;
-        }
         if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
             if (!model.isLocked()) {
-                if (Gdx.input.isKeyPressed(up)) {
+                if (Gdx.input.isKeyPressed(controlKeys[ControlKeys.KEY_UP])) {
                     move(Direction.UP);
-                } else if (Gdx.input.isKeyPressed(down)) {
+                } else if (Gdx.input.isKeyPressed(controlKeys[ControlKeys.KEY_DOWN])) {
                     move(Direction.DOWN);
-                } else if (Gdx.input.isKeyPressed(left)) {
+                } else if (Gdx.input.isKeyPressed(controlKeys[ControlKeys.KEY_LEFT])) {
                     move(Direction.LEFT);
-                } else if (Gdx.input.isKeyPressed(right)) {
+                } else if (Gdx.input.isKeyPressed(controlKeys[ControlKeys.KEY_RIGH])) {
                     move(Direction.RIGHT);
                 }
             }
 
-            if (Gdx.input.isKeyPressed(fire)){
+            if (Gdx.input.isKeyPressed(controlKeys[ControlKeys.KEY_FIRE])){
                 long time = new Date().getTime();
 
                 if ((time - lastShotTime) > 100 && !isFired) {
@@ -97,7 +85,7 @@ public class PlayerTankController implements TankController {
     public boolean hitOn(BulletController bullet) {
         if (bullet.getOwnerType() != Types.USER){
             if (model.getShieldEnergy() <= 0) {
-                state.destructTank(this);
+                state.destructTank(this, bullet);
             }
         } else {
             if (bullet.getOwner() != this) {
@@ -113,6 +101,14 @@ public class PlayerTankController implements TankController {
         model.reset();
         view.levelChanged();
         model.setDirection(Direction.UP);//reset previous direction
+    }
+
+    public void lock() {
+        model.lock();
+    }
+
+    public void setControlKeys(int[] controlKeys) {
+        this.controlKeys = controlKeys;
     }
 
     @Override
@@ -151,7 +147,7 @@ public class PlayerTankController implements TankController {
     }
 
     private void move(float direction) {
-        BattleFieldController battleField = state.getBattleField();
+        GameFieldController battleField = state.getBattleField();
         model.move(battleField, direction);
     }
 
@@ -173,5 +169,9 @@ public class PlayerTankController implements TankController {
             positionY = model.getY() + ((model.getHeight() - Size.BULLET) / 2);
         }
         return new Rectangle(positionX, positionY, Size.BULLET, Size.BULLET);
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

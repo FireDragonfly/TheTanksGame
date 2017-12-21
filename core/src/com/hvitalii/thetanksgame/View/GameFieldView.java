@@ -3,26 +3,27 @@ package com.hvitalii.thetanksgame.View;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.hvitalii.thetanksgame.Model.BattleFieldModel;
+import com.hvitalii.thetanksgame.Model.GameFieldModel;
 
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 
-public class BattleFieldView {
+public class GameFieldView {
 
     private TextureAtlas atlas;
     private Sprite[] sprites;
-    private BattleFieldModel model;
+    private GameFieldModel model;
 
-    public BattleFieldView(TextureAtlas atlas, BattleFieldModel model) {
+    public GameFieldView(TextureAtlas atlas, GameFieldModel model) {
         this.atlas = atlas;
         this.model = model;
-        sprites = new Sprite[19];
+        sprites = new Sprite[40];
         for (int i = 0; i < sprites.length; i++){
             sprites[i] = new Sprite(atlas.findRegion("block", i));
             sprites[i].setSize(Resolution.TILE_SIZE, Resolution.TILE_SIZE);
             sprites[i].setOriginCenter();
+            //sprites[i].setColor(1,1,1,1);
         }
     }
 
@@ -108,9 +109,20 @@ public class BattleFieldView {
         }
     }
 
+    public void drawUi(SpriteBatch batch) {
+        byte[][] layer = model.getUiLayer();
+        for (int i = 0; i < model.getHeight(); i++) {
+            for (int j = 0; j < model.getWidth(); j++) {
+                updateAndDrawSprite(batch, layer[i][j], j, i);
+            }
+        }
+    }
+
     private void updateAndDrawSprite(SpriteBatch batch, int spriteIndex, int x, int y) {
-        sprites[spriteIndex].setPosition(x * Resolution.TILE_SIZE, y * Resolution.TILE_SIZE);
-        sprites[spriteIndex].draw(batch);
+        if (spriteIndex > 0) {
+            sprites[spriteIndex].setPosition(x * Resolution.TILE_SIZE, y * Resolution.TILE_SIZE);
+            sprites[spriteIndex].draw(batch);
+        }
     }
 
 }

@@ -63,6 +63,7 @@ public class BulletController implements Controller{
     public int getOwnerType() {
         return model.getOwnerType();
     }
+
     public TankController getOwner() {
         return model.getOwner();
 
@@ -82,7 +83,7 @@ public class BulletController implements Controller{
     }
 
     private void checkCollision(Vector2 dot1, Vector2 dot2) {
-        BattleFieldController battleField = state.getBattleField();
+        GameFieldController battleField = state.getBattleField();
 
         if (battleField.hitTank(this, dot1.x, dot1.y)) {
             destruct();

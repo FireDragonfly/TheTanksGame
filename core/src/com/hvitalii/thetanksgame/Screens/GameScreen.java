@@ -2,11 +2,9 @@ package com.hvitalii.thetanksgame.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
@@ -16,11 +14,10 @@ import com.hvitalii.thetanksgame.TheTanksGame;
 public class GameScreen implements Screen {
 
     TheTanksGame game;
-    private TextureAtlas textureAtlas;
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private Viewport viewport;
-    private FPSLogger logger;
+    //private FPSLogger logger;
 
     private GameController state;
 
@@ -33,7 +30,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
-        logger = new FPSLogger();
+        //logger = new FPSLogger();
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -46,19 +43,19 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (state.isTimeToExit()) {
+            Gdx.app.exit();
+        }
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
         state.update();
-
         batch.begin();
         state.draw(batch);
         batch.end();
 
-        logger.log();
+        //logger.log();
     }
 
     @Override

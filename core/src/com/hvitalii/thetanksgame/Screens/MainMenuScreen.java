@@ -5,7 +5,6 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
@@ -33,7 +32,7 @@ public class MainMenuScreen extends ScreenAdapter{
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Resolution.SCREEN_WIDTH, Resolution.SCREEN_HEIGHT);
-        viewport = new FitViewport(Resolution.SCREEN_WIDTH, Resolution.SCREEN_HEIGHT, camera);
+        viewport = new ScreenViewport(camera);
         //float colorValue = 0.00390625f * 63;
         Gdx.gl.glClearColor(0 ,0, 0, 1);
     }
@@ -55,7 +54,7 @@ public class MainMenuScreen extends ScreenAdapter{
     }
 
     private void newGame() {
-        GameController state = new GameController(resourcesHandler, 1);
+        GameController state = new GameController(resourcesHandler, 4);
         GameScreen gameScreen = new GameScreen(state, game);
         game.setScreen(gameScreen);
     }

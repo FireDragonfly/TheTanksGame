@@ -1,33 +1,20 @@
 package com.hvitalii.thetanksgame.Constants;
 
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Array;
 
 public class ObjectsConstants {
+
     public static class Types {
         public static final int BOT = 0;
         public static final int USER = 1;
     }
 
-    public static final String[] PLAYER_TANKS_NAMES = {
-            "player_L1",
-            "player_L2",
-            "player_L3",
-            "player_L4"
-    };
-
-    public static final String[] BOT_TYPES_NAMES = {
-            "bot_small",
-            "bot_apc",
-            "bot_fast",
-            "bot_heavy"
-    };
-
     public static class Size {
         public static final float BULLET = 4;
-        public static final float TANK = 16;
-        public static final float TILE = 8;
-        public static final float BLOCK = 16;
+        public static final float TILE = GameConstants.Resolution.TILE_SIZE;
+        public static final float BLOCK = TILE * 2;
+        public static final float TANK = BLOCK;
     }
 
     public static class Direction {
@@ -54,16 +41,12 @@ public class ObjectsConstants {
     }
 
     public static class BotTypes {
+        public static final int COUNT = 4;
         public static final int SMALL = 0;
         public static final int APC = 1;
         public static final int FAST = 2;
         public static final int HEAVY = 3;
     }
-
-//    public static class BotState {
-//        public static final int BONUS = 1;
-//        public static final int DEFAULT = 0;
-//    }
 
     public static class BulletsTypes {
         public static final int NORMAL = 0;
@@ -91,24 +74,47 @@ public class ObjectsConstants {
         public static final byte DESTROYED_EAGLE_1_1 = 16;
         public static final byte BOT_IMG = 17;
         public static final byte PLAYER_IMG = 18;
-        public static final byte BOT_SPAWN = 19;
-        public static final byte PLAYER_1_SPAWN = 20;
-        public static final byte PLAYER_2_SPAWN = 21;
 
+        public static final byte DIGIT_0 = 19;
+        public static final byte DIGIT_1 = 20;
+        public static final byte DIGIT_2 = 21;
+        public static final byte DIGIT_3 = 22;
+        public static final byte DIGIT_4 = 23;
+        public static final byte DIGIT_5 = 24;
+        public static final byte DIGIT_6 = 25;
+        public static final byte DIGIT_7 = 26;
+        public static final byte DIGIT_8 = 27;
+        public static final byte DIGIT_9 = 28;
+
+        public static final byte LETTER_A = 29;
+        public static final byte LETTER_E = 30;
+        public static final byte LETTER_G = 31;
+        public static final byte LETTER_M = 32;
+        public static final byte LETTER_O = 33;
+        public static final byte LETTER_P = 34;
+        public static final byte LETTER_R = 35;
+        public static final byte LETTER_S = 36;
+        public static final byte LETTER_T = 37;
+        public static final byte LETTER_U = 37;
+        public static final byte LETTER_V = 39;
     }
 
-    public static class Colors {
-        public static final Color PLAYERS_COLORS[] = {
-                new Color(1, 1, 0, 1),
-                new Color(0.1f, 1, 0.2f, 1)
-        };
+    public static int[] intToTiles(int n) {
+        if (n > 0) {
+            Array<Integer> array = new Array<Integer>();
+            while (n > 0) {
+                array.add((n % 10) + TilesTypes.DIGIT_0);
+                n /= 10;
+            }
+            array.reverse();
+            int[] result = new int[array.size];
+            for (int i = 0; i < array.size; i++){
+                result[i] = array.get(i).intValue();
+            }
+            return result;
+        } else {
+            return new int[] { TilesTypes.DIGIT_0 };
+        }
 
-        public static final Color BONUSED_TANK = new Color(1,0.1f,0.5f,1);
-
-        public static final Color ARMOUR_COLORS[] = {
-                new Color(1, 1, 1, 1),
-                new Color(0.5f, 1, 0, 1),
-                new Color(1, 0.5f, 0, 1)
-        };
     }
 }

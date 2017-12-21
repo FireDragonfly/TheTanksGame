@@ -43,4 +43,8 @@ public class BotTankModel extends TankModel {
     public void setBonusCarrier(int bonus) {
         this.bonus = bonus;
     }
+
+    public int getBonus(){
+        return bonus;
+    }
 }

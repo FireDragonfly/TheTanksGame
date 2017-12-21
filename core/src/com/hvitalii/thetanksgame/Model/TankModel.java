@@ -2,7 +2,7 @@ package com.hvitalii.thetanksgame.Model;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
-import com.hvitalii.thetanksgame.Controller.BattleFieldController;
+import com.hvitalii.thetanksgame.Controller.GameFieldController;
 import com.hvitalii.thetanksgame.Utils.MathUtils;
 
 public abstract class TankModel extends Moveable {
@@ -86,12 +86,12 @@ public abstract class TankModel extends Moveable {
         }
     }
 
-    public void move(BattleFieldController battleField, float direction) {
+    public void move(GameFieldController battleField, float direction) {
 
         shift += getSpeed();
         if (shift >= 1) {
             switchAnimationFrame();
-            shift = 0;
+            shift -= 1;
         }
 
         setDirection(direction);

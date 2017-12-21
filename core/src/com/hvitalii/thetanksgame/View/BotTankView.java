@@ -3,7 +3,8 @@ package com.hvitalii.thetanksgame.View;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.hvitalii.thetanksgame.Constants.ObjectsConstants;
+import com.hvitalii.thetanksgame.Constants.GameConstants;
+import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Model.BotTankModel;
 
 public class BotTankView {
@@ -17,12 +18,12 @@ public class BotTankView {
         this.atlas = atlas;
         this.model = model;
         for (int i = 0; i < 2; i++) {
-            sprites[i] = new Sprite(atlas.findRegion(ObjectsConstants.BOT_TYPES_NAMES[model.getBotType()], i));
+            sprites[i] = new Sprite(atlas.findRegion(GameConstants.BOT_TYPES_NAMES[model.getBotType()], i));
             sprites[i].setBounds(model.x, model.y, model.width, model.height);
             if (model.isBonusCarrier()) {
-                sprites[i].setColor(ObjectsConstants.Colors.BONUSED_TANK);
+                sprites[i].setColor(Colors.BONUSED_TANK);
             } else {
-                sprites[i].setColor(ObjectsConstants.Colors.ARMOUR_COLORS[model.getArmourAmount()]);
+                sprites[i].setColor(Colors.ARMOUR_COLORS[model.getArmourAmount()]);
             }
             sprites[i].setOriginCenter();
             sprites[i].setRotation(model.getDirection());
@@ -37,7 +38,7 @@ public class BotTankView {
 
     public void armourAmountChanged() {
         for (int i = 0; i < 2; i++) {
-            sprites[i].setColor(ObjectsConstants.Colors.ARMOUR_COLORS[model.getArmourAmount()]);
+            sprites[i].setColor(Colors.ARMOUR_COLORS[model.getArmourAmount()]);
         }
     }
 

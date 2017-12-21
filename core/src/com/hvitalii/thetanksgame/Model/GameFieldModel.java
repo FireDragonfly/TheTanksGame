@@ -2,14 +2,13 @@ package com.hvitalii.thetanksgame.Model;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
-import com.hvitalii.thetanksgame.Controller.BulletController;
 import com.hvitalii.thetanksgame.Controller.TankController;
 
 import java.util.Scanner;
 
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.TilesTypes;
 
-public class BattleFieldModel {
+public class GameFieldModel {
 
     private int height;
     private int width;
@@ -17,21 +16,23 @@ public class BattleFieldModel {
     private byte[][] topBlocksLayer;
     private byte[][] borderLayer;
     private TankController[][] tanksLayer;
+    private byte[][] uiLayer;
 //    private BulletController[][] bulletLayer;
 
-    public BattleFieldModel() {
+    public GameFieldModel() {
         height = Resolution.FIELD_HEIGHT;
         width = Resolution.FIELD_WIDTH;
         bottomBlocksLayer = new byte[height][width];
         topBlocksLayer = new byte[height][width];
         borderLayer = new byte[height][width];
+        uiLayer = new byte[height][width];
         tanksLayer = new TankController[height][width];
 //        bulletLayer = new BulletController[height][width];
-//        initMap();
+        initMap();
         loadBorder();
     }
 
-    public BattleFieldModel(FileHandle fileHandle){
+    public GameFieldModel(FileHandle fileHandle){
         this();
         loadMap(fileHandle);
     }
@@ -122,6 +123,7 @@ public class BattleFieldModel {
             case TilesTypes.NULL:
                 borderLayer[y][x] = type;
                 bottomBlocksLayer[y][x] = type;
+                topBlocksLayer[y][x] = type;
                 break;
             case TilesTypes.GRAY:
                 borderLayer[y][x] = type;
@@ -172,10 +174,10 @@ public class BattleFieldModel {
                 bottomBlocksLayer[y][x] = type;
                 break;
             case TilesTypes.BOT_IMG:
-                borderLayer[y][x] = type;
+                uiLayer[y][x] = type;
                 break;
             case TilesTypes.PLAYER_IMG:
-                borderLayer[y][x] = type;
+                uiLayer[y][x] = type;
                 break;
 //                    case TilesTypes.BOT_SPAWN:
 //                        permeableBlocksLayer[i][j] = block;
@@ -312,6 +314,10 @@ public class BattleFieldModel {
         return borderLayer;
     }
 
+    public byte[][] getUiLayer() {
+        return uiLayer;
+    }
+
     public void clear() {
         bottomBlocksLayer = new byte[height][width];
         borderLayer = new byte[height][width];
@@ -326,6 +332,7 @@ public class BattleFieldModel {
                 bottomBlocksLayer[i][j] = 0;
                 borderLayer[i][j] = 0;
                 topBlocksLayer[i][j] = 0;
+                uiLayer[i][j] = 0;
                 tanksLayer[i][j] = null;
 //                bulletLayer[i][j] = null;
             }

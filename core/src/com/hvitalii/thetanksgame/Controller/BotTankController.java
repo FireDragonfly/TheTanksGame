@@ -1,7 +1,5 @@
 package com.hvitalii.thetanksgame.Controller;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,7 +7,6 @@ import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.GameController;
 import com.hvitalii.thetanksgame.Model.BotTankModel;
 import com.hvitalii.thetanksgame.Model.TankModel;
-import com.hvitalii.thetanksgame.Utils.MathUtils;
 import com.hvitalii.thetanksgame.View.BotTankView;
 
 import java.util.Date;
@@ -64,7 +61,7 @@ public class BotTankController implements TankController {
 //            }
 //        }
 
-        BattleFieldController battleField = state.getBattleField();
+        GameFieldController battleField = state.getBattleField();
         float direction = model.getDirection();
         float random = direction;
 
@@ -177,7 +174,10 @@ public class BotTankController implements TankController {
                     model.setArmourAmount(model.getArmourAmount() - 1);
                     view.armourAmountChanged();
                 } else {
-                    state.destructTank(this);
+                    state.destructTank(this, bullet);
+                }
+                if (model.isBonusCarrier()) {
+                    state.spawnBonus(model.getBonus());
                 }
             }
             return true;
@@ -189,9 +189,12 @@ public class BotTankController implements TankController {
     public int getType() {
         return Types.BOT;
     }
+    public int getBotType() {
+        return model.getBotType();
+    }
 
     private void move(float direction) {
-        BattleFieldController battleField = state.getBattleField();
+        GameFieldController battleField = state.getBattleField();
         model.move(battleField, direction);
     }
 

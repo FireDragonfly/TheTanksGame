@@ -2,8 +2,8 @@ package com.hvitalii.thetanksgame;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.hvitalii.thetanksgame.Constants.GameConstants;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Controller.*;
@@ -15,69 +15,73 @@ import java.util.Date;
 public class GameController {
 
     private ResourcesHandler resourcesHandler;
-    private Array<TankController> bots;
-    private Array<TankController> players;
-    private Array<BulletController> bullets;
-    private BattleFieldController battleField;
     private TextureAtlas textureAtlas;
-    private Rectangle[] playersSpawnPositions;
-    private Rectangle[] botsSpawnPositions;
+    private StageState stageState;
+    private Array<Player> players;
     private int playersNumber;
     private int stage;
     private long frame;
     private long nextBotSpawnTime;
+    private long exitTime;
+    private boolean isTimeToExit;
 
     public GameController(ResourcesHandler resourcesHandler, int playersNumber) {
+        isTimeToExit = false;
         this.resourcesHandler = resourcesHandler;
-        textureAtlas = resourcesHandler.getAssetManager().get("atlas.atlas");
-        //textureAtlas = resourcesHandler.getAssetManager().get("debugging_atlas.atlas");
+        textureAtlas = resourcesHandler.getAssetManager().get(Files.ATLASES_LOCATION + Files.ATLAS_NAME);
+//        textureAtlas = resourcesHandler.getAssetManager().get(Files.ATLASES_LOCATION + Files.DEBUGGING_ATLAS_NAME);
+        stageState = new StageState(this, textureAtlas);
+        stageState.setMap(resourcesHandler.getMaps()[0]);
+        stageState.setBotsRemaining(20);
+        players = new Array<Player>();
 
-        this.playersNumber = playersNumber;
-        stage = 1;
+        stage = 0;
         frame = 0;
         nextBotSpawnTime = 0;
 
-        playersSpawnPositions = new Rectangle[2];
-        playersSpawnPositions[0] = new Rectangle(Resolution.TILE_SIZE * 2 * 5, Resolution.TILE_SIZE, Size.TANK, Size.TANK);
-        playersSpawnPositions[1] = new Rectangle(Resolution.TILE_SIZE * 2 * 9, 8, Size.TANK, Size.TANK);
-
-        botsSpawnPositions = new Rectangle[3];
-        botsSpawnPositions[0] = new Rectangle(Resolution.SCREEN_HEIGHT - (Size.TILE * 2 + (Size.BLOCK * 12)) , Resolution.SCREEN_HEIGHT - Size.TILE * 3, Size.TANK, Size.TANK);
-        botsSpawnPositions[1] = new Rectangle(Resolution.SCREEN_HEIGHT - (Size.TILE * 2 + (Size.BLOCK * 6)) , Resolution.SCREEN_HEIGHT - Size.TILE * 3, Size.TANK, Size.TANK);
-        botsSpawnPositions[2] = new Rectangle(Resolution.SCREEN_HEIGHT - (Size.TILE * 2) , Resolution.SCREEN_HEIGHT - Size.TILE * 3, Size.TANK, Size.TANK);
-
-
-        battleField = new BattleFieldController(this, textureAtlas);
-        battleField.setMap(resourcesHandler.getMaps()[0]);
-        bots = new Array<TankController>();
-        players = new Array<TankController>();
-        bullets = new Array<BulletController>();
-
-        spawnPlayer(0);
-        if (playersNumber > 0){
-            spawnPlayer(1);
+        this.playersNumber = playersNumber;
+        for (int i = 0; i < playersNumber; i++) {
+            addPlayer(i);
         }
 
+        exitTime = 0;
     }
+
 
     public void update() {
         long time = new Date().getTime();
-        if ((bots.size < 4) && (nextBotSpawnTime < time)) {
-            spawnBot();
-            updateBotSpawnTyme(time);
+
+        if (exitTime < time) {
+            if (exitTime == 0) {
+                if (!stageState.isEagleAlive() || !hasAlivePlayer()
+                        || ((stageState.getBotsRemaining() == 0) && (stageState.getBots().size == 0))) {
+                    exitTime = time + 5000;
+                }
+            } else {
+                isTimeToExit = true;
+            }
+        }
+
+        if ((stageState.getBots().size < 4) && (nextBotSpawnTime < time)) {
+            if (stageState.getBotsRemaining() > 0) {
+                spawnBot();
+                updateBotSpawnTime(time);
+                stageState.setBotsRemaining(stageState.getBotsRemaining() - 1);
+            }
         }
 
         frame++;
         if (frame == 256) {
             frame = 0;
         }
-        {
+
+        { // Check bullets collision
             Array<BulletController> bulletsToRemove = new Array<BulletController>();
-            for (int i = 0; i < bullets.size - 1; i++) {
-                for (int j = i + 1; j < bullets.size; j++) {
-                    if (bullets.get(i).getBounds().overlaps(bullets.get(j).getBounds())) {
-                        bulletsToRemove.add(bullets.get(i));
-                        bulletsToRemove.add(bullets.get(j));
+            for (int i = 0; i < stageState.getBullets().size - 1; i++) {
+                for (int j = i + 1; j < stageState.getBullets().size; j++) {
+                    if (stageState.getBullets().get(i).getBounds().overlaps(stageState.getBullets().get(j).getBounds())) {
+                        bulletsToRemove.add(stageState.getBullets().get(i));
+                        bulletsToRemove.add(stageState.getBullets().get(j));
                     }
                 }
             }
@@ -85,66 +89,81 @@ public class GameController {
                 bulletsToRemove.get(i).destruct();
             }
         }
-
-
-        for (int i = 0; i < players.size; i++) { //Update players
-            players.get(i).update(frame);
+        if (stageState.isEagleAlive()) {
+            for (int i = 0; i < stageState.getPlayers().size; i++) { //Update players
+                stageState.getPlayers().get(i).update(frame);
+            }
         }
-        for (int i = 0; i < bots.size; i++) { //Update bots
-            bots.get(i).update(frame);
+        for (int i = 0; i < stageState.getBots().size; i++) { //Update bots
+            stageState.getBots().get(i).update(frame);
         }
 
-        battleField.update(frame);
+        stageState.getBattleField().update(frame); //Update battle field
 
-        for (int i = 0; i < bullets.size; i++) { //Update bullets
-            bullets.get(i).update(frame);
+        for (int i = 0; i < stageState.getBullets().size; i++) { //Update bullets
+            stageState.getBullets().get(i).update(frame);
+        }
+
+        if (frame % 60 == 0) {
+            for (int i = 0; i < players.size; i++) {
+                System.out.print(i + ": ");
+                System.out.println(players.get(i).getScore());
+            }
         }
 
     }
 
     public void draw(SpriteBatch batch) {
 
-        battleField.drawBottomLayers(batch);
+        stageState.getBattleField().drawBottomLayers(batch);
 
-        for (int i = 0; i < players.size; i++) { //Draw players
-            players.get(i).draw(batch);
+        for (int i = 0; i < stageState.getPlayers().size; i++) { //Draw players
+            stageState.getPlayers().get(i).draw(batch);
         }
 
-        for (int i = 0; i < bots.size; i++) { //Draw bots
-            bots.get(i).draw(batch);
+        for (int i = 0; i < stageState.getBots().size; i++) { //Draw bots
+            stageState.getBots().get(i).draw(batch);
         }
 
-        for (int i = 0; i < bullets.size; i++) { //Draw bullets
-            bullets.get(i).draw(batch);
+        for (int i = 0; i < stageState.getBullets().size; i++) { //Draw bullets
+            stageState.getBullets().get(i).draw(batch);
         }
 
-        battleField.drawTopLayers(batch);
+        stageState.getBattleField().drawTopLayers(batch);
+        stageState.getBattleField().drawUi(batch);
 
+    }
+
+
+    public void addPlayer(int playerNumber){
+        Player player = new Player(this, textureAtlas, playerNumber);
+        players.add(player);
+        stageState.getPlayers().add(player.getController());
+    }
+
+    public void respawnPlayer(PlayerTankController player) {
+        player.reset(GameConstants.PLAYERS_SPAWN_POSITIONS[((PlayerTankModel)player.getModel()).getPlayerNumber()]);
     }
 
     public void spawnBullet(BulletController bullet) {
-        bullets.add(bullet);
-    }
-
-    public void spawnPlayer(int playerNumber){
-        players.add(new PlayerTankController(this, playersSpawnPositions[playerNumber], textureAtlas, playerNumber, 3));
+        stageState.getBullets().add(bullet);
     }
 
     public void spawnBot(){
         int spawnPosition = (int)(Math.random() * 75) / 32;
-        int botType = (int)(Math.random() * 96) / 32 ;
-        bots.add(new BotTankController(this, botsSpawnPositions[spawnPosition], textureAtlas, botType, -1));
+        int botType = (int)(Math.random() * 128) / 32 ;
+        stageState.getBots().add(new BotTankController(this, GameConstants.BOTS_SPAWN_POSITIONS[spawnPosition], textureAtlas, botType, -1));
     }
 
-    public void respawnPlayer(PlayerTankController player) {
-        player.reset(playersSpawnPositions[((PlayerTankModel)player.getModel()).getPlayerNumber()]);
+    public void spawnBonus(int bonusType) {
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     public void destructBullet(BulletController bullet) {
-        bullets.removeIndex(bullets.indexOf(bullet, true));
+        stageState.getBullets().removeIndex(stageState.getBullets().indexOf(bullet, true));
     }
 
-    public void destructTank(TankController tank) {
+    public void destructTank(TankController tank, BulletController bullet) {
         if (tank.getType() == Types.USER) {
             PlayerTankModel tankModel = (PlayerTankModel)tank.getModel();
             int lives = tankModel.getLivesAmount();
@@ -154,34 +173,52 @@ public class GameController {
                 respawnPlayer((PlayerTankController) tank);
                 return;
             }
-            players.removeIndex(players.indexOf(tank, true));
+            ((PlayerTankController)tank).getPlayer().killed();
+            stageState.getPlayers().removeIndex(stageState.getPlayers().indexOf(tank, true));
             return;
         }
-        bots.removeIndex(bots.indexOf(tank, true));
+        int botType = ((BotTankController)tank).getBotType();
+        ((PlayerTankController)bullet.getOwner()).getPlayer().addDestroyedBot(botType);
+        stageState.getBots().removeIndex(stageState.getBots().indexOf(tank, true));
 
         long time = new Date().getTime();
         if (nextBotSpawnTime < time) {
-            updateBotSpawnTyme(time);
+            updateBotSpawnTime(time);
         }
     }
+
+    public boolean hasAlivePlayer() {
+        for (int i = 0; i < players.size; i++) {
+            if (players.get(i).isAlive()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     public TextureAtlas getTextureAtlas() {
         return textureAtlas;
     }
 
-    public BattleFieldController getBattleField() {
-        return battleField;
+    public GameFieldController getBattleField() {
+        return stageState.getBattleField();
     }
 
     public Array<BulletController> getBullets() {
-        return bullets;
+        return stageState.getBullets();
     }
 
     public Array<TankController> getBotsTanks() {
-        return bots;
+        return stageState.getBots();
     }
 
     public Array<TankController> getPlayersTanks() {
+        return stageState.getPlayers();
+    }
+
+    public Array<Player> getPlayers() {
         return players;
     }
 
@@ -189,7 +226,11 @@ public class GameController {
         return frame;
     }
 
-    private void updateBotSpawnTyme(long time) {
+    private void updateBotSpawnTime(long time) {
         nextBotSpawnTime = time + Math.abs(3500 - (50 * stage) * playersNumber);
+    }
+
+    public boolean isTimeToExit() {
+        return isTimeToExit;
     }
 }
