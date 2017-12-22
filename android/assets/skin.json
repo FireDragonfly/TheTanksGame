@@ -1,0 +1,26 @@
+{
+
+  com.badlogic.gdx.graphics.g2d.BitmapFont: {
+    font32: { file: Fonts/font32.fnt },
+    font16: { file: Fonts/font16.fnt },
+    font8: { file: Fonts/font8.fnt }
+  },
+
+  com.badlogic.gdx.graphics.Color: {
+    white: { a: 1, b: 1, g: 1, r: 1 },
+    black: { a: 1, b: 0, g: 0, r: 0 },
+    red: { a: 1, b: 0.13, g: 0.19, r: 0.71 }
+  },
+
+  com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+    default: { font: font32, fontColor: white },
+    default_black: { font: font32, fontColor: black },
+    default_red: { font: font32, fontColor: red }
+//  },
+//
+//  com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+//    default: { down: default-round-down, up: default-round },
+//    toggle: { down: default-round-down, checked: default-round-down, up: default-round }
+  }
+
+}

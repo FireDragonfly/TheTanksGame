@@ -56,6 +56,10 @@ public class Player {
         }
     }
 
+    public int[] getStageBotsDestroyed() {
+        return stageBotsDestroyed;
+    }
+
     public void setControlKeys(int[] set) {
         controller.setControlKeys(set);
     }

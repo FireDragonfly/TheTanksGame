@@ -15,8 +15,9 @@ public class ResourcesHandler implements Disposable{
     private FileHandle[] maps;
     private FileHandle[] externalMaps;
 
-    private BitmapFont font16;
-    private BitmapFont font32;
+    public final FileHandle font16;
+    public final FileHandle font32;
+    public final FileHandle font64;
 
     public ResourcesHandler() {
         maps = Gdx.files.local(Files.LOCAL_MAPS_LOCATION).list("map");
@@ -28,8 +29,9 @@ public class ResourcesHandler implements Disposable{
             }
         }
         assetManager = new AssetManager();
-        font16 = new BitmapFont(Gdx.files.local(Files.FONTS_LOCATION + "font16.fnt"));
-        font32 = new BitmapFont(Gdx.files.local(Files.FONTS_LOCATION + "font32.fnt"));
+        font16 = Gdx.files.local(Files.FONTS_LOCATION + "font16.fnt");
+        font32 = Gdx.files.local(Files.FONTS_LOCATION + "font32.fnt");
+        font64 = Gdx.files.local(Files.FONTS_LOCATION + "font64.fnt");
     }
 
     public void loadAssets() {
@@ -58,7 +60,5 @@ public class ResourcesHandler implements Disposable{
     @Override
     public void dispose() {
         assetManager.dispose();
-        font16.dispose();
-        font32.dispose();
     }
 }

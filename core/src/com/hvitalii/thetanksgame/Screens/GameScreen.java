@@ -2,60 +2,107 @@ package com.hvitalii.thetanksgame.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.GameController;
+import com.hvitalii.thetanksgame.Player;
+import com.hvitalii.thetanksgame.Statistic;
 import com.hvitalii.thetanksgame.TheTanksGame;
+import com.hvitalii.thetanksgame.View.MyOwnButton;
+import com.hvitalii.thetanksgame.View.MyOwnLabel;
+import com.hvitalii.thetanksgame.View.MyOwnLabel.*;
 
 public class GameScreen implements Screen {
 
     TheTanksGame game;
     private SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
     private Viewport viewport;
-    //private FPSLogger logger;
-
     private GameController state;
+    private Statistic statistic;
+
+    private MyOwnButton pause;
+    private MyOwnButton exit;
+    private MyOwnLabel gameOver;
+    private boolean isPause;
 
 
-    public GameScreen(GameController state, TheTanksGame game) {
+    public GameScreen(GameController state, TheTanksGame game, Statistic statistic) {
         this.state = state;
         this.game = game;
+        this.statistic = statistic;
     }
 
     @Override
     public void show() {
-
-        //logger = new FPSLogger();
-
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Resolution.SCREEN_WIDTH, Resolution.SCREEN_HEIGHT);
         viewport = new FitViewport(Resolution.SCREEN_WIDTH, Resolution.SCREEN_HEIGHT, camera);
-        //float colorValue = 0.00390625f * 63;
         Gdx.gl.glClearColor(0 ,0, 0, 1);
-
+        isPause = false;
+        initUi();
     }
 
     @Override
     public void render(float delta) {
         if (state.isTimeToExit()) {
-            Gdx.app.exit();
+            exit();
         }
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        state.update();
-        batch.begin();
-        state.draw(batch);
-        batch.end();
+        if (!isPause) {
 
-        //logger.log();
+            state.update();
+
+            batch.begin();
+            state.draw(batch);
+            pause.draw(batch);
+            batch.end();
+            if (!state.getStageState().isEagleAlive() || !state.hasAlivePlayer()) {
+                fillGrayScreen();
+                batch.begin();
+                gameOver.draw(batch);
+                batch.end();
+            } else {
+                if (pause.isPressed()) {
+                    isPause = true;
+                    pause.setText("PLAY");
+                    debounce();
+                }
+            }
+        } else {
+            batch.begin();
+            state.draw(batch);
+            batch.end();
+
+            fillGrayScreen();
+
+            batch.begin();
+            pause.draw(batch);
+            exit.draw(batch);
+            batch.end();
+
+            if (exit.isPressed()) {
+                exit();
+            } else if (pause.isPressed()) {
+                isPause = false;
+                pause.setText("PAUSE");
+                debounce();
+            }
+        }
+
     }
 
     @Override
@@ -76,6 +123,52 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {
 
+    }
+
+    private void fillGrayScreen() {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0.25f, 0.25f, 0.25f, 0.7f);
+        shapeRenderer.rect(0, 0, Resolution.SCREEN_WIDTH, Resolution.SCREEN_HEIGHT);
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
+    private void initUi() {
+        pause = new MyOwnButton(game.getResourcesHandler().font32, "PAUSE");
+        pause.setTextAlignment(Align.center);
+        pause.setPosition(Resolution.SCREEN_WIDTH - 4 , 8, Align.right);
+        pause.setScale(0.2f);
+        pause.setColor(UiColors.TTG_RED);
+        pause.setHoverColor(Color.WHITE);
+
+        exit = new MyOwnButton(game.getResourcesHandler().font32, "EXIT");
+        exit.setTextAlignment(Align.center);
+        exit.setScale(0.25f);
+        exit.setPosition(Resolution.SCREEN_WIDTH / 2, 16, Align.center);
+        exit.setColor(Color.ORANGE);
+        exit.setHoverColor(UiColors.TTG_RED);
+
+        gameOver = new MyOwnLabel(game.getResourcesHandler().font32, "GAME\nOVER");
+        gameOver.setTextAlignment(Align.center);
+        gameOver.setScale(0.5f);
+        gameOver.setPosition(Resolution.SCREEN_WIDTH / 2, (Resolution.SCREEN_HEIGHT / 2) - (gameOver.getHeight() / 2), Align.center);
+        gameOver.setColor(UiColors.TTG_RED);
+    }
+
+    private void exit() {
+        StatisticScreen statisticScreen = new StatisticScreen(game, statistic, state);
+        game.setScreen(statisticScreen);
+    }
+
+    private void debounce() {
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

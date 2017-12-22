@@ -39,87 +39,20 @@ public class BotTankController implements TankController {
 
     @Override
     public void update(long frame) {
-//        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-//            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-//                move(Direction.UP);
-//            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-//                move(Direction.DOWN);
-//            } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-//                move(Direction.LEFT);
-//            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-//                move(Direction.RIGHT);
-//            }
-//
-//            if (Gdx.input.isKeyPressed(Input.Keys.X)){
-//
-//                long time = new Date().getTime();
-//
-//                if ((time - lastShotTime) > 100) {
-//                    fire();
-//                    lastShotTime = time;
-//                }
-//            }
-//        }
-
-        GameFieldController battleField = state.getBattleField();
         float direction = model.getDirection();
         float random = direction;
 
-        if (!model.isDirectionChanged()) {
-            if ((int)(Math.random() * 64) % 64 == 0) {
-                random = randomDirection();
-            }
-            if ((int)(Math.random() * 512) % 512 == 0) {
-                System.out.println("direction changed");
+        if (isThePathFree(direction)) {
+            if ((int)(Math.random() * 200) % 200 == 0) {
                 direction = randomDirection();
             }
+        } else if (!model.isDirectionChanged()){
+            direction = randomDirection();
         }
 
-        if (direction == Direction.UP) {
-            float newPosition = model.getY() + model.getSpeed();
-            if (!battleField.isPositionFree(model, model.getX(), newPosition + Size.TANK)
-                    || !battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition + Size.TANK)
-                    ) {
-                random = randomDirection(random);
-                move(random);
-            } else {
-                move(direction);
-            }
-        } else if (direction == Direction.DOWN) {
-            float newPosition = model.getY() - model.getSpeed();
-            if (!battleField.isPositionFree(model, model.getX(), newPosition)
-                    || !battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition)
-                    ) {
-                random = randomDirection(random);
-                move(random);
-            } else {
-                move(direction);
-            }
-        } else if (direction == Direction.LEFT) {
-            float newPosition = model.getX() - model.getSpeed();
-            if (!battleField.isPositionFree(model, newPosition, model.getY())
-                    || !battleField.isPositionFree(model, newPosition, model.getY() + Size.TANK - 0.1f)
-                    ) {
-                random = randomDirection(random);
-                move(random);
-            } else {
-                move(direction);
-            }
-        } else if (direction == Direction.RIGHT) {
-            float newPosition = model.getX() + model.getSpeed();
-            if (!battleField.isPositionFree(model, newPosition  + Size.TANK, model.getY())
-                    || !battleField.isPositionFree(model, newPosition + Size.TANK, model.getY() + Size.TANK - 0.1f)
-                    ) {
-                random = randomDirection(random);
-                move(random);
-            } else {
-                move(direction);
-            }
-        }
+        move(direction);
 
-        int fire = (int)(Math.random() * 64) % 64;
-//        if (fire == 0) System.out.println("/////" + fire);
-//        else System.out.println(fire);
+        int fire = (int)(Math.random() * 32) % 32;
         if (fire == 0) {
             fire();
         }
@@ -198,23 +131,78 @@ public class BotTankController implements TankController {
         model.move(battleField, direction);
     }
 
+    /**
+     * generate random direction
+     */
     private float randomDirection() {
-        return (int)((Math.random() * 359) / 90) * 90;
-    }
+        float direction = model.getDirection();
 
-    private float randomDirection(float direction) {
-        if ((model.getDirection() == direction) || (model.getDirection() == Math.abs(direction - 180))) {
-            if ((int)(Math.random() * 64) % 32 == 0) {
+        if ((int)(Math.random() * 32) % 32 == 0) {
+            direction = (int) ((Math.random() * 359) / 90) * 90;
+        }
+
+        if (isThePathFree(direction)) {
+            return direction;
+        } else  {
+            if ((int)(Math.random() * 32) % 32 == 0) {
                 if ((Math.random() * 100) > 50) {
                     direction += 90;
                 } else {
                     direction -= 90;
                 }
             }
+            if (direction == Direction.UP) {
+                if ((int)(Math.random() * 128) % 128 == 0) {
+                    direction -= 180;
+                }
+            }
         }
+
         direction = Math.abs(direction);
         direction = (direction == 360) ? 0 : direction;
         return direction;
+    }
+
+    private boolean isThePathFree(float direction) {
+        GameFieldController battleField = state.getBattleField();
+        if (direction == Direction.UP) {
+            float newPosition = model.getY() + model.getSpeed();
+            if (battleField.isPositionFree(model, model.getX(), newPosition + Size.TANK)
+                    && battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition + Size.TANK)
+                    ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (direction == Direction.DOWN) {
+            float newPosition = model.getY() - model.getSpeed();
+            if (battleField.isPositionFree(model, model.getX(), newPosition)
+                    && battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition)
+                    ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (direction == Direction.LEFT) {
+            float newPosition = model.getX() - model.getSpeed();
+            if (battleField.isPositionFree(model, newPosition, model.getY())
+                    && battleField.isPositionFree(model, newPosition, model.getY() + Size.TANK - 0.1f)
+                    ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (direction == Direction.RIGHT) {
+            float newPosition = model.getX() + model.getSpeed();
+            if (battleField.isPositionFree(model, newPosition  + Size.TANK, model.getY())
+                    && battleField.isPositionFree(model, newPosition + Size.TANK, model.getY() + Size.TANK - 0.1f)
+                    ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     private Rectangle bulletStartPosition() {

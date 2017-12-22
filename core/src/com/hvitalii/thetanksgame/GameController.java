@@ -1,5 +1,7 @@
 package com.hvitalii.thetanksgame;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
@@ -20,6 +22,7 @@ public class GameController {
     private Array<Player> players;
     private int playersNumber;
     private int stage;
+    private int lastSpawnPosition;
     private long frame;
     private long nextBotSpawnTime;
     private long exitTime;
@@ -29,15 +32,26 @@ public class GameController {
         isTimeToExit = false;
         this.resourcesHandler = resourcesHandler;
         textureAtlas = resourcesHandler.getAssetManager().get(Files.ATLASES_LOCATION + Files.ATLAS_NAME);
-//        textureAtlas = resourcesHandler.getAssetManager().get(Files.ATLASES_LOCATION + Files.DEBUGGING_ATLAS_NAME);
         stageState = new StageState(this, textureAtlas);
-        stageState.setMap(resourcesHandler.getMaps()[0]);
+        try {
+            stageState.setMap(resourcesHandler.getMaps()[0]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            try {
+                stageState.setMap(resourcesHandler.getExternalMaps()[0]);
+            } catch (ArrayIndexOutOfBoundsException e2) {
+                e2.printStackTrace();
+                isTimeToExit = true;
+            }
+        }
         stageState.setBotsRemaining(20);
         players = new Array<Player>();
 
         stage = 0;
         frame = 0;
         nextBotSpawnTime = 0;
+
+        lastSpawnPosition = (int)(Math.random() * 2);
 
         this.playersNumber = playersNumber;
         for (int i = 0; i < playersNumber; i++) {
@@ -89,7 +103,7 @@ public class GameController {
                 bulletsToRemove.get(i).destruct();
             }
         }
-        if (stageState.isEagleAlive()) {
+        if (stageState.isEagleAlive() && hasAlivePlayer()) {
             for (int i = 0; i < stageState.getPlayers().size; i++) { //Update players
                 stageState.getPlayers().get(i).update(frame);
             }
@@ -132,6 +146,7 @@ public class GameController {
         stageState.getBattleField().drawTopLayers(batch);
         stageState.getBattleField().drawUi(batch);
 
+
     }
 
 
@@ -150,9 +165,14 @@ public class GameController {
     }
 
     public void spawnBot(){
-        int spawnPosition = (int)(Math.random() * 75) / 32;
         int botType = (int)(Math.random() * 128) / 32 ;
-        stageState.getBots().add(new BotTankController(this, GameConstants.BOTS_SPAWN_POSITIONS[spawnPosition], textureAtlas, botType, -1));
+        stageState.getBots().add(new BotTankController(
+                this,
+                GameConstants.BOTS_SPAWN_POSITIONS[nextSpawnPosition()],
+                textureAtlas,
+                botType,
+                -1
+        ));
     }
 
     public void spawnBonus(int bonusType) {
@@ -222,8 +242,27 @@ public class GameController {
         return players;
     }
 
+    public StageState getStageState() {
+        return stageState;
+    }
+
+    public int getStage() {
+        return stage;
+    }
+
+
     public long getFrame() {
         return frame;
+    }
+
+    private int nextSpawnPosition() {
+        if (lastSpawnPosition == 2) {
+            lastSpawnPosition = 0;
+        } else {
+            lastSpawnPosition++;
+        }
+        return lastSpawnPosition;
+
     }
 
     private void updateBotSpawnTime(long time) {

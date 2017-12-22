@@ -17,7 +17,8 @@ public class TheTanksGame extends Game {
 	public void create () {
 	    resourcesHandler = new ResourcesHandler();
 	    resourcesHandler.loadAssets();
-	    mainMenuScreen = new MainMenuScreen(resourcesHandler, this);
+	    Statistic statistic = new Statistic();
+	    mainMenuScreen = new MainMenuScreen(resourcesHandler, this, statistic);
 	    setScreen(mainMenuScreen);
 	}
 

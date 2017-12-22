@@ -116,6 +116,7 @@ public class GameConstants {
     }
 
     public static class Colors {
+
         public static final Color PLAYERS_COLORS[] = {
                 new Color(1, 0.732f, 0.156f, 1),
                 new Color(0, 0.825f, 0.285f, 1),
@@ -131,6 +132,12 @@ public class GameConstants {
                 new Color(0.5f, 1, 0.7f, 1),
                 new Color(1, 0.7f, 0.5f, 1)
         };
+    }
+
+    public static class UiColors {
+        public static final Color TTG_RED = new Color(0xB53121FF);
+        public static final Color TTG_GREY = new Color(0x636363FF);
+        public static final Color TTG_ORANGE = new Color(0xFC9838FF);
     }
 
     public static class ControlKeys {
