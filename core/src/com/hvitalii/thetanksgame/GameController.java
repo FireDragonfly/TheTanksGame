@@ -47,7 +47,7 @@ public class GameController {
         stageState.setBotsRemaining(20);
         players = new Array<Player>();
 
-        stage = 0;
+        stage = 1;
         frame = 0;
         nextBotSpawnTime = 0;
 

@@ -9,16 +9,24 @@ import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 public class GameConstants {
 
     public static class Files {
-        public static final String ATLASES_LOCATION = "Atlases/";
+        public static final String RESOURCES_LOCATION = "resources/";
+        public static final String ATLASES_LOCATION = RESOURCES_LOCATION + "atlases/";
+        public static final String FONTS_LOCATION = RESOURCES_LOCATION + "fonts/";
+        public static final String LOCAL_MAPS_LOCATION = RESOURCES_LOCATION + "maps/";
+        public static final String EXTERNAL_MAPS_LOCATION = "The Tanks Game/maps/";
+        public static final String MAP_SUFFIX = ".ttgm";
         public static final String ATLAS_NAME = "atlas.atlas";
         public static final String DEBUGGING_ATLAS_NAME = "debugging_atlas.atlas";
-        public static final String FONTS_LOCATION = "Fonts/";
-        public static final String LOCAL_MAPS_LOCATION = "Maps/";
-        public static final String EXTERNAL_MAPS_LOCATION = "The Tanks Game/maps/";
+
+        public static final String[] MAPS_NAMES = {
+                "stage_1" + MAP_SUFFIX,
+                "stage_2" + MAP_SUFFIX,
+                "stage_3" + MAP_SUFFIX,
+                "stage_4" + MAP_SUFFIX,
+                "stage_5" + MAP_SUFFIX
+        };
+        public static final int MAPS_COUNT = MAPS_NAMES.length;
     }
-
-
-
 
     public static final String[] PLAYER_TANKS_NAMES = {
             "player_L1",
@@ -135,7 +143,7 @@ public class GameConstants {
     }
 
     public static class UiColors {
-        public static final Color TTG_RED = new Color(0xB53121FF);
+        public static final Color TTG_RED = new Color(0xD82800FF);
         public static final Color TTG_GREY = new Color(0x636363FF);
         public static final Color TTG_ORANGE = new Color(0xFC9838FF);
     }

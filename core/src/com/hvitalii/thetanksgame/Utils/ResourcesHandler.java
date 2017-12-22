@@ -3,7 +3,6 @@ package com.hvitalii.thetanksgame.Utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
 import com.hvitalii.thetanksgame.Constants.GameConstants.Files;
@@ -20,12 +19,16 @@ public class ResourcesHandler implements Disposable{
     public final FileHandle font64;
 
     public ResourcesHandler() {
-        maps = Gdx.files.local(Files.LOCAL_MAPS_LOCATION).list("map");
+        maps = new FileHandle[Files.MAPS_COUNT];
+        for (int i = 0; i < maps.length; i++) {
+            maps[i] = Gdx.files.internal(Files.LOCAL_MAPS_LOCATION + Files.MAPS_NAMES[i]);
+        }
         if (Gdx.files.isExternalStorageAvailable()) {
             if (Gdx.files.external(DEFAULT_EXTERNAL_MAPS_FOLDER).isDirectory()) {
-                externalMaps = Gdx.files.external(DEFAULT_EXTERNAL_MAPS_FOLDER).list("map");
+                externalMaps = Gdx.files.external(DEFAULT_EXTERNAL_MAPS_FOLDER).list(Files.MAP_SUFFIX);
             } else {
                 Gdx.files.external(DEFAULT_EXTERNAL_MAPS_FOLDER).mkdirs();
+                externalMaps = new FileHandle[0];
             }
         }
         assetManager = new AssetManager();

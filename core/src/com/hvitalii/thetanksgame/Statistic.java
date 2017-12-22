@@ -5,7 +5,7 @@ public class Statistic {
     private int hiScore;
     private int[] playersScores;
     public Statistic() {
-        hiScore = 20000;
+        hiScore = 0;
         playersScores = new int[4];
     }
 

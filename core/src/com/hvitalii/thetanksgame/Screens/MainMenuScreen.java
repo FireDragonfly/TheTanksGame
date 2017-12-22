@@ -50,8 +50,6 @@ public class MainMenuScreen extends ScreenAdapter{
         super.show();
         //float colorValue = 0.00390625f * 63;
         Gdx.gl.glClearColor(0 ,0, 0, 1);
-
-        render(30);
     }
 
     @Override
@@ -66,22 +64,15 @@ public class MainMenuScreen extends ScreenAdapter{
         drawUi();
         batch.end();
 
-        if (delta >= 25) {
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        if (onePlayer.isPressed()){
+        if (onePlayer.justTouched()){
             newGame(1);
-        } else if (twoPlayers.isPressed()) {
+        } else if (twoPlayers.justTouched()) {
             newGame(2);
-        } else if (threePlayers.isPressed()) {
+        } else if (threePlayers.justTouched()) {
             newGame(3);
-        } else if (fourPlayers.isPressed()) {
+        } else if (fourPlayers.justTouched()) {
             newGame(4);
-        } else if (exit.isPressed()) {
+        } else if (exit.justTouched()) {
             Gdx.app.exit();
         }
     }

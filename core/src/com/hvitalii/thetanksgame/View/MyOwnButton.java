@@ -74,4 +74,12 @@ public class MyOwnButton extends MyOwnLabel {
     public boolean isPressed() {
         return isHover() && (Gdx.input.isButtonPressed(Input.Buttons.LEFT));
     }
+
+    public boolean isTouched() {
+        return isHover() && (Gdx.input.isTouched());
+    }
+
+    public boolean justTouched() {
+        return isHover() && (Gdx.input.justTouched());
+    }
 }

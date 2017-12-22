@@ -76,10 +76,9 @@ public class GameScreen implements Screen {
                 gameOver.draw(batch);
                 batch.end();
             } else {
-                if (pause.isPressed()) {
+                if (pause.justTouched()) {
                     isPause = true;
                     pause.setText("PLAY");
-                    debounce();
                 }
             }
         } else {
@@ -94,12 +93,11 @@ public class GameScreen implements Screen {
             exit.draw(batch);
             batch.end();
 
-            if (exit.isPressed()) {
+            if (exit.justTouched()) {
                 exit();
-            } else if (pause.isPressed()) {
+            } else if (pause.justTouched()) {
                 isPause = false;
                 pause.setText("PAUSE");
-                debounce();
             }
         }
 
@@ -141,7 +139,7 @@ public class GameScreen implements Screen {
         pause.setTextAlignment(Align.center);
         pause.setPosition(Resolution.SCREEN_WIDTH - 4 , 8, Align.right);
         pause.setScale(0.2f);
-        pause.setColor(UiColors.TTG_RED);
+        pause.setColor(Color.BLACK);
         pause.setHoverColor(Color.WHITE);
 
         exit = new MyOwnButton(game.getResourcesHandler().font32, "EXIT");
@@ -161,14 +159,6 @@ public class GameScreen implements Screen {
     private void exit() {
         StatisticScreen statisticScreen = new StatisticScreen(game, statistic, state);
         game.setScreen(statisticScreen);
-    }
-
-    private void debounce() {
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

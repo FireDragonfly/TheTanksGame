@@ -73,7 +73,6 @@ public class StatisticScreen extends ScreenAdapter{
             }
         }
         initUi();
-        render(30);
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
@@ -98,7 +97,7 @@ public class StatisticScreen extends ScreenAdapter{
                 e.printStackTrace();
             }
         }
-        if (exit.isPressed()) {
+        if (exit.justTouched()) {
             exit();
         }
     }
@@ -155,15 +154,15 @@ public class StatisticScreen extends ScreenAdapter{
         //set Positions
         hiScore.setPosition(Resolution.SCREEN_WIDTH / 2, 16 * 12, Align.right);
         hiScoreNumber.setPosition(Resolution.SCREEN_WIDTH / 2 + 16, 16 * 12, Align.left);
-        stage.setPosition(Resolution.SCREEN_WIDTH / 2, 16 * 10, Align.center);
+        stage.setPosition(Resolution.SCREEN_WIDTH / 2, 16 * 11, Align.center);
         exit.setPosition(Resolution.SCREEN_WIDTH - 16, 16, Align.right);
         next.setPosition(Resolution.SCREEN_WIDTH / 2 + 16, 16, Align.left);
         random.setPosition(Resolution.SCREEN_WIDTH / 2 - 16, 16, Align.right);
 
         // set Scales
-        hiScore.setScale(0.3f);
-        hiScoreNumber.setScale(0.3f);
-        stage.setScale(0.3f);
+        hiScore.setScale(0.32f);
+        hiScoreNumber.setScale(0.32f);
+        stage.setScale(0.35f);
         player.setScale(0.25f);
         botNumber.setScale(0.25f);
         player_score.setScale(0.25f);
