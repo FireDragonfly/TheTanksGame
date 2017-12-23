@@ -74,7 +74,7 @@ public class GameFieldController {
         }
 
         switch (type) {
-            case TilesTypes.GRAY:
+            case TilesTypes.BORDER:
                 break;
             case TilesTypes.BRICK:
                 model.set(TilesTypes.DESTROYED_BRICK, trimmedX, trimmedY);
@@ -197,7 +197,7 @@ public class GameFieldController {
         Array<Player> players = game.getPlayers();
         for (int i = 0; i < players.size; i++) {
             layer[yStartPosition - (4 + i * 4)][xStartPosition] =
-                    (byte) (players.get(i).getPlayerNumber() + 1 + TilesTypes.DIGIT_0);
+                    (byte) (players.get(i).getNumber() + 1 + TilesTypes.DIGIT_0);
             layer[yStartPosition - (4 + i * 4)][xStartPosition + 1] = TilesTypes.LETTER_P;
             layer[yStartPosition - (5 + i * 4)][xStartPosition] = TilesTypes.PLAYER_IMG;
             layer[yStartPosition - (5 + i * 4)][xStartPosition + 1] =
@@ -230,13 +230,4 @@ public class GameFieldController {
         model.set(TilesTypes.DESTROYED_EAGLE_1_1, x + 1, y + 1);
         state.killEagle();
     }
-
-//    private void clearBulletLayer() {
-//        BulletController[][] bulletLayer = model.getBulletLayer();
-//        for (int i = 0; i < bulletLayer.length; i++) {
-//            for (int j = 0; j < bulletLayer[i].length; j++) {
-//                bulletLayer[i][j] = null;
-//            }
-//        }
-//    }
 }

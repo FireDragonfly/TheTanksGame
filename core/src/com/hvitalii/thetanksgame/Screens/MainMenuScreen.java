@@ -2,10 +2,12 @@ package com.hvitalii.thetanksgame.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
@@ -34,6 +36,8 @@ public class MainMenuScreen extends ScreenAdapter{
     private MyOwnButton fourPlayers;
     private MyOwnButton exit;
 
+    private int command;
+
     public MainMenuScreen(ResourcesHandler resourcesHandler, TheTanksGame game, Statistic statistic) {
         this.resourcesHandler = resourcesHandler;
         this.game = game;
@@ -50,6 +54,7 @@ public class MainMenuScreen extends ScreenAdapter{
         super.show();
         //float colorValue = 0.00390625f * 63;
         Gdx.gl.glClearColor(0 ,0, 0, 1);
+        command = 0;
     }
 
     @Override
@@ -58,22 +63,37 @@ public class MainMenuScreen extends ScreenAdapter{
         batch.setProjectionMatrix(camera.combined);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
         batch.begin();
         drawUi();
         batch.end();
 
         if (onePlayer.justTouched()){
-            newGame(1);
+            command = 1;
         } else if (twoPlayers.justTouched()) {
-            newGame(2);
+            command = 2;
         } else if (threePlayers.justTouched()) {
-            newGame(3);
+            command = 3;
         } else if (fourPlayers.justTouched()) {
-            newGame(4);
+            command = 4;
         } else if (exit.justTouched()) {
-            Gdx.app.exit();
+            command = -1;
+        } else {
+            command = 0;
+        }
+
+        switch (command) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                if (!newGame(command)) {
+                    title.setText("MAPS IS\nNOT FOUNDED");
+                    title.setScale(0.7f);
+                }
+                break;
+            case -1:
+                Gdx.app.exit();
+                break;
         }
     }
 
@@ -94,10 +114,14 @@ public class MainMenuScreen extends ScreenAdapter{
         exit.dispose();
     }
 
-    private void newGame(int playerNumber) {
-        GameController state = new GameController(resourcesHandler, playerNumber);
-        GameScreen gameScreen = new GameScreen(state, game, statistic);
+    private boolean newGame(int playersNumber) {
+        GameController gameController = new GameController(resourcesHandler, playersNumber);
+        if (!gameController.isPreparingSuccess()) {
+            return false;
+        }
+        GameScreen gameScreen = new GameScreen(gameController, game, statistic);
         game.setScreen(gameScreen);
+        return true;
     }
 
     public Statistic getStatistic() {

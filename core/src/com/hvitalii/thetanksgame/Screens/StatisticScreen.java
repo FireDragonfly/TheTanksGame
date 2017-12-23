@@ -37,14 +37,8 @@ public class StatisticScreen extends ScreenAdapter{
     private MyOwnLabel stage;
     private MyOwnLabel player;
     private MyOwnLabel botNumber;
-//    private MyOwnLabel player_3;
-//    private MyOwnLabel player_4;
     private MyOwnLabel player_score;
-//    private MyOwnLabel player_2_score;
-//    private MyOwnLabel player_3_score;
-//    private MyOwnLabel player_4_score;
-//    private MyOwnLabel arrow;
-    private MyOwnButton exit;
+    private MyOwnButton gameOver;
     private MyOwnButton next;
     private MyOwnButton random;
 
@@ -73,11 +67,6 @@ public class StatisticScreen extends ScreenAdapter{
             }
         }
         initUi();
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -86,18 +75,18 @@ public class StatisticScreen extends ScreenAdapter{
         batch.setProjectionMatrix(camera.combined);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         batch.begin();
         drawUi();
         batch.end();
-        if (delta >= 25) {
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+        if (gameController.hasAlivePlayer() && gameController.getStageState().isEagleAlive()) {
+            if (next.justTouched()) {
+                nextState(false);
+            } else if (random.justTouched()) {
+                nextState(true);
             }
         }
-        if (exit.justTouched()) {
+        if (gameOver.justTouched()) {
             exit();
         }
     }
@@ -116,15 +105,19 @@ public class StatisticScreen extends ScreenAdapter{
         player.dispose();
         botNumber.dispose();
         player_score.dispose();
-        exit.dispose();
+        gameOver.dispose();
         next.dispose();
         random.dispose();
         atlas.dispose();
     }
 
-    private void newGame(int playerNumber) {
-        GameController state = new GameController(resourcesHandler, playerNumber);
-        GameScreen gameScreen = new GameScreen(state, game, statistic);
+    private void nextState(boolean randomMap) {
+        gameController.prepareNextStage(randomMap);
+        if (!gameController.isPreparingSuccess()) {
+            exit();
+            return;
+        }
+        GameScreen gameScreen = new GameScreen(gameController, game, statistic);
         game.setScreen(gameScreen);
     }
 
@@ -146,8 +139,6 @@ public class StatisticScreen extends ScreenAdapter{
         player = new MyOwnLabel(resourcesHandler.font32);
         botNumber = new MyOwnLabel(resourcesHandler.font32);
         player_score = new MyOwnLabel(resourcesHandler.font32);
-
-        exit = new MyOwnButton(resourcesHandler.font32, "EXIT");
         next = new MyOwnButton(resourcesHandler.font32, "NEXT MAP");
         random = new MyOwnButton(resourcesHandler.font32, "RANDOM MAP");
 
@@ -155,7 +146,6 @@ public class StatisticScreen extends ScreenAdapter{
         hiScore.setPosition(Resolution.SCREEN_WIDTH / 2, 16 * 12, Align.right);
         hiScoreNumber.setPosition(Resolution.SCREEN_WIDTH / 2 + 16, 16 * 12, Align.left);
         stage.setPosition(Resolution.SCREEN_WIDTH / 2, 16 * 11, Align.center);
-        exit.setPosition(Resolution.SCREEN_WIDTH - 16, 16, Align.right);
         next.setPosition(Resolution.SCREEN_WIDTH / 2 + 16, 16, Align.left);
         random.setPosition(Resolution.SCREEN_WIDTH / 2 - 16, 16, Align.right);
 
@@ -167,25 +157,30 @@ public class StatisticScreen extends ScreenAdapter{
         botNumber.setScale(0.25f);
         player_score.setScale(0.25f);
         botNumber.setScale(0.25f);
-        exit.setScale(0.25f);
         next.setScale(0.25f);
         random.setScale(0.25f);
 
         // set Colors
         hiScore.setColor(UiColors.TTG_RED);
         hiScoreNumber.setColor(UiColors.TTG_ORANGE);
-
         player_score.setColor(UiColors.TTG_ORANGE);
         player.setColor(UiColors.TTG_RED);
 
-        exit.setColor(UiColors.TTG_GREY);
-        exit.setHoverColor(UiColors.TTG_RED);
         next.setColor(UiColors.TTG_ORANGE);
         next.setHoverColor(UiColors.TTG_RED);
         random.setColor(UiColors.TTG_GREY);
         random.setHoverColor(UiColors.TTG_RED);
 
-
+        gameOver = new MyOwnButton(resourcesHandler.font32, "EXIT");
+        if (gameController.hasAlivePlayer() && gameController.getStageState().isEagleAlive()) {
+            gameOver.setPosition(Resolution.SCREEN_WIDTH - 16, 16, Align.right);
+            gameOver.setScale(0.25f);
+        } else {
+            gameOver.setPosition(Resolution.SCREEN_WIDTH / 2, 16, Align.center);
+            gameOver.setScale(0.35f);
+        }
+        gameOver.setColor(UiColors.TTG_GREY);
+        gameOver.setHoverColor(UiColors.TTG_RED);
     }
 
     private void drawUi() {
@@ -208,9 +203,11 @@ public class StatisticScreen extends ScreenAdapter{
             player_score.draw(batch);
         }
 
-        exit.draw(batch);
-//        next.draw(batch);
-//        random.draw(batch);
+        gameOver.draw(batch);
+        if (gameController.hasAlivePlayer() && gameController.getStageState().isEagleAlive()) {
+            next.draw(batch);
+            random.draw(batch);
+        }
 
         for (int i = 0; i < botTextures.length; i++) {
             batch.draw(botTextures[i], 40 + (32 * i), 8 * 17, Size.TANK, Size.TANK);

@@ -95,22 +95,6 @@ public class PlayerTankController implements TankController {
         return true;
     }
 
-    public void reset(Rectangle rectangle) {
-        model.setDirection(Direction.UP);
-        model.set(rectangle);
-        model.reset();
-        view.levelChanged();
-        model.setDirection(Direction.UP);//reset previous direction
-    }
-
-    public void lock() {
-        model.lock();
-    }
-
-    public void setControlKeys(int[] controlKeys) {
-        this.controlKeys = controlKeys;
-    }
-
     @Override
     public int getType() {
         return Types.USER;
@@ -124,6 +108,44 @@ public class PlayerTankController implements TankController {
     @Override
     public TankModel getModel() {
         return model;
+    }
+
+    public int getNumber() {
+        return model.getPlayerNumber();
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void reset(Rectangle rectangle) {
+        model.reset();
+        model.set(rectangle);
+        view.levelChanged();
+        view.updateSprites();
+    }
+
+    public void prepare(Rectangle rectangle) {
+        model.prepare();
+        model.set(rectangle);
+        view.levelChanged();
+        view.updateSprites();
+    }
+
+    public void lock() {
+        model.lock();
+    }
+
+    public void setControlKeys(int[] controlKeys) {
+        this.controlKeys = controlKeys;
+    }
+
+    public void addLive() {
+        addLives(1);
+    }
+
+    public void addLives(int livesNumber) {
+        model.setLivesAmount(model.getLivesAmount() + livesNumber);
     }
 
     private void fire() {
@@ -169,9 +191,5 @@ public class PlayerTankController implements TankController {
             positionY = model.getY() + ((model.getHeight() - Size.BULLET) / 2);
         }
         return new Rectangle(positionX, positionY, Size.BULLET, Size.BULLET);
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 }

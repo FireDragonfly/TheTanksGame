@@ -31,8 +31,8 @@ public class GameFieldView {
         for (int i = 0; i < model.getHeight(); i++) {
             for (int j = 0; j < model.getWidth(); j++) {
                 switch (model.get(j, i)) {
-                    case TilesTypes.GRAY:
-                        updateAndDrawSprite(batch, TilesTypes.GRAY, j, i);
+                    case TilesTypes.BORDER:
+                        updateAndDrawSprite(batch, TilesTypes.BORDER, j, i);
                         break;
                     case TilesTypes.BRICK:
                         updateAndDrawSprite(batch, TilesTypes.BRICK, j, i);

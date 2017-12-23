@@ -6,27 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 
+import java.awt.*;
+
 public class GameConstants {
-
-    public static class Files {
-        public static final String RESOURCES_LOCATION = "resources/";
-        public static final String ATLASES_LOCATION = RESOURCES_LOCATION + "atlases/";
-        public static final String FONTS_LOCATION = RESOURCES_LOCATION + "fonts/";
-        public static final String LOCAL_MAPS_LOCATION = RESOURCES_LOCATION + "maps/";
-        public static final String EXTERNAL_MAPS_LOCATION = "The Tanks Game/maps/";
-        public static final String MAP_SUFFIX = ".ttgm";
-        public static final String ATLAS_NAME = "atlas.atlas";
-        public static final String DEBUGGING_ATLAS_NAME = "debugging_atlas.atlas";
-
-        public static final String[] MAPS_NAMES = {
-                "stage_1" + MAP_SUFFIX,
-                "stage_2" + MAP_SUFFIX,
-                "stage_3" + MAP_SUFFIX,
-                "stage_4" + MAP_SUFFIX,
-                "stage_5" + MAP_SUFFIX
-        };
-        public static final int MAPS_COUNT = MAPS_NAMES.length;
-    }
 
     public static final String[] PLAYER_TANKS_NAMES = {
             "player_L1",
@@ -115,9 +97,31 @@ public class GameConstants {
         }
     }
 
+    public static class Files {
+        public static final String RESOURCES_LOCATION = "resources/";
+        public static final String ATLASES_LOCATION = RESOURCES_LOCATION + "atlases/";
+        public static final String FONTS_LOCATION = RESOURCES_LOCATION + "fonts/";
+        public static final String LOCAL_MAPS_LOCATION = RESOURCES_LOCATION + "maps/";
+        public static final String EXTERNAL_MAPS_LOCATION = "The Tanks Game/maps/";
+        public static final String MAP_SUFFIX = ".ttgm";
+        public static final String ATLAS_NAME = "atlas.atlas";
+        public static final String DEBUGGING_ATLAS_NAME = "debugging_atlas.atlas";
+
+        public static final String[] MAPS_NAMES = {
+                "stage_1" + MAP_SUFFIX,
+                "stage_2" + MAP_SUFFIX,
+                "stage_3" + MAP_SUFFIX,
+                "stage_4" + MAP_SUFFIX,
+                "stage_5" + MAP_SUFFIX
+        };
+        public static final int MAPS_COUNT = MAPS_NAMES.length;
+    }
+
     public static class Resolution {
         public static final int FIELD_WIDTH = 32;
         public static final int FIELD_HEIGHT = 28;
+        public static final Point BATTLE_FIELD_LEFT_BOTTOM_POINT = new Point(2, 1);
+        public static final Point BATTLE_FIELD_RIGHT_TOP_POINT = new Point(FIELD_WIDTH - 5, FIELD_HEIGHT - 2);
         public static final float TILE_SIZE = 8;
         public static final float SCREEN_WIDTH = FIELD_WIDTH * TILE_SIZE;
         public static final float SCREEN_HEIGHT = FIELD_HEIGHT * TILE_SIZE;

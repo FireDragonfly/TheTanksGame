@@ -67,6 +67,11 @@ public class PlayerTankModel extends TankModel {
 
     public void reset() {
         setLevel(Levels.FIRST);
+        prepare();
+    }
+
+    public void prepare() {
+        setDirection(Direction.UP);
         locked = 0;
     }
 }

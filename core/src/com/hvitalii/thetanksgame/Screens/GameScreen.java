@@ -7,12 +7,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.GameController;
-import com.hvitalii.thetanksgame.Player;
 import com.hvitalii.thetanksgame.Statistic;
 import com.hvitalii.thetanksgame.TheTanksGame;
 import com.hvitalii.thetanksgame.View.MyOwnButton;
@@ -26,7 +24,7 @@ public class GameScreen implements Screen {
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
     private Viewport viewport;
-    private GameController state;
+    private GameController gameController;
     private Statistic statistic;
 
     private MyOwnButton pause;
@@ -35,8 +33,8 @@ public class GameScreen implements Screen {
     private boolean isPause;
 
 
-    public GameScreen(GameController state, TheTanksGame game, Statistic statistic) {
-        this.state = state;
+    public GameScreen(GameController gameController, TheTanksGame game, Statistic statistic) {
+        this.gameController = gameController;
         this.game = game;
         this.statistic = statistic;
     }
@@ -55,7 +53,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (state.isTimeToExit()) {
+        if (gameController.isTimeToExit()) {
             exit();
         }
         camera.update();
@@ -64,13 +62,13 @@ public class GameScreen implements Screen {
 
         if (!isPause) {
 
-            state.update();
+            gameController.update();
 
             batch.begin();
-            state.draw(batch);
+            gameController.draw(batch);
             pause.draw(batch);
             batch.end();
-            if (!state.getStageState().isEagleAlive() || !state.hasAlivePlayer()) {
+            if (!gameController.getStageState().isEagleAlive() || !gameController.hasAlivePlayer()) {
                 fillGrayScreen();
                 batch.begin();
                 gameOver.draw(batch);
@@ -83,7 +81,7 @@ public class GameScreen implements Screen {
             }
         } else {
             batch.begin();
-            state.draw(batch);
+            gameController.draw(batch);
             batch.end();
 
             fillGrayScreen();
@@ -157,7 +155,7 @@ public class GameScreen implements Screen {
     }
 
     private void exit() {
-        StatisticScreen statisticScreen = new StatisticScreen(game, statistic, state);
+        StatisticScreen statisticScreen = new StatisticScreen(game, statistic, gameController);
         game.setScreen(statisticScreen);
     }
 

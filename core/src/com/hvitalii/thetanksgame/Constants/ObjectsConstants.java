@@ -1,7 +1,10 @@
 package com.hvitalii.thetanksgame.Constants;
 
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+
+import java.awt.*;
 
 public class ObjectsConstants {
 
@@ -56,7 +59,7 @@ public class ObjectsConstants {
 
     public static class TilesTypes {
         public static final byte NULL = 0;
-        public static final byte GRAY = 1;
+        public static final byte BORDER = 1;
         public static final byte BRICK = 2;
         public static final byte DESTROYED_BRICK = 3;
         public static final byte CONCRETE = 4;
@@ -117,4 +120,6 @@ public class ObjectsConstants {
         }
 
     }
+
+    public static Point DEFAULT_EAGLE_POSITION = new Point(14, 0);
 }

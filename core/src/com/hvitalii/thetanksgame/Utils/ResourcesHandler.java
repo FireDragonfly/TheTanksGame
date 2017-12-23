@@ -11,17 +11,18 @@ public class ResourcesHandler implements Disposable{
 
     private static final String DEFAULT_EXTERNAL_MAPS_FOLDER = Files.EXTERNAL_MAPS_LOCATION;
     private AssetManager assetManager;
-    private FileHandle[] maps;
+    private FileHandle[] internalMaps;
     private FileHandle[] externalMaps;
+    private FileHandle[] allMaps;
 
     public final FileHandle font16;
     public final FileHandle font32;
     public final FileHandle font64;
 
     public ResourcesHandler() {
-        maps = new FileHandle[Files.MAPS_COUNT];
-        for (int i = 0; i < maps.length; i++) {
-            maps[i] = Gdx.files.internal(Files.LOCAL_MAPS_LOCATION + Files.MAPS_NAMES[i]);
+        internalMaps = new FileHandle[Files.MAPS_COUNT];
+        for (int i = 0; i < internalMaps.length; i++) {
+            internalMaps[i] = Gdx.files.internal(Files.LOCAL_MAPS_LOCATION + Files.MAPS_NAMES[i]);
         }
         if (Gdx.files.isExternalStorageAvailable()) {
             if (Gdx.files.external(DEFAULT_EXTERNAL_MAPS_FOLDER).isDirectory()) {
@@ -52,8 +53,8 @@ public class ResourcesHandler implements Disposable{
         this.assetManager = assetManager;
     }
 
-    public FileHandle[] getMaps() {
-        return maps;
+    public FileHandle[] getInternalMaps() {
+        return internalMaps;
     }
 
     public FileHandle[] getExternalMaps() {

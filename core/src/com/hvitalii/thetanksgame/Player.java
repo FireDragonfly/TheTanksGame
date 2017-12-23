@@ -1,6 +1,7 @@
 package com.hvitalii.thetanksgame;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Rectangle;
 import com.hvitalii.thetanksgame.Constants.GameConstants;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Controller.PlayerTankController;
@@ -14,12 +15,10 @@ public class Player {
     private int [] stageBotsDestroyed;
     private int score;
     private int playerLevel;
-    private int playerNumber;
     private  boolean isAlive;
 
     public Player(GameController game, TextureAtlas textureAtlas, int playerNumber) {
         this.game = game;
-        this.playerNumber = playerNumber;
         gameBotsDestroyed = new int[BotTypes.COUNT];
         stageBotsDestroyed = new int[BotTypes.COUNT];
         controller = new PlayerTankController(this, game, GameConstants.PLAYERS_SPAWN_POSITIONS[playerNumber], textureAtlas, playerNumber);
@@ -44,8 +43,8 @@ public class Player {
         return playerLevel;
     }
 
-    public int getPlayerNumber() {
-        return playerNumber;
+    public int getNumber() {
+        return controller.getNumber();
     }
 
     public void addDestroyedBot(int botType) {
@@ -64,11 +63,28 @@ public class Player {
         controller.setControlKeys(set);
     }
 
-    public void killed() {
+    public void kill() {
         isAlive = false;
     }
 
     public boolean isAlive() {
         return isAlive;
+    }
+
+    public void prepare(Rectangle bounds) {
+        controller.prepare(bounds);
+    }
+
+    public void reset(Rectangle bounds) {
+        controller.reset(bounds);
+    }
+
+    public void addLive() {
+        addLives(1);
+    }
+
+    public void addLives(int livesNumber) {
+        controller.addLives(livesNumber);
+        isAlive = true;
     }
 }

@@ -1,12 +1,10 @@
 package com.hvitalii.thetanksgame;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.hvitalii.thetanksgame.Constants.GameConstants;
-import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Controller.*;
 import com.hvitalii.thetanksgame.Model.PlayerTankModel;
@@ -16,49 +14,42 @@ import java.util.Date;
 
 public class GameController {
 
-    private ResourcesHandler resourcesHandler;
+    ResourcesHandler resourcesHandler;
     private TextureAtlas textureAtlas;
     private StageState stageState;
     private Array<Player> players;
     private int playersNumber;
     private int stage;
     private int lastSpawnPosition;
+    private int currentMapIndex;
     private long frame;
     private long nextBotSpawnTime;
     private long exitTime;
     private boolean isTimeToExit;
+    private boolean isPreparingSuccess;
 
     public GameController(ResourcesHandler resourcesHandler, int playersNumber) {
-        isTimeToExit = false;
+        this.textureAtlas = resourcesHandler.getAssetManager().get(GameConstants.Files.ATLASES_LOCATION + GameConstants.Files.ATLAS_NAME);
         this.resourcesHandler = resourcesHandler;
-        textureAtlas = resourcesHandler.getAssetManager().get(Files.ATLASES_LOCATION + Files.ATLAS_NAME);
-        stageState = new StageState(this, textureAtlas);
-        try {
-            stageState.setMap(resourcesHandler.getMaps()[0]);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-            try {
-                stageState.setMap(resourcesHandler.getExternalMaps()[0]);
-            } catch (ArrayIndexOutOfBoundsException e2) {
-                e2.printStackTrace();
-                isTimeToExit = true;
-            }
-        }
-        stageState.setBotsRemaining(20);
-        players = new Array<Player>();
 
+        stageState = new StageState(this, textureAtlas);
+        stageState.setBotsRemaining(20 + (10 * playersNumber - 1));
+
+        currentMapIndex = 0;
+        isPreparingSuccess = setMap();
+
+        isTimeToExit = false;
+        exitTime = 0;
         stage = 1;
         frame = 0;
         nextBotSpawnTime = 0;
-
         lastSpawnPosition = (int)(Math.random() * 2);
 
         this.playersNumber = playersNumber;
+        players = new Array<Player>();
         for (int i = 0; i < playersNumber; i++) {
             addPlayer(i);
         }
-
-        exitTime = 0;
     }
 
 
@@ -85,7 +76,7 @@ public class GameController {
         }
 
         frame++;
-        if (frame == 256) {
+        if (frame >= 256) {
             frame = 0;
         }
 
@@ -118,12 +109,12 @@ public class GameController {
             stageState.getBullets().get(i).update(frame);
         }
 
-        if (frame % 60 == 0) {
-            for (int i = 0; i < players.size; i++) {
-                System.out.print(i + ": ");
-                System.out.println(players.get(i).getScore());
-            }
-        }
+//        if (frame % 60 == 0) {
+//            for (int i = 0; i < players.size; i++) {
+//                System.out.print(i + ": ");
+//                System.out.println(players.get(i).getScore());
+//            }
+//        }
 
     }
 
@@ -150,29 +141,8 @@ public class GameController {
     }
 
 
-    public void addPlayer(int playerNumber){
-        Player player = new Player(this, textureAtlas, playerNumber);
-        players.add(player);
-        stageState.getPlayers().add(player.getController());
-    }
-
-    public void respawnPlayer(PlayerTankController player) {
-        player.reset(GameConstants.PLAYERS_SPAWN_POSITIONS[((PlayerTankModel)player.getModel()).getPlayerNumber()]);
-    }
-
     public void spawnBullet(BulletController bullet) {
         stageState.getBullets().add(bullet);
-    }
-
-    public void spawnBot(){
-        int botType = (int)(Math.random() * 128) / 32 ;
-        stageState.getBots().add(new BotTankController(
-                this,
-                GameConstants.BOTS_SPAWN_POSITIONS[nextSpawnPosition()],
-                textureAtlas,
-                botType,
-                -1
-        ));
     }
 
     public void spawnBonus(int bonusType) {
@@ -190,10 +160,11 @@ public class GameController {
             if ( lives > 0) {
                 lives--;
                 tankModel.setLivesAmount(lives);
-                respawnPlayer((PlayerTankController) tank);
+                stageState.getPlayers().removeIndex(stageState.getPlayers().indexOf(tank, true));
+                respawnPlayer(((PlayerTankController)tank).getPlayer());
                 return;
             }
-            ((PlayerTankController)tank).getPlayer().killed();
+            ((PlayerTankController)tank).getPlayer().kill();
             stageState.getPlayers().removeIndex(stageState.getPlayers().indexOf(tank, true));
             return;
         }
@@ -214,6 +185,39 @@ public class GameController {
             }
         }
         return false;
+    }
+
+    public void prepareNextStage(boolean choseRandomMap) {
+        stageState = new StageState(this, textureAtlas);
+        stageState.setBotsRemaining((playersNumber < 3) ? 20 : (playersNumber * 10));
+
+        int allMapsNumber = resourcesHandler.getInternalMaps().length
+                + resourcesHandler.getExternalMaps().length;
+
+        if (choseRandomMap) {
+            currentMapIndex = (int)(Math.random() * (allMapsNumber - 1));
+        } else {
+            if (currentMapIndex >= allMapsNumber) {
+                currentMapIndex = 0;
+            } else {
+                currentMapIndex++;
+            }
+        }
+        isPreparingSuccess = setMap();
+
+        if (!isPreparingSuccess) {
+            currentMapIndex = 0;
+            isPreparingSuccess = setMap();
+        }
+
+        isTimeToExit = false;
+        exitTime = 0;
+        stage++;
+        frame = 0;
+        nextBotSpawnTime = 0;
+        lastSpawnPosition = (int)(Math.random() * 2);
+
+        preparePlayers();
     }
 
 
@@ -250,9 +254,62 @@ public class GameController {
         return stage;
     }
 
-
     public long getFrame() {
         return frame;
+    }
+
+    private boolean setMap() {
+        FileHandle map;
+        int internalMapsNumber = resourcesHandler.getInternalMaps().length;
+        if (currentMapIndex < internalMapsNumber) {
+            try {
+                map = resourcesHandler.getInternalMaps()[currentMapIndex];
+                stageState.setMap(map);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            try {
+                map = resourcesHandler.getExternalMaps()[currentMapIndex - internalMapsNumber];
+                stageState.setMap(map);
+            } catch (Exception e2) {
+                e2.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void addPlayer(int playerNumber){
+        Player player = new Player(this, textureAtlas, playerNumber);
+        players.add(player);
+        stageState.getPlayers().add(player.getController());
+    }
+
+    private void preparePlayers() {
+        for (Player player: players) {
+            player.prepare(GameConstants.PLAYERS_SPAWN_POSITIONS[player.getNumber()]);
+            if (player.isAlive()) {
+                stageState.getPlayers().add(player.getController());
+            }
+        }
+    }
+
+    private void respawnPlayer(Player player) {
+        player.reset(GameConstants.PLAYERS_SPAWN_POSITIONS[player.getNumber()]);
+        stageState.getPlayers().add(player.getController());
+    }
+
+    private void spawnBot(){
+        int botType = (int)(Math.random() * 128) / 32 ;
+        stageState.getBots().add(new BotTankController(
+                this,
+                GameConstants.BOTS_SPAWN_POSITIONS[nextSpawnPosition()],
+                textureAtlas,
+                botType,
+                -1
+        ));
     }
 
     private int nextSpawnPosition() {
@@ -271,5 +328,9 @@ public class GameController {
 
     public boolean isTimeToExit() {
         return isTimeToExit;
+    }
+
+    public boolean isPreparingSuccess() {
+        return isPreparingSuccess;
     }
 }

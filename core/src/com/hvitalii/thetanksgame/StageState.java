@@ -14,6 +14,7 @@ public class StageState {
     private Array<TankController> players;
     private Array<BulletController> bullets;
     private GameFieldController battleField;
+    private FileHandle map;
     private boolean isEagleAlive;
     private int botsRemaining;
 
@@ -47,6 +48,11 @@ public class StageState {
     }
 
     public void setMap(FileHandle map) {
+        battleField.setMap(map);
+        this.map = map;
+    }
+
+    public void resetMap() {
         battleField.setMap(map);
     }
 
