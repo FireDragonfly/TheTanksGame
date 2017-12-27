@@ -130,7 +130,7 @@ public class GameFieldController {
     }
 
     private void tankPositionUpdate() {
-        clearTankLayer();
+        model.clearTankLayer();
 
         Array<TankController> botsTanks = state.getBots();
         Array<TankController> playersTanks = state.getPlayers();
@@ -181,7 +181,7 @@ public class GameFieldController {
     }
 
     private void uiUpdate() {
-        clearUiLayer();
+        model.clearUiLayer();
 
         byte[][] layer = model.getUiLayer();
         int yStartPosition = model.getHeight() - 3;
@@ -205,29 +205,13 @@ public class GameFieldController {
         }
     }
 
-    private void clearTankLayer() {
-        TankController[][] tanksLayer = model.getTanksLayer();
-        for (int i = 0; i < tanksLayer.length; i++) {
-            for (int j = 0; j < tanksLayer[i].length; j++) {
-                tanksLayer[i][j] = null;
-            }
-        }
-    }
-
-    private void clearUiLayer() {
-        byte[][] uiLayer = model.getUiLayer();
-        for (int i = 0; i < model.getHeight(); i++) {
-            for (int j = 0; j < model.getWidth(); j++) {
-                uiLayer[i][j] = 0;
-            }
-        }
-    }
-
     private void destructEagle(int x, int y) {
         model.set(TilesTypes.DESTROYED_EAGLE_0_0, x, y);
         model.set(TilesTypes.DESTROYED_EAGLE_1_0, x + 1, y);
         model.set(TilesTypes.DESTROYED_EAGLE_0_1, x, y + 1);
         model.set(TilesTypes.DESTROYED_EAGLE_1_1, x + 1, y + 1);
-        state.killEagle();
+        if (!model.hasAliveEagle()) {
+            state.eagleKilled();
+        }
     }
 }

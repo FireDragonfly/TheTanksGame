@@ -33,7 +33,7 @@ public class GameController {
         this.resourcesHandler = resourcesHandler;
 
         stageState = new StageState(this, textureAtlas);
-        stageState.setBotsRemaining(20 + (10 * playersNumber - 1));
+        stageState.setBotsRemaining(20 + (10 * (playersNumber - 1)));
 
         currentMapIndex = 0;
         isPreparingSuccess = setMap();

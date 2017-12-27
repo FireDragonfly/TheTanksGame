@@ -13,9 +13,9 @@ import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.GameController;
 import com.hvitalii.thetanksgame.Statistic;
 import com.hvitalii.thetanksgame.TheTanksGame;
-import com.hvitalii.thetanksgame.View.MyOwnButton;
-import com.hvitalii.thetanksgame.View.MyOwnLabel;
-import com.hvitalii.thetanksgame.View.MyOwnLabel.*;
+import com.hvitalii.thetanksgame.MyOwn.MOButton;
+import com.hvitalii.thetanksgame.MyOwn.MOLabel;
+import com.hvitalii.thetanksgame.MyOwn.MOLabel.*;
 
 public class GameScreen implements Screen {
 
@@ -27,9 +27,9 @@ public class GameScreen implements Screen {
     private GameController gameController;
     private Statistic statistic;
 
-    private MyOwnButton pause;
-    private MyOwnButton exit;
-    private MyOwnLabel gameOver;
+    private MOButton pause;
+    private MOButton exit;
+    private MOLabel gameOver;
     private boolean isPause;
 
 
@@ -133,21 +133,21 @@ public class GameScreen implements Screen {
     }
 
     private void initUi() {
-        pause = new MyOwnButton(game.getResourcesHandler().font32, "PAUSE");
+        pause = new MOButton(game.getResourcesHandler().font32, "PAUSE");
         pause.setTextAlignment(Align.center);
         pause.setPosition(Resolution.SCREEN_WIDTH - 4 , 8, Align.right);
         pause.setScale(0.2f);
         pause.setColor(Color.BLACK);
         pause.setHoverColor(Color.WHITE);
 
-        exit = new MyOwnButton(game.getResourcesHandler().font32, "EXIT");
+        exit = new MOButton(game.getResourcesHandler().font32, "EXIT");
         exit.setTextAlignment(Align.center);
         exit.setScale(0.25f);
         exit.setPosition(Resolution.SCREEN_WIDTH / 2, 16, Align.center);
         exit.setColor(Color.ORANGE);
         exit.setHoverColor(UiColors.TTG_RED);
 
-        gameOver = new MyOwnLabel(game.getResourcesHandler().font32, "GAME\nOVER");
+        gameOver = new MOLabel(game.getResourcesHandler().font32, "GAME\nOVER");
         gameOver.setTextAlignment(Align.center);
         gameOver.setScale(0.5f);
         gameOver.setPosition(Resolution.SCREEN_WIDTH / 2, (Resolution.SCREEN_HEIGHT / 2) - (gameOver.getHeight() / 2), Align.center);

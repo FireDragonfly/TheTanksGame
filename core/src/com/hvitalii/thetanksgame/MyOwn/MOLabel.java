@@ -1,4 +1,4 @@
-package com.hvitalii.thetanksgame.View;
+package com.hvitalii.thetanksgame.MyOwn;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 
-public class MyOwnLabel implements Disposable{
+public class MOLabel implements Disposable{
 
     private BitmapFont font;
     private Color color;
@@ -23,29 +23,29 @@ public class MyOwnLabel implements Disposable{
 
 
 
-    public MyOwnLabel(FileHandle font, String text, float x, float y) {
+    public MOLabel(FileHandle font, String text, float x, float y) {
         this(font, text);
         this.x = x;
         this.y = y;
     }
 
-    public MyOwnLabel(FileHandle font, String text) {
+    public MOLabel(FileHandle font, String text) {
         this();
         this.font = new BitmapFont(font);
         setText(text);
     }
 
-    public MyOwnLabel(String text) {
+    public MOLabel(String text) {
         this();
         setText(text);
     }
 
-    public MyOwnLabel(FileHandle font) {
+    public MOLabel(FileHandle font) {
         this();
         this.font = new BitmapFont(font);
     }
 
-    public MyOwnLabel() {
+    public MOLabel() {
         font = new BitmapFont();
         scaleX = font.getScaleX();
         scaleY = font.getScaleY();

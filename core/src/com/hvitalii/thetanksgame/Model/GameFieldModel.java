@@ -172,6 +172,57 @@ public class GameFieldModel {
         }
     }
 
+    public void reset(byte type, int x, int y){
+        if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
+            return;
+        }
+        borderLayer[y][x] = TilesTypes.NULL;
+        bottomBlocksLayer[y][x] = TilesTypes.NULL;
+        topBlocksLayer[y][x] = TilesTypes.NULL;
+        set(type, x, y);
+    }
+
+    public void reset() {
+        bottomBlocksLayer = new byte[height][width];
+        borderLayer = new byte[height][width];
+        topBlocksLayer = new byte[height][width];
+        uiLayer = new byte[height][width];
+        tanksLayer = new TankController[height][width];
+        loadBorder();
+    }
+
+    public void clear() {
+        clearVisibleLayers();
+        clearTankLayer();
+        borderLayer = new byte[height][width];
+        loadBorder();
+    }
+
+    public void clearTankLayer() {
+        for (int i = 0; i < tanksLayer.length; i++) {
+            for (int j = 0; j < tanksLayer[i].length; j++) {
+                tanksLayer[i][j] = null;
+            }
+        }
+    }
+
+    public void clearUiLayer() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                uiLayer[i][j] = 0;
+            }
+        }
+    }
+
+    public void clearVisibleLayers() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                topBlocksLayer[i][j] = 0;
+                bottomBlocksLayer[i][j] = 0;
+            }
+        }
+    }
+
     public void loadBorder() {
         int lastRow = borderLayer.length - 1;
         int lastColumn = borderLayer[0].length - 1;
@@ -227,13 +278,6 @@ public class GameFieldModel {
         return tanksLayer[y][x];
     }
 
-//    public BulletController getBullet(int x, int y) {
-//        if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
-//            return null;
-//        }
-//        return bulletLayer[y][x];
-//    }
-
     public boolean hasTankAt(int x, int y) {
         if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
             return false;
@@ -287,10 +331,6 @@ public class GameFieldModel {
         return tanksLayer;
     }
 
-//    public BulletController[][] getBulletLayer() {
-//        return bulletLayer;
-//    }
-
     public byte[][] getBorderLayer() {
         return borderLayer;
     }
@@ -299,12 +339,47 @@ public class GameFieldModel {
         return uiLayer;
     }
 
-    public void clear() {
-        bottomBlocksLayer = new byte[height][width];
-        borderLayer = new byte[height][width];
-        topBlocksLayer = new byte[height][width];
-        tanksLayer = new TankController[height][width];
-//        bulletLayer = new BulletController[height][width];
+    public byte[][] getCompositeLayer() {
+        byte[][] layer = new byte[width][height];
+        for (int i = 0; i < height - 2; i++) {
+            for (int j = 2; j < width - 4; j++) {
+                if (bottomBlocksLayer[i][j] != TilesTypes.NULL) {
+                    layer[i][j] = bottomBlocksLayer[i][j];
+                } else if (topBlocksLayer[i][j] != TilesTypes.NULL) {
+                    layer[i][j] = topBlocksLayer[i][j];
+                } else {
+                    layer[i][j] = TilesTypes.NULL;
+                }
+            }
+        }
+        return layer;
+    }
+
+    public byte[][] getMapLayer() {
+        byte[][] layer = new byte[width-6][height-2];
+        for (int i = 1, i2 = 0; i <= height - 2; i++, i2++) {
+            for (int j = 2, j2 = 0; j <= width - 5; j++, j2++) {
+                if (bottomBlocksLayer[i][j] != TilesTypes.NULL) {
+                    layer[i2][j2] = bottomBlocksLayer[i][j];
+                } else if (topBlocksLayer[i][j] != TilesTypes.NULL) {
+                    layer[i2][j2] = topBlocksLayer[i][j];
+                } else {
+                    layer[i2][j2] = TilesTypes.NULL;
+                }
+            }
+        }
+        return layer;
+    }
+
+    public boolean hasAliveEagle() {
+        for (int i = 0; i < height - 2; i--) {
+            for (int j = 2; j < width - 4; j++) {
+                if (bottomBlocksLayer[i][j] == TilesTypes.EAGLE_0_0) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void initMap() {
@@ -320,7 +395,7 @@ public class GameFieldModel {
         }
     }
 
-    private byte getBlockIdFromName(String name) {
+    public static byte getBlockIdFromName(String name) {
         name = name.toLowerCase();
 
         if ("br".equals(name) || "border".equals(name) || "1".equals(name)) {
@@ -352,7 +427,7 @@ public class GameFieldModel {
         }
     }
 
-    private void drawEagle(int x, int y) {
+    public void drawEagle(int x, int y) {
         if (x >= Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x) {
             x = Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x - 1;
         } else if (x < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x) {

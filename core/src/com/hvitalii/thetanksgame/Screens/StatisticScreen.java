@@ -15,9 +15,9 @@ import com.hvitalii.thetanksgame.Constants.GameConstants;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Utils.ResourcesHandler;
-import com.hvitalii.thetanksgame.View.MyOwnButton;
-import com.hvitalii.thetanksgame.View.MyOwnLabel;
-import com.hvitalii.thetanksgame.View.MyOwnLabel.*;
+import com.hvitalii.thetanksgame.MyOwn.MOButton;
+import com.hvitalii.thetanksgame.MyOwn.MOLabel;
+import com.hvitalii.thetanksgame.MyOwn.MOLabel.*;
 
 public class StatisticScreen extends ScreenAdapter{
 
@@ -32,15 +32,15 @@ public class StatisticScreen extends ScreenAdapter{
     private TextureRegion[] botTextures;
 
     private String[] players;
-    private MyOwnLabel hiScore;
-    private MyOwnLabel hiScoreNumber;
-    private MyOwnLabel stage;
-    private MyOwnLabel player;
-    private MyOwnLabel botNumber;
-    private MyOwnLabel player_score;
-    private MyOwnButton gameOver;
-    private MyOwnButton next;
-    private MyOwnButton random;
+    private MOLabel hiScore;
+    private MOLabel hiScoreNumber;
+    private MOLabel stage;
+    private MOLabel player;
+    private MOLabel botNumber;
+    private MOLabel player_score;
+    private MOButton gameOver;
+    private MOButton next;
+    private MOButton random;
 
     public StatisticScreen(TheTanksGame game, Statistic statistic, GameController gameController) {
         resourcesHandler = game.getResourcesHandler();
@@ -132,15 +132,15 @@ public class StatisticScreen extends ScreenAdapter{
             botTextures[i] = atlas.findRegion(GameConstants.BOT_TYPES_NAMES[i], 0);
         }
 
-        hiScore = new MyOwnLabel(resourcesHandler.font32,"HI SCORE");
-        hiScoreNumber = new MyOwnLabel(resourcesHandler.font32,"" + statistic.getHiScore());
-        stage = new MyOwnLabel(resourcesHandler.font32,"STAGE  " + gameController.getStage());
+        hiScore = new MOLabel(resourcesHandler.font32,"HI SCORE");
+        hiScoreNumber = new MOLabel(resourcesHandler.font32,"" + statistic.getHiScore());
+        stage = new MOLabel(resourcesHandler.font32,"STAGE  " + gameController.getStage());
 
-        player = new MyOwnLabel(resourcesHandler.font32);
-        botNumber = new MyOwnLabel(resourcesHandler.font32);
-        player_score = new MyOwnLabel(resourcesHandler.font32);
-        next = new MyOwnButton(resourcesHandler.font32, "NEXT MAP");
-        random = new MyOwnButton(resourcesHandler.font32, "RANDOM MAP");
+        player = new MOLabel(resourcesHandler.font32);
+        botNumber = new MOLabel(resourcesHandler.font32);
+        player_score = new MOLabel(resourcesHandler.font32);
+        next = new MOButton(resourcesHandler.font32, "NEXT MAP");
+        random = new MOButton(resourcesHandler.font32, "RANDOM MAP");
 
         //set Positions
         hiScore.setPosition(Resolution.SCREEN_WIDTH / 2, 16 * 12, Align.right);
@@ -171,7 +171,7 @@ public class StatisticScreen extends ScreenAdapter{
         random.setColor(UiColors.TTG_GREY);
         random.setHoverColor(UiColors.TTG_RED);
 
-        gameOver = new MyOwnButton(resourcesHandler.font32, "EXIT");
+        gameOver = new MOButton(resourcesHandler.font32, "EXIT");
         if (gameController.hasAlivePlayer() && gameController.getStageState().isEagleAlive()) {
             gameOver.setPosition(Resolution.SCREEN_WIDTH - 16, 16, Align.right);
             gameOver.setScale(0.25f);

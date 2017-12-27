@@ -1,30 +1,31 @@
-package com.hvitalii.thetanksgame.View;
+package com.hvitalii.thetanksgame.MyOwn;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.hvitalii.thetanksgame.Constants.GameConstants.*;
+import com.badlogic.gdx.math.Vector2;
+import com.hvitalii.thetanksgame.Utils.MathUtils;
 
-public class MyOwnButton extends MyOwnLabel {
+public class MOButton extends MOLabel {
 
     private Color color;
     private Color hoverColor;
 
-    public MyOwnButton(FileHandle font, String text, float x, float y) {
+    public MOButton(FileHandle font, String text, float x, float y) {
         super(font, text, x, y);
     }
 
-    public MyOwnButton(FileHandle font, String text) {
+    public MOButton(FileHandle font, String text) {
         super(font, text);
     }
 
-    public MyOwnButton(String text) {
+    public MOButton(String text) {
         super(text);
     }
 
-    public MyOwnButton() {
+    public MOButton() {
         super();
     }
 
@@ -51,10 +52,7 @@ public class MyOwnButton extends MyOwnLabel {
     }
 
     public boolean isHover() {
-        float synchronizedX = Gdx.graphics.getWidth() / Resolution.SCREEN_WIDTH;
-        float synchronizedY = Gdx.graphics.getHeight() / Resolution.SCREEN_HEIGHT;
-        float cursorX = Gdx.input.getX() / synchronizedX;
-        float cursorY = (-Gdx.input.getY() + Gdx.graphics.getHeight()) / synchronizedY;
+        Vector2 cursorPosition = MathUtils.getCursorPositionForFitViewport();
         float x = getX();
         switch (getAlignment()) {
             case Align.center:
@@ -64,8 +62,8 @@ public class MyOwnButton extends MyOwnLabel {
                 x = x - getWidth();
                 break;
         }
-        if ((cursorX >= x) && (cursorX <= (x + getWidth()))
-            && (cursorY >= getY()) && (cursorY <= (getY() + getHeight()))) {
+        if ((cursorPosition.x >= x) && (cursorPosition.x <= (x + getWidth()))
+            && (cursorPosition.y >= getY()) && (cursorPosition.y <= (getY() + getHeight()))) {
             return true;
         }
         return false;

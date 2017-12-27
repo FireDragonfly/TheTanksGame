@@ -1,580 +1,587 @@
 
 atlas.png
-size: 512,32
-format: RGBA4444
+size: 128,128
+format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 block
   rotate: false
-  xy: 352, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 10
-block
-  rotate: false
-  xy: 336, 6
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 11
-block
-  rotate: false
-  xy: 360, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 12
-block
-  rotate: false
-  xy: 368, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 14
-block
-  rotate: false
-  xy: 376, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 16
-block
-  rotate: false
-  xy: 384, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 17
-block
-  rotate: false
-  xy: 392, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 0
-block
-  rotate: false
-  xy: 400, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 25
-block
-  rotate: false
-  xy: 408, 24
+  xy: 64, 47
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 15
 block
   rotate: false
-  xy: 416, 24
+  xy: 80, 63
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
-  index: 1
+  index: 25
 block
   rotate: false
-  xy: 424, 24
+  xy: 96, 79
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
-  index: 20
+  index: 10
 block
   rotate: false
-  xy: 432, 24
+  xy: 48, 15
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
-  index: 21
+  index: 11
 block
   rotate: false
-  xy: 440, 24
+  xy: 64, 39
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
-  index: 23
+  index: 12
 block
   rotate: false
-  xy: 448, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 26
-block
-  rotate: false
-  xy: 456, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 27
-block
-  rotate: false
-  xy: 464, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 28
-block
-  rotate: false
-  xy: 472, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 29
-block
-  rotate: false
-  xy: 480, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 18
-block
-  rotate: false
-  xy: 488, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 3
-block
-  rotate: false
-  xy: 496, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 4
-block
-  rotate: false
-  xy: 504, 24
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 5
-block
-  rotate: false
-  xy: 344, 6
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 6
-block
-  rotate: false
-  xy: 352, 16
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 7
-block
-  rotate: false
-  xy: 360, 16
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 31
-block
-  rotate: false
-  xy: 368, 16
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 22
-block
-  rotate: false
-  xy: 376, 16
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 30
-block
-  rotate: false
-  xy: 384, 16
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 32
-block
-  rotate: false
-  xy: 392, 16
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 33
-block
-  rotate: false
-  xy: 400, 16
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 34
-block
-  rotate: false
-  xy: 408, 16
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 35
-block
-  rotate: false
-  xy: 416, 16
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 36
-block
-  rotate: false
-  xy: 424, 16
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 9
-block
-  rotate: false
-  xy: 432, 16
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: 39
-block
-  rotate: false
-  xy: 440, 16
+  xy: 72, 47
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 13
 block
   rotate: false
-  xy: 448, 16
+  xy: 80, 55
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
-  index: 2
+  index: 16
 block
   rotate: false
-  xy: 456, 16
+  xy: 88, 63
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
-  index: 8
+  index: 17
 block
   rotate: false
-  xy: 464, 16
+  xy: 96, 71
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 18
+block
+  rotate: false
+  xy: 104, 79
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 19
 block
   rotate: false
-  xy: 472, 16
+  xy: 48, 7
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
-  index: 37
+  index: 23
 block
   rotate: false
-  xy: 480, 16
+  xy: 72, 39
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 3
+block
+  rotate: false
+  xy: 80, 47
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 14
+block
+  rotate: false
+  xy: 88, 55
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 35
+block
+  rotate: false
+  xy: 96, 63
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 9
+block
+  rotate: false
+  xy: 104, 71
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 20
+block
+  rotate: false
+  xy: 112, 79
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 21
+block
+  rotate: false
+  xy: 120, 79
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 22
+block
+  rotate: false
+  xy: 80, 39
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 24
 block
   rotate: false
-  xy: 488, 16
+  xy: 88, 47
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 26
+block
+  rotate: false
+  xy: 96, 55
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 27
+block
+  rotate: false
+  xy: 104, 63
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 28
+block
+  rotate: false
+  xy: 112, 71
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 29
+block
+  rotate: false
+  xy: 120, 71
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 0
+block
+  rotate: false
+  xy: 88, 39
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 1
+block
+  rotate: false
+  xy: 96, 47
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 2
+block
+  rotate: false
+  xy: 104, 55
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 4
+block
+  rotate: false
+  xy: 112, 63
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 6
+block
+  rotate: false
+  xy: 120, 63
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 7
+block
+  rotate: false
+  xy: 96, 39
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 8
+block
+  rotate: false
+  xy: 104, 47
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 30
+block
+  rotate: false
+  xy: 112, 55
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 31
+block
+  rotate: false
+  xy: 120, 55
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 32
+block
+  rotate: false
+  xy: 104, 39
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 33
+block
+  rotate: false
+  xy: 112, 47
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 34
+block
+  rotate: false
+  xy: 120, 47
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 36
+block
+  rotate: false
+  xy: 112, 39
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: 37
+block
+  rotate: false
+  xy: 120, 39
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: 38
-bonus
+block
   rotate: false
-  xy: 112, 0
-  size: 16, 16
-  orig: 16, 16
+  xy: 56, 15
+  size: 8, 8
+  orig: 8, 8
   offset: 0, 0
-  index: 1
-bonus
+  index: 39
+block
   rotate: false
-  xy: 128, 0
-  size: 16, 16
-  orig: 16, 16
+  xy: 56, 7
+  size: 8, 8
+  orig: 8, 8
   offset: 0, 0
-  index: 2
+  index: 5
 bonus
   rotate: false
-  xy: 208, 16
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 0
-bonus
-  rotate: false
-  xy: 208, 0
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 3
-bonus
-  rotate: false
-  xy: 224, 16
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 4
-bonus
-  rotate: false
-  xy: 224, 0
+  xy: 32, 80
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 5
 bonus
   rotate: false
-  xy: 240, 16
+  xy: 32, 64
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+bonus
+  rotate: false
+  xy: 80, 96
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+bonus
+  rotate: false
+  xy: 32, 32
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+bonus
+  rotate: false
+  xy: 48, 48
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+bonus
+  rotate: false
+  xy: 80, 80
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 6
-bot_apc
+bonus
   rotate: false
-  xy: 176, 0
+  xy: 48, 32
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
 bot_apc
   rotate: false
-  xy: 256, 0
+  xy: 0, 48
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+bot_apc
+  rotate: false
+  xy: 112, 112
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
 bot_fast
   rotate: false
-  xy: 96, 16
+  xy: 16, 32
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
 bot_fast
   rotate: false
-  xy: 192, 16
+  xy: 48, 80
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
 bot_heavy
   rotate: false
-  xy: 64, 16
+  xy: 48, 96
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
 bot_heavy
   rotate: false
-  xy: 64, 0
+  xy: 64, 112
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
 bot_small
   rotate: false
-  xy: 176, 16
+  xy: 48, 64
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+bot_small
+  rotate: false
+  xy: 32, 16
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
-bot_small
+bullet
   rotate: false
-  xy: 240, 0
-  size: 16, 16
-  orig: 16, 16
+  xy: 64, 35
+  size: 4, 4
+  orig: 4, 4
   offset: 0, 0
   index: 1
 bullet
   rotate: false
-  xy: 320, 1
+  xy: 48, 3
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: 0
+bullet
+  rotate: false
+  xy: 68, 35
   size: 4, 4
   orig: 4, 4
   offset: 0, 0
   index: 2
-bullet
+eagle
   rotate: false
-  xy: 496, 20
-  size: 4, 4
-  orig: 4, 4
+  xy: 0, 16
+  size: 16, 16
+  orig: 16, 16
   offset: 0, 0
-  index: 0
-bullet
+  index: -1
+explosion
   rotate: false
-  xy: 324, 1
-  size: 4, 4
-  orig: 4, 4
+  xy: 0, 96
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
-  index: 1
+  index: 4
+explosion
+  rotate: false
+  xy: 0, 64
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
 explosion
   rotate: false
   xy: 0, 0
-  size: 32, 32
-  orig: 32, 32
+  size: 16, 16
+  orig: 16, 16
   offset: 0, 0
-  index: 3
+  index: 0
+explosion
+  rotate: false
+  xy: 96, 112
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
 explosion
   rotate: false
   xy: 32, 0
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 4
-explosion
-  rotate: false
-  xy: 112, 16
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
-explosion
+player_L1
   rotate: false
-  xy: 192, 0
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 2
-explosion
-  rotate: false
-  xy: 272, 16
+  xy: 80, 112
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
 player_L1
   rotate: false
-  xy: 80, 0
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 0
-player_L1
-  rotate: false
-  xy: 144, 0
+  xy: 112, 96
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
 player_L2
   rotate: false
-  xy: 288, 16
+  xy: 32, 96
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
 player_L2
   rotate: false
-  xy: 288, 0
+  xy: 48, 112
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
 player_L3
   rotate: false
-  xy: 160, 16
+  xy: 16, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
 player_L3
   rotate: false
-  xy: 160, 0
+  xy: 32, 48
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
 player_L4
   rotate: false
-  xy: 80, 16
+  xy: 0, 32
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 0
 player_L4
   rotate: false
-  xy: 304, 16
+  xy: 16, 48
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
 points
   rotate: false
-  xy: 320, 23
+  xy: 64, 55
+  size: 16, 9
+  orig: 16, 9
+  offset: 0, 0
+  index: 1
+points
+  rotate: false
+  xy: 80, 71
+  size: 16, 9
+  orig: 16, 9
+  offset: 0, 0
+  index: 4
+points
+  rotate: false
+  xy: 96, 87
   size: 16, 9
   orig: 16, 9
   offset: 0, 0
   index: 3
 points
   rotate: false
-  xy: 320, 14
-  size: 16, 9
-  orig: 16, 9
-  offset: 0, 0
-  index: 4
-points
-  rotate: false
-  xy: 336, 23
-  size: 16, 9
-  orig: 16, 9
-  offset: 0, 0
-  index: 1
-points
-  rotate: false
-  xy: 320, 5
+  xy: 112, 87
   size: 16, 9
   orig: 16, 9
   offset: 0, 0
   index: 2
 points
   rotate: false
-  xy: 336, 14
+  xy: 48, 23
   size: 15, 9
   orig: 15, 9
   offset: 0, 0
   index: 0
 shield
   rotate: false
-  xy: 256, 16
+  xy: 64, 80
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+shield
+  rotate: false
+  xy: 64, 64
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 1
-shield
+spawn
   rotate: false
-  xy: 272, 0
+  xy: 32, 112
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
-  index: 0
+  index: 1
 spawn
   rotate: false
-  xy: 96, 0
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 2
-spawn
-  rotate: false
-  xy: 128, 16
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: 0
-spawn
-  rotate: false
-  xy: 144, 16
+  xy: 64, 96
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: 3
 spawn
   rotate: false
-  xy: 304, 0
+  xy: 16, 16
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
-  index: 1
+  index: 0
+spawn
+  rotate: false
+  xy: 96, 96
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2

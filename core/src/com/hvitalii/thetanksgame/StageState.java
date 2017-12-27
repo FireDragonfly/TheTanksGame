@@ -60,7 +60,7 @@ public class StageState {
         return isEagleAlive;
     }
 
-    public void killEagle() {
+    public void eagleKilled() {
         isEagleAlive = false;
     }
 

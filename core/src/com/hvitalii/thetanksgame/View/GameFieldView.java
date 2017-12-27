@@ -3,6 +3,7 @@ package com.hvitalii.thetanksgame.View;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.hvitalii.thetanksgame.Model.GameFieldModel;
 
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
@@ -23,7 +24,6 @@ public class GameFieldView {
             sprites[i] = new Sprite(atlas.findRegion("block", i));
             sprites[i].setSize(Resolution.TILE_SIZE, Resolution.TILE_SIZE);
             sprites[i].setOriginCenter();
-            //sprites[i].setColor(1,1,1,1);
         }
     }
 
@@ -116,6 +116,14 @@ public class GameFieldView {
                 updateAndDrawSprite(batch, layer[i][j], j, i);
             }
         }
+    }
+
+    public Sprite[] getSprites() {
+        return sprites;
+    }
+
+    public void setModel(GameFieldModel model) {
+        this.model = model;
     }
 
     private void updateAndDrawSprite(SpriteBatch batch, int spriteIndex, int x, int y) {

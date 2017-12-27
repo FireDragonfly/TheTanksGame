@@ -149,6 +149,7 @@ public class GameConstants {
     public static class UiColors {
         public static final Color TTG_RED = new Color(0xD82800FF);
         public static final Color TTG_GREY = new Color(0x636363FF);
+        public static final Color TTG_LIGHT_GREY = new Color(0.65f, 0.65f, 0.65f, 1);
         public static final Color TTG_ORANGE = new Color(0xFC9838FF);
     }
 
