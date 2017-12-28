@@ -5,11 +5,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.hvitalii.thetanksgame.Constants.GameConstants;
+import com.hvitalii.thetanksgame.Constants.ObjectsConstants;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Controller.*;
+import com.hvitalii.thetanksgame.Model.Bonus;
 import com.hvitalii.thetanksgame.Model.PlayerTankModel;
 import com.hvitalii.thetanksgame.Utils.ResourcesHandler;
+import com.hvitalii.thetanksgame.View.BonusView;
 
+import java.awt.*;
 import java.util.Date;
 
 public class GameController {
@@ -18,19 +22,24 @@ public class GameController {
     private TextureAtlas textureAtlas;
     private StageState stageState;
     private Array<Player> players;
+    private BonusView bonusView;
     private int playersNumber;
     private int stage;
     private int lastSpawnPosition;
     private int currentMapIndex;
     private long frame;
     private long nextBotSpawnTime;
+    private long botFreezeTime;
     private long exitTime;
     private boolean isTimeToExit;
     private boolean isPreparingSuccess;
+    private boolean isDrawBonuses;
 
     public GameController(ResourcesHandler resourcesHandler, int playersNumber) {
         this.textureAtlas = resourcesHandler.getAssetManager().get(GameConstants.Files.ATLASES_LOCATION + GameConstants.Files.ATLAS_NAME);
         this.resourcesHandler = resourcesHandler;
+
+        bonusView = new BonusView(textureAtlas);
 
         stageState = new StageState(this, textureAtlas);
         stageState.setBotsRemaining(20 + (10 * (playersNumber - 1)));
@@ -39,10 +48,12 @@ public class GameController {
         isPreparingSuccess = setMap();
 
         isTimeToExit = false;
+        isDrawBonuses = false;
         exitTime = 0;
         stage = 1;
         frame = 0;
         nextBotSpawnTime = 0;
+        botFreezeTime = 0;
         lastSpawnPosition = (int)(Math.random() * 2);
 
         this.playersNumber = playersNumber;
@@ -99,14 +110,73 @@ public class GameController {
                 stageState.getPlayers().get(i).update(frame);
             }
         }
-        for (int i = 0; i < stageState.getBots().size; i++) { //Update bots
-            stageState.getBots().get(i).update(frame);
+        if (botFreezeTime < time) {
+            for (int i = 0; i < stageState.getBots().size; i++) { //Update bots
+                stageState.getBots().get(i).update(frame);
+            }
         }
 
         stageState.getBattleField().update(frame); //Update battle field
 
         for (int i = 0; i < stageState.getBullets().size; i++) { //Update bullets
             stageState.getBullets().get(i).update(frame);
+        }
+
+
+        for (int i = 0; i < stageState.getBonuses().size; i++) { //Update bonuses
+            Bonus bonus = stageState.getBonuses().get(i);
+            TankController tank = stageState.getBattleField().getTankAt((int)(bonus.x / 8), (int)(bonus.y / 8));
+            if (tank == null) {
+                tank = stageState.getBattleField().getTankAt((int)(bonus.x / 8) + 1, (int)(bonus.y / 8));
+            }
+            if (tank == null) {
+                tank = stageState.getBattleField().getTankAt((int)(bonus.x / 8), (int)(bonus.y / 8) + 1);
+            }
+            if (tank == null) {
+                tank = stageState.getBattleField().getTankAt((int)(bonus.x / 8) + 1, (int)(bonus.y / 8) + 1);
+            }
+            if (tank == null) {
+                continue;
+            }
+
+            if (tank.getType() == Types.USER) {
+                PlayerTankController player = (PlayerTankController) tank;
+                player.getPlayer().addScore(500);
+                switch (bonus.getType()) {
+
+                    case BonusTypes.SHIELD:
+                        player.getModel().setShieldActiveTime(time + 10000);
+                        break;
+
+                    case BonusTypes.TIME:
+                        botFreezeTime = time + 10000;
+                        break;
+
+                    case BonusTypes.SHOVEL:
+                        break;
+
+                    case BonusTypes.STAR:
+                        player.upgrade();
+                        break;
+
+                    case BonusTypes.GRENADE:
+                        destructAllBots();
+                        break;
+
+                    case BonusTypes.LIFE:
+                        player.addLive();
+                        break;
+
+                    case BonusTypes.GUN:
+                        player.maxUpgrade();
+                        break;
+                }
+                stageState.getBonuses().removeIndex(i);
+            }
+        }
+
+        if (frame % 32 == 0) {
+            isDrawBonuses = !isDrawBonuses;
         }
 
 //        if (frame % 60 == 0) {
@@ -137,6 +207,11 @@ public class GameController {
         stageState.getBattleField().drawTopLayers(batch);
         stageState.getBattleField().drawUi(batch);
 
+        if (isDrawBonuses) {
+            for (int i = 0; i < stageState.getBonuses().size; i++) {
+                bonusView.draw(batch ,stageState.getBonuses().get(i));
+            }
+        }
 
     }
 
@@ -145,8 +220,10 @@ public class GameController {
         stageState.getBullets().add(bullet);
     }
 
-    public void spawnBonus(int bonusType) {
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public void spawnBonus() {
+        Point position = stageState.getBattleField().getRandomFreePosition();
+        int type = ObjectsConstants.BONUS_ARRAY[(int)(Math.random() * 8.99)];
+        stageState.getBonuses().add(new Bonus(position.x * 8, position.y * 8, type));
     }
 
     public void destructBullet(BulletController bullet) {
@@ -171,6 +248,15 @@ public class GameController {
         int botType = ((BotTankController)tank).getBotType();
         ((PlayerTankController)bullet.getOwner()).getPlayer().addDestroyedBot(botType);
         stageState.getBots().removeIndex(stageState.getBots().indexOf(tank, true));
+
+        long time = new Date().getTime();
+        if (nextBotSpawnTime < time) {
+            updateBotSpawnTime(time);
+        }
+    }
+
+    public void destructAllBots() {
+        stageState.getBots().clear();
 
         long time = new Date().getTime();
         if (nextBotSpawnTime < time) {
@@ -303,12 +389,23 @@ public class GameController {
 
     private void spawnBot(){
         int botType = (int)(Math.random() * 128) / 32 ;
+        boolean isBonusCarrier = false;
+        switch (stageState.getBotsRemaining()) {
+            case 3:
+            case 10:
+            case 17:
+            case 23:
+            case 30:
+            case 37:
+                isBonusCarrier = true;
+                break;
+        }
         stageState.getBots().add(new BotTankController(
                 this,
                 GameConstants.BOTS_SPAWN_POSITIONS[nextSpawnPosition()],
                 textureAtlas,
                 botType,
-                -1
+                isBonusCarrier
         ));
     }
 
@@ -323,7 +420,7 @@ public class GameController {
     }
 
     private void updateBotSpawnTime(long time) {
-        nextBotSpawnTime = time + Math.abs(3500 - (50 * stage) * playersNumber);
+        nextBotSpawnTime = time + (long) ((3.17 - stage * 0.07 - (players.size - 1) * 0.34) * 1000);
     }
 
     public boolean isTimeToExit() {

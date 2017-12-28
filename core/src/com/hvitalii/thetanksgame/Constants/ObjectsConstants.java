@@ -8,6 +8,8 @@ import java.awt.*;
 
 public class ObjectsConstants {
 
+    public static final int[] BONUS_ARRAY = {0, 1, 2, 3, 4, 5, 6, 0, 4};
+
     public static class Types {
         public static final int BOT = 0;
         public static final int USER = 1;
@@ -56,6 +58,17 @@ public class ObjectsConstants {
         public static final int FAST = 1;
         public static final int AP = 2;
     }
+
+    public static class BonusTypes {
+        public static final int SHIELD = 0;
+        public static final int TIME = 1;
+        public static final int SHOVEL = 2;
+        public static final int STAR = 3;
+        public static final int GRENADE = 4;
+        public static final int LIFE = 5;
+        public static final int GUN = 6;
+    }
+
 
     public static class TilesTypes {
         public static final byte NULL = 0;

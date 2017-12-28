@@ -15,6 +15,8 @@ import com.hvitalii.thetanksgame.Player;
 import com.hvitalii.thetanksgame.StageState;
 import com.hvitalii.thetanksgame.View.GameFieldView;
 
+import java.awt.*;
+
 import static com.hvitalii.thetanksgame.Utils.MathUtils.*;
 
 
@@ -115,6 +117,27 @@ public class GameFieldController {
         int trimmedX = (int) trimToGrid(x) / 8;
         int trimmedY = (int) trimToGrid(y) / 8;
         return !model.hasImpermeableTileAt(trimmedX, trimmedY) && !model.hasTankAt(tank, trimmedX, trimmedY);
+    }
+
+    public Point getRandomFreePosition() {
+        int random = (int) (Math.random() * ((model.getWidth() - 9) * (model.getHeight() - 6)));
+        while (random > 0) {
+            for (int i = 3; i <= model.getHeight() - 4; i++) {
+                for (int j = 4; j <= model.getWidth() - 7; j++) {
+                    if (!model.hasImpermeableTileAt(j, i)) {
+                        random--;
+                        if (random <= 0) {
+                            return new Point(j, i);
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public TankController getTankAt(int x, int y) {
+        return model.getTank(x, y);
     }
 
     public void drawBottomLayers(SpriteBatch batch) {

@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.hvitalii.thetanksgame.Controller.BulletController;
 import com.hvitalii.thetanksgame.Controller.GameFieldController;
 import com.hvitalii.thetanksgame.Controller.TankController;
+import com.hvitalii.thetanksgame.Model.Bonus;
 import com.hvitalii.thetanksgame.Utils.ResourcesHandler;
 
 public class StageState {
@@ -13,6 +14,7 @@ public class StageState {
     private Array<TankController> bots;
     private Array<TankController> players;
     private Array<BulletController> bullets;
+    private Array<Bonus> bonuses;
     private GameFieldController battleField;
     private FileHandle map;
     private boolean isEagleAlive;
@@ -23,6 +25,7 @@ public class StageState {
         bots = new Array<TankController>();
         players = new Array<TankController>();
         bullets = new Array<BulletController>();
+        bonuses = new Array<Bonus>();
         isEagleAlive = true;
     }
 
@@ -45,6 +48,10 @@ public class StageState {
 
     public Array<TankController> getPlayers() {
         return players;
+    }
+
+    public Array<Bonus> getBonuses() {
+        return bonuses;
     }
 
     public void setMap(FileHandle map) {

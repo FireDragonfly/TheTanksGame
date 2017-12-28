@@ -19,7 +19,6 @@ public class GameFieldModel {
     private byte[][] borderLayer;
     private TankController[][] tanksLayer;
     private byte[][] uiLayer;
-//    private BulletController[][] bulletLayer;
 
     public GameFieldModel() {
         height = Resolution.FIELD_HEIGHT;
@@ -341,8 +340,8 @@ public class GameFieldModel {
 
     public byte[][] getCompositeLayer() {
         byte[][] layer = new byte[width][height];
-        for (int i = 0; i < height - 2; i++) {
-            for (int j = 2; j < width - 4; j++) {
+        for (int i = 1; i <= height - 2; i++) {
+            for (int j = 2; j <= width - 5; j++) {
                 if (bottomBlocksLayer[i][j] != TilesTypes.NULL) {
                     layer[i][j] = bottomBlocksLayer[i][j];
                 } else if (topBlocksLayer[i][j] != TilesTypes.NULL) {
@@ -372,8 +371,8 @@ public class GameFieldModel {
     }
 
     public boolean hasAliveEagle() {
-        for (int i = 0; i < height - 2; i--) {
-            for (int j = 2; j < width - 4; j++) {
+        for (int i = 1; i <= height - 2; i++) {
+            for (int j = 2; j <= width - 5; j++) {
                 if (bottomBlocksLayer[i][j] == TilesTypes.EAGLE_0_0) {
                     return true;
                 }

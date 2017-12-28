@@ -10,7 +10,7 @@ public abstract class TankModel extends Moveable {
     private int bulletsMax;
     private int bulletsAmount;
     private int bulletsType;
-    private int shieldEnergy;
+    private long shieldActiveTime;
 
     private int animationFrame;
     private float shift;
@@ -19,11 +19,11 @@ public abstract class TankModel extends Moveable {
         this(rectangle, direction, speed, 1, BulletsTypes.NORMAL, 0);
     }
 
-    public TankModel(Rectangle rectangle, float direction, float speed, int bulletsAmount, int bulletsType, int shieldEnergy) {
+    public TankModel(Rectangle rectangle, float direction, float speed, int bulletsAmount, int bulletsType, int shieldActiveTime) {
         super(rectangle, direction, speed);
         setBulletsAmount(bulletsAmount);
         setBulletsType(bulletsType);
-        setShieldEnergy(shieldEnergy);
+        setShieldActiveTime(shieldActiveTime);
         bulletsMax = 1;
         animationFrame = 0;
         shift = 0;
@@ -74,16 +74,12 @@ public abstract class TankModel extends Moveable {
         return bulletsMax;
     }
 
-    public int getShieldEnergy() {
-        return shieldEnergy;
+    public long getShieldActiveTime() {
+        return shieldActiveTime;
     }
 
-    public void setShieldEnergy(int shieldEnergy) {
-        if (shieldEnergy >= 0) {
-            this.shieldEnergy = shieldEnergy;
-        } else {
-            this.shieldEnergy = 0;
-        }
+    public void setShieldActiveTime(long shieldActiveTime) {
+        this.shieldActiveTime = shieldActiveTime;
     }
 
     public void move(GameFieldController battleField, float direction) {

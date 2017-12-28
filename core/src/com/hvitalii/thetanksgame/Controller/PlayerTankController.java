@@ -69,6 +69,7 @@ public class PlayerTankController implements TankController {
         } else {
             isFired = false;
         }
+
     }
 
     @Override
@@ -84,7 +85,7 @@ public class PlayerTankController implements TankController {
     @Override
     public boolean hitOn(BulletController bullet) {
         if (bullet.getOwnerType() != Types.USER){
-            if (model.getShieldEnergy() <= 0) {
+            if (model.getShieldActiveTime() < new Date().getTime()) {
                 state.destructTank(this, bullet);
             }
         } else {
@@ -108,6 +109,18 @@ public class PlayerTankController implements TankController {
     @Override
     public TankModel getModel() {
         return model;
+    }
+
+    public void upgrade() {
+        if (model.getLevel() < Levels.FOURTH) {
+            model.setLevel(model.getLevel() + 1);
+            view.levelChanged();
+        }
+    }
+
+    public void maxUpgrade() {
+        model.setLevel(Levels.FOURTH);
+        view.levelChanged();
     }
 
     public int getNumber() {

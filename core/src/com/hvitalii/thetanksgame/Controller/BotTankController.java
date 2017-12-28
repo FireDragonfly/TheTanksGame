@@ -20,17 +20,17 @@ public class BotTankController implements TankController {
     private float shift;
 
     public BotTankController(GameController state, Rectangle rectangle, TextureAtlas atlas, int botType) {
-        this(state, rectangle, atlas, botType, -1);
+        this(state, rectangle, atlas, botType, false);
     }
 
     public BotTankController(GameController state, Rectangle rectangle, TextureAtlas atlas, int botType, float direction) {
-        this(state, rectangle, atlas, botType, -1);
+        this(state, rectangle, atlas, botType, false);
         model.setDirection(direction);
     }
 
-    public BotTankController(GameController state, Rectangle rectangle, TextureAtlas atlas, int botType, int bonusType) {
+    public BotTankController(GameController state, Rectangle rectangle, TextureAtlas atlas, int botType, boolean isBonusCarrier) {
         this.state = state;
-        model = new BotTankModel(rectangle, bonusType);
+        model = new BotTankModel(rectangle, isBonusCarrier);
         model.setBotType(botType);
         view = new BotTankView(atlas, model);
         lastShotTime = 0;
@@ -102,7 +102,7 @@ public class BotTankController implements TankController {
     @Override
     public boolean hitOn(BulletController bullet) {
         if (bullet.getOwnerType() != Types.BOT){
-            if (model.getShieldEnergy() <= 0) {
+            if (model.getShieldActiveTime() < new Date().getTime()) {
                 if (model.getArmourAmount() > 0) {
                     model.setArmourAmount(model.getArmourAmount() - 1);
                     view.armourAmountChanged();
@@ -110,7 +110,8 @@ public class BotTankController implements TankController {
                     state.destructTank(this, bullet);
                 }
                 if (model.isBonusCarrier()) {
-                    state.spawnBonus(model.getBonus());
+                    state.spawnBonus();
+                    model.setBonusCarrier(false);
                 }
             }
             return true;
