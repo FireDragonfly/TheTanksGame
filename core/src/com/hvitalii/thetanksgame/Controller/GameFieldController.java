@@ -152,6 +152,13 @@ public class GameFieldController {
         view.drawUi(batch);
     }
 
+    public void surroundBases(byte blockType) {
+        Array<Point> bases = model.getBases();
+        for (int i = 0; i < bases.size; i++) {
+            model.surroundBase(blockType, bases.get(i));
+        }
+    }
+
     private void tankPositionUpdate() {
         model.clearTankLayer();
 
@@ -233,7 +240,7 @@ public class GameFieldController {
         model.set(TilesTypes.DESTROYED_EAGLE_1_0, x + 1, y);
         model.set(TilesTypes.DESTROYED_EAGLE_0_1, x, y + 1);
         model.set(TilesTypes.DESTROYED_EAGLE_1_1, x + 1, y + 1);
-        if (!model.hasAliveEagle()) {
+        if (!model.hasAliveBase()) {
             state.eagleKilled();
         }
     }

@@ -16,7 +16,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
-import com.hvitalii.thetanksgame.GameController;
 import com.hvitalii.thetanksgame.Model.GameFieldModel;
 import com.hvitalii.thetanksgame.MyOwn.MOButton;
 import com.hvitalii.thetanksgame.MyOwn.MOImgRadioButton;
@@ -99,7 +98,7 @@ public class ConstructionScreen extends ScreenAdapter{
                     cursorPosition.y = MathUtils.clingToGrid(cursorPosition.y) / 8;
                     if ((cursorPosition.x >= 2 && cursorPosition.x <= (Resolution.FIELD_WIDTH - 5))
                             && (cursorPosition.y >= 1 && cursorPosition.y <= (Resolution.FIELD_HEIGHT - 2))){
-                        fieldModel.drawEagle((int)cursorPosition.x - 1, (int)cursorPosition.y - 1);
+                        fieldModel.drawBase((int)cursorPosition.x - 1, (int)cursorPosition.y - 1);
                     }
                     break;
                 case TilesTypes.BRICK * 10:

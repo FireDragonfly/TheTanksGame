@@ -1,6 +1,7 @@
 package com.hvitalii.thetanksgame.Model;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants;
 import com.hvitalii.thetanksgame.Controller.TankController;
@@ -20,6 +21,8 @@ public class GameFieldModel {
     private TankController[][] tanksLayer;
     private byte[][] uiLayer;
 
+    private Array<Point> bases;
+
     public GameFieldModel() {
         height = Resolution.FIELD_HEIGHT;
         width = Resolution.FIELD_WIDTH;
@@ -28,6 +31,7 @@ public class GameFieldModel {
         borderLayer = new byte[height][width];
         uiLayer = new byte[height][width];
         tanksLayer = new TankController[height][width];
+        bases = new Array<Point>();
 //        bulletLayer = new BulletController[height][width];
         initMap();
         loadBorder();
@@ -43,7 +47,7 @@ public class GameFieldModel {
         Scanner sc = new Scanner(fileHandle.read());
         String name;
         byte block;
-        Point eaglePosition = new Point();
+        Array<Point> eaglePositions = new Array<Point>();
         boolean eagleExist = false;
         for (int i = height - 2; i > 0; i--) {
             if (!sc.hasNext()){
@@ -81,21 +85,29 @@ public class GameFieldModel {
                         topBlocksLayer[i][j] = block;
                         break;
                     case TilesTypes.EAGLE_0_0:
-                        eaglePosition = new Point(j, i);
+                        bases.add(new Point(j, i));
                         eagleExist = true;
                         break;
                 }
             }
         }
         if (eagleExist) {
-            drawEagle(eaglePosition.x, eaglePosition.y);
+            for (int i = 0; i < bases.size; i++) {
+                drawBase(bases.get(i).x, bases.get(i).y);
+            }
         } else {
-            drawEagle(ObjectsConstants.DEFAULT_EAGLE_POSITION.x,
+            drawBase(ObjectsConstants.DEFAULT_EAGLE_POSITION.x,
                     ObjectsConstants.DEFAULT_EAGLE_POSITION.y);
+            bases.add(new Point(ObjectsConstants.DEFAULT_EAGLE_POSITION));
+//            surroundBase(TilesTypes.BRICK, ObjectsConstants.DEFAULT_EAGLE_POSITION);
         }
     }
 
-    public void set(byte type, int x, int y){
+    public void set(byte type, Point position) {
+        set(type, position.x, position.y);
+    }
+
+    public void set(byte type, int x, int y) {
         if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
             return;
         }
@@ -295,9 +307,8 @@ public class GameFieldModel {
         if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
             return true;
         }
-        if ((bottomBlocksLayer[y][x] == 0)
-                && (bottomBlocksLayer[y][x] != TilesTypes.ICE)
-                && (borderLayer[y][x] == 0)) {
+        if (((bottomBlocksLayer[y][x] == 0) && (borderLayer[y][x] == 0))
+            || ((bottomBlocksLayer[y][x] == TilesTypes.ICE))) {
             return false;
         }
         return true;
@@ -320,6 +331,10 @@ public class GameFieldModel {
             return TilesTypes.NULL;
 
         }
+    }
+
+    public Array<Point> getBases() {
+        return bases;
     }
 
     public byte[][] getBottomBlocksLayer() {
@@ -370,7 +385,7 @@ public class GameFieldModel {
         return layer;
     }
 
-    public boolean hasAliveEagle() {
+    public boolean hasAliveBase() {
         for (int i = 1; i <= height - 2; i++) {
             for (int j = 2; j <= width - 5; j++) {
                 if (bottomBlocksLayer[i][j] == TilesTypes.EAGLE_0_0) {
@@ -381,15 +396,47 @@ public class GameFieldModel {
         return false;
     }
 
-    private void initMap() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                bottomBlocksLayer[i][j] = 0;
-                borderLayer[i][j] = 0;
-                topBlocksLayer[i][j] = 0;
-                uiLayer[i][j] = 0;
-                tanksLayer[i][j] = null;
-//                bulletLayer[i][j] = null;
+    public void drawBase(int x, int y) {
+        if (x >= Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x) {
+            x = Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x - 1;
+        } else if (x < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x) {
+            x = Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x;
+        }
+        if (y >= Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y) {
+            y = Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y - 1;
+        } else if (y < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y) {
+            y = Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y;
+        }
+        set(TilesTypes.EAGLE_0_0, x, y);
+        set(TilesTypes.EAGLE_1_0, x + 1, y);
+        set(TilesTypes.EAGLE_0_1, x, y + 1);
+        set(TilesTypes.EAGLE_1_1, x + 1, y + 1);
+    }
+
+    public void surroundBase(byte blockType, Point baseBottomLeft) {
+        surroundBase(blockType, baseBottomLeft.x, baseBottomLeft.y);
+    }
+
+    public void surroundBase(byte blockType, int baseBottomLeftX, int baseBottomLeftY) {
+        int x = baseBottomLeftX - 1;
+        int y = baseBottomLeftY - 1;
+        for (int i = 0; i < 4; i++){
+            int currentX = x + i;
+            if (!isBaseAt(currentX, y) && !isOutOfBattleField(currentX, y)) {
+                set(blockType,currentX, y);
+            }
+            if (!isBaseAt(currentX, y + 3) && !isOutOfBattleField(currentX, y + 3)) {
+                set(blockType,currentX, y + 3);
+            }
+        }
+
+        for (int i = 1; i < 3; i++){
+            int currentY = y + i;
+            if (!isBaseAt(x, currentY) && !isOutOfBattleField(x, currentY)) {
+                set(blockType, x, currentY);
+            }
+            if (!isBaseAt(x + 3, currentY) && !isOutOfBattleField(x + 3, currentY)) {
+                set(blockType, x + 3, currentY);
             }
         }
     }
@@ -426,21 +473,43 @@ public class GameFieldModel {
         }
     }
 
-    public void drawEagle(int x, int y) {
-        if (x >= Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x) {
-            x = Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x - 1;
-        } else if (x < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x) {
-            x = Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x;
+    public boolean isOutOfBattleField(int x, int y) {
+        if ((x > Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x)
+            ||(x < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x)
+            ||(y > Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y)
+            ||(y < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y)) {
+            return true;
         }
-        if (y >= Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y) {
-            y = Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y - 1;
-        } else if (y < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y) {
-            y = Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y;
+        return false;
+    }
+
+    private boolean isBaseAt(int x, int y) {
+        byte block = get(x, y);
+        switch (block) {
+            case TilesTypes.EAGLE_0_0:
+            case TilesTypes.EAGLE_1_0:
+            case TilesTypes.EAGLE_0_1:
+            case TilesTypes.EAGLE_1_1:
+            case TilesTypes.DESTROYED_EAGLE_0_0:
+            case TilesTypes.DESTROYED_EAGLE_1_0:
+            case TilesTypes.DESTROYED_EAGLE_0_1:
+            case TilesTypes.DESTROYED_EAGLE_1_1:
+                return true;
         }
-        set(TilesTypes.EAGLE_0_0, x, y);
-        set(TilesTypes.EAGLE_1_0, x + 1, y);
-        set(TilesTypes.EAGLE_0_1, x, y + 1);
-        set(TilesTypes.EAGLE_1_1, x + 1, y + 1);
+        return false;
+    }
+
+    private void initMap() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                bottomBlocksLayer[i][j] = 0;
+                borderLayer[i][j] = 0;
+                topBlocksLayer[i][j] = 0;
+                uiLayer[i][j] = 0;
+                tanksLayer[i][j] = null;
+//                bulletLayer[i][j] = null;
+            }
+        }
     }
 }
 

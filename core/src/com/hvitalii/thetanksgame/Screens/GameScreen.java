@@ -1,6 +1,7 @@
 package com.hvitalii.thetanksgame.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
+import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.GameController;
 import com.hvitalii.thetanksgame.Statistic;
 import com.hvitalii.thetanksgame.TheTanksGame;
@@ -18,6 +20,10 @@ import com.hvitalii.thetanksgame.MyOwn.MOLabel;
 import com.hvitalii.thetanksgame.MyOwn.MOLabel.*;
 
 public class GameScreen implements Screen {
+
+    private static final int[] KEYKODES = new int[] {
+            Input.Keys.NUM_5
+    };
 
     TheTanksGame game;
     private SpriteBatch batch;
@@ -96,6 +102,36 @@ public class GameScreen implements Screen {
             } else if (pause.justTouched()) {
                 isPause = false;
                 pause.setText("PAUSE");
+            }
+        }
+
+        if (game.isTestMod()) {
+            if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)
+                    && Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
+                    && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+
+                if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) {
+                    gameController.spawnBonus(BonusTypes.SHIELD);
+
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+                    gameController.spawnBonus(BonusTypes.TIME_STOP);
+
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+                    gameController.spawnBonus(BonusTypes.SHOVEL);
+
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+                    gameController.spawnBonus(BonusTypes.STAR);
+
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+                    gameController.spawnBonus(BonusTypes.GRENADE);
+
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
+                    gameController.spawnBonus(BonusTypes.LIFE);
+
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) {
+                    gameController.spawnBonus(BonusTypes.GUN);
+
+                }
             }
         }
 

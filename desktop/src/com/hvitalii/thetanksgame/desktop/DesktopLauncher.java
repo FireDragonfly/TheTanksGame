@@ -14,6 +14,8 @@ public class DesktopLauncher {
 		config.title = "The Tanks Game";
 		config.width = (int)Resolution.SCREEN_WIDTH * SCREEN_FACTOR;
 		config.height = (int)Resolution.SCREEN_HEIGHT * SCREEN_FACTOR;
-		new LwjglApplication(new TheTanksGame(), config);
+		boolean testMod = (arg.length > 0)&&(arg[0].equals("test"));
+		if (testMod) System.out.println("test mod activated");
+		new LwjglApplication(new TheTanksGame(testMod), config);
 	}
 }

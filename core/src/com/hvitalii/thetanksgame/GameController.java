@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.hvitalii.thetanksgame.Constants.GameConstants;
+import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Controller.*;
@@ -30,10 +31,12 @@ public class GameController {
     private long frame;
     private long nextBotSpawnTime;
     private long botFreezeTime;
+    private long basesSurroundTime;
     private long exitTime;
     private boolean isTimeToExit;
     private boolean isPreparingSuccess;
     private boolean isDrawBonuses;
+    private boolean isShovelActive;
 
     public GameController(ResourcesHandler resourcesHandler, int playersNumber) {
         this.textureAtlas = resourcesHandler.getAssetManager().get(GameConstants.Files.ATLASES_LOCATION + GameConstants.Files.ATLAS_NAME);
@@ -49,11 +52,13 @@ public class GameController {
 
         isTimeToExit = false;
         isDrawBonuses = false;
+        isShovelActive = false;
         exitTime = 0;
         stage = 1;
         frame = 0;
         nextBotSpawnTime = 0;
         botFreezeTime = 0;
+        basesSurroundTime = 0;
         lastSpawnPosition = (int)(Math.random() * 2);
 
         this.playersNumber = playersNumber;
@@ -145,14 +150,17 @@ public class GameController {
                 switch (bonus.getType()) {
 
                     case BonusTypes.SHIELD:
-                        player.getModel().setShieldActiveTime(time + 10000);
+                        player.getModel().setShieldActiveTime(time + Time.BONUS_SHIELD);
                         break;
 
-                    case BonusTypes.TIME:
-                        botFreezeTime = time + 10000;
+                    case BonusTypes.TIME_STOP:
+                        botFreezeTime = time + Time.BONUS_TIME_STOP;
                         break;
 
                     case BonusTypes.SHOVEL:
+                        stageState.getBattleField().surroundBases(TilesTypes.CONCRETE);
+                        basesSurroundTime = time + Time.BONUS_SHOVEL;
+                        isShovelActive = true;
                         break;
 
                     case BonusTypes.STAR:
@@ -175,7 +183,12 @@ public class GameController {
             }
         }
 
-        if (frame % 32 == 0) {
+        if (isShovelActive && (basesSurroundTime < time)) {
+            stageState.getBattleField().surroundBases(TilesTypes.BRICK);
+            isShovelActive = false;
+        }
+
+        if (frame % 16 == 0) {
             isDrawBonuses = !isDrawBonuses;
         }
 
@@ -220,9 +233,13 @@ public class GameController {
         stageState.getBullets().add(bullet);
     }
 
-    public void spawnBonus() {
-        Point position = stageState.getBattleField().getRandomFreePosition();
+    public void spawnRandomBonus() {
         int type = ObjectsConstants.BONUS_ARRAY[(int)(Math.random() * 8.99)];
+        spawnBonus(type);
+    }
+
+    public void spawnBonus(int type) {
+        Point position = stageState.getBattleField().getRandomFreePosition();
         stageState.getBonuses().add(new Bonus(position.x * 8, position.y * 8, type));
     }
 

@@ -127,6 +127,12 @@ public class GameConstants {
         public static final float SCREEN_HEIGHT = FIELD_HEIGHT * TILE_SIZE;
     }
 
+    public static class Time {
+        public static final long BONUS_SHIELD = 10000;
+        public static final long BONUS_TIME_STOP = 10000;
+        public static final long BONUS_SHOVEL = 20000;
+    }
+
     public static class Colors {
 
         public static final Color PLAYERS_COLORS[] = {

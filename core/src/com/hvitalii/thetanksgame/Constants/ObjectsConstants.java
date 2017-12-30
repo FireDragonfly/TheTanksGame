@@ -61,7 +61,7 @@ public class ObjectsConstants {
 
     public static class BonusTypes {
         public static final int SHIELD = 0;
-        public static final int TIME = 1;
+        public static final int TIME_STOP = 1;
         public static final int SHOVEL = 2;
         public static final int STAR = 3;
         public static final int GRENADE = 4;
@@ -134,5 +134,5 @@ public class ObjectsConstants {
 
     }
 
-    public static Point DEFAULT_EAGLE_POSITION = new Point(14, 0);
+    public static Point DEFAULT_EAGLE_POSITION = new Point(14, 1);
 }

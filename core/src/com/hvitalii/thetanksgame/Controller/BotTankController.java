@@ -110,7 +110,7 @@ public class BotTankController implements TankController {
                     state.destructTank(this, bullet);
                 }
                 if (model.isBonusCarrier()) {
-                    state.spawnBonus();
+                    state.spawnRandomBonus();
                     model.setBonusCarrier(false);
                 }
             }
