@@ -314,6 +314,20 @@ public class GameFieldModel {
         return true;
     }
 
+    public boolean hasIndestructibleTileAt(int x, int y) {
+        if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
+            return true;
+        }
+        if (((bottomBlocksLayer[y][x] == TilesTypes.CONCRETE)
+                || (bottomBlocksLayer[y][x] == TilesTypes.WATER_1)
+                || (bottomBlocksLayer[y][x] == TilesTypes.WATER_2)
+                || (!isNoBaseAt(x, y))
+                || (borderLayer[y][x] != 0))) {
+            return true;
+        }
+        return false;
+    }
+
     public byte getImpermeableForBulletTileAt(int x, int y) {
         if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
             return TilesTypes.NULL;
@@ -369,7 +383,7 @@ public class GameFieldModel {
         return layer;
     }
 
-    public byte[][] getMapLayer() {
+    public byte[][] getMap() {
         byte[][] layer = new byte[width-6][height-2];
         for (int i = 1, i2 = 0; i <= height - 2; i++, i2++) {
             for (int j = 2, j2 = 0; j <= width - 5; j++, j2++) {
@@ -422,20 +436,20 @@ public class GameFieldModel {
         int y = baseBottomLeftY - 1;
         for (int i = 0; i < 4; i++){
             int currentX = x + i;
-            if (!isBaseAt(currentX, y) && !isOutOfBattleField(currentX, y)) {
+            if (isNoBaseAt(currentX, y) && isInBattleField(currentX, y)) {
                 set(blockType,currentX, y);
             }
-            if (!isBaseAt(currentX, y + 3) && !isOutOfBattleField(currentX, y + 3)) {
+            if (isNoBaseAt(currentX, y + 3) && isInBattleField(currentX, y + 3)) {
                 set(blockType,currentX, y + 3);
             }
         }
 
         for (int i = 1; i < 3; i++){
             int currentY = y + i;
-            if (!isBaseAt(x, currentY) && !isOutOfBattleField(x, currentY)) {
+            if (isNoBaseAt(x, currentY) && isInBattleField(x, currentY)) {
                 set(blockType, x, currentY);
             }
-            if (!isBaseAt(x + 3, currentY) && !isOutOfBattleField(x + 3, currentY)) {
+            if (isNoBaseAt(x + 3, currentY) && isInBattleField(x + 3, currentY)) {
                 set(blockType, x + 3, currentY);
             }
         }
@@ -473,17 +487,17 @@ public class GameFieldModel {
         }
     }
 
-    public boolean isOutOfBattleField(int x, int y) {
+    public static boolean isInBattleField(int x, int y) {
         if ((x > Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x)
             ||(x < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x)
             ||(y > Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y)
             ||(y < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y)) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
-    private boolean isBaseAt(int x, int y) {
+    private boolean isNoBaseAt(int x, int y) {
         byte block = get(x, y);
         switch (block) {
             case TilesTypes.EAGLE_0_0:
@@ -494,9 +508,9 @@ public class GameFieldModel {
             case TilesTypes.DESTROYED_EAGLE_1_0:
             case TilesTypes.DESTROYED_EAGLE_0_1:
             case TilesTypes.DESTROYED_EAGLE_1_1:
-                return true;
+                return false;
         }
-        return false;
+        return true;
     }
 
     private void initMap() {

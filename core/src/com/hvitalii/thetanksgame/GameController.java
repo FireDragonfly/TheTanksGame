@@ -83,6 +83,58 @@ public class GameController {
             }
         }
 
+        frame++;
+        if (frame >= 256) {
+            frame = 0;
+        }
+
+        checkBulletsCollision();
+
+        updatePlayers();
+        updateBots();
+        stageState.getBattleField().update(frame);
+        updateBullets();
+
+        updateBonuses();
+//        if (frame % 60 == 0) {
+//            for (int i = 0; i < players.size; i++) {
+//                System.out.print(i + ": ");
+//                System.out.println(players.get(i).getScore());
+//            }
+//        }
+    }
+
+    public void draw(SpriteBatch batch) {
+
+        stageState.getBattleField().drawBottomLayers(batch);
+
+        for (int i = 0; i < stageState.getPlayers().size; i++) { //Draw players
+            stageState.getPlayers().get(i).draw(batch);
+        }
+
+        for (int i = 0; i < stageState.getBots().size; i++) { //Draw bots
+            stageState.getBots().get(i).draw(batch);
+        }
+
+        for (int i = 0; i < stageState.getBullets().size; i++) { //Draw bullets
+            stageState.getBullets().get(i).draw(batch);
+        }
+
+        stageState.getBattleField().drawTopLayers(batch);
+        stageState.getBattleField().drawUi(batch);
+
+        if (isDrawBonuses) {
+            for (int i = 0; i < stageState.getBonuses().size; i++) {
+                bonusView.draw(batch ,stageState.getBonuses().get(i));
+            }
+        }
+
+    }
+
+
+    private void updateBots() {
+        long time = new Date().getTime();
+
         if ((stageState.getBots().size < 4) && (nextBotSpawnTime < time)) {
             if (stageState.getBotsRemaining() > 0) {
                 spawnBot();
@@ -91,44 +143,42 @@ public class GameController {
             }
         }
 
-        frame++;
-        if (frame >= 256) {
-            frame = 0;
-        }
-
-        { // Check bullets collision
-            Array<BulletController> bulletsToRemove = new Array<BulletController>();
-            for (int i = 0; i < stageState.getBullets().size - 1; i++) {
-                for (int j = i + 1; j < stageState.getBullets().size; j++) {
-                    if (stageState.getBullets().get(i).getBounds().overlaps(stageState.getBullets().get(j).getBounds())) {
-                        bulletsToRemove.add(stageState.getBullets().get(i));
-                        bulletsToRemove.add(stageState.getBullets().get(j));
-                    }
-                }
-            }
-            for (int i = 0; i < bulletsToRemove.size; i++) {
-                bulletsToRemove.get(i).destruct();
-            }
-        }
-        if (stageState.isEagleAlive() && hasAlivePlayer()) {
-            for (int i = 0; i < stageState.getPlayers().size; i++) { //Update players
-                stageState.getPlayers().get(i).update(frame);
-            }
-        }
         if (botFreezeTime < time) {
-            for (int i = 0; i < stageState.getBots().size; i++) { //Update bots
+            for (int i = 0; i < stageState.getBots().size; i++) {
                 stageState.getBots().get(i).update(frame);
             }
         }
+    }
 
-        stageState.getBattleField().update(frame); //Update battle field
+    private void updateBullets() {
+        Array<BulletController> bullets = stageState.getBullets();
 
-        for (int i = 0; i < stageState.getBullets().size; i++) { //Update bullets
-            stageState.getBullets().get(i).update(frame);
+        for (int i = 0; i < stageState.getBullets().size; i++) {
+            bullets.get(i).update(frame);
+        }
+    }
+
+    private void updatePlayers() {
+        if (stageState.isEagleAlive() && hasAlivePlayer()) {
+            for (int i = 0; i < stageState.getPlayers().size; i++) {
+                stageState.getPlayers().get(i).update(frame);
+            }
+        }
+    }
+
+    private void updateBonuses() {
+        long time = new Date().getTime();
+
+        if (isShovelActive && (basesSurroundTime < time)) {
+            stageState.getBattleField().surroundBases(TilesTypes.BRICK);
+            isShovelActive = false;
         }
 
+        if (frame % 16 == 0) {
+            isDrawBonuses = !isDrawBonuses;
+        }
 
-        for (int i = 0; i < stageState.getBonuses().size; i++) { //Update bonuses
+        for (int i = 0; i < stageState.getBonuses().size; i++) {
             Bonus bonus = stageState.getBonuses().get(i);
             TankController tank = stageState.getBattleField().getTankAt((int)(bonus.x / 8), (int)(bonus.y / 8));
             if (tank == null) {
@@ -182,50 +232,22 @@ public class GameController {
                 stageState.getBonuses().removeIndex(i);
             }
         }
-
-        if (isShovelActive && (basesSurroundTime < time)) {
-            stageState.getBattleField().surroundBases(TilesTypes.BRICK);
-            isShovelActive = false;
-        }
-
-        if (frame % 16 == 0) {
-            isDrawBonuses = !isDrawBonuses;
-        }
-
-//        if (frame % 60 == 0) {
-//            for (int i = 0; i < players.size; i++) {
-//                System.out.print(i + ": ");
-//                System.out.println(players.get(i).getScore());
-//            }
-//        }
-
     }
 
-    public void draw(SpriteBatch batch) {
-
-        stageState.getBattleField().drawBottomLayers(batch);
-
-        for (int i = 0; i < stageState.getPlayers().size; i++) { //Draw players
-            stageState.getPlayers().get(i).draw(batch);
-        }
-
-        for (int i = 0; i < stageState.getBots().size; i++) { //Draw bots
-            stageState.getBots().get(i).draw(batch);
-        }
-
-        for (int i = 0; i < stageState.getBullets().size; i++) { //Draw bullets
-            stageState.getBullets().get(i).draw(batch);
-        }
-
-        stageState.getBattleField().drawTopLayers(batch);
-        stageState.getBattleField().drawUi(batch);
-
-        if (isDrawBonuses) {
-            for (int i = 0; i < stageState.getBonuses().size; i++) {
-                bonusView.draw(batch ,stageState.getBonuses().get(i));
+    private void checkBulletsCollision() {
+        Array<BulletController> bulletsToRemove = new Array<BulletController>();
+        for (int i = 0; i < stageState.getBullets().size - 1; i++) {
+            for (int j = i + 1; j < stageState.getBullets().size; j++) {
+                if (stageState.getBullets().get(i).getBounds().overlaps(stageState.getBullets().get(j).getBounds())) {
+                    bulletsToRemove.add(stageState.getBullets().get(i));
+                    bulletsToRemove.add(stageState.getBullets().get(j));
+                }
             }
         }
 
+        for (int i = 0; i < bulletsToRemove.size; i++) {
+            bulletsToRemove.get(i).destruct();
+        }
     }
 
 
@@ -240,11 +262,18 @@ public class GameController {
 
     public void spawnBonus(int type) {
         Point position = stageState.getBattleField().getRandomFreePosition();
+        if(position == null) {
+            position = new Point();
+            position.x = Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x
+                    + (int)(Math.random() * (Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x - 1 - Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x));
+            position.y = Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y
+                    + (int)(Math.random() * (Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y - 1 - Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y));
+        }
         stageState.getBonuses().add(new Bonus(position.x * 8, position.y * 8, type));
     }
 
     public void destructBullet(BulletController bullet) {
-        stageState.getBullets().removeIndex(stageState.getBullets().indexOf(bullet, true));
+        stageState.getBullets().removeValue(bullet, true);
     }
 
     public void destructTank(TankController tank, BulletController bullet) {

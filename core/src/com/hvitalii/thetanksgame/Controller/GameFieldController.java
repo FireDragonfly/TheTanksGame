@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.GameController;
@@ -120,11 +121,14 @@ public class GameFieldController {
     }
 
     public Point getRandomFreePosition() {
-        int random = (int) (Math.random() * ((model.getWidth() - 9) * (model.getHeight() - 6)));
+        int random = (int) (Math.random() * ((model.getWidth() - 7) * (model.getHeight() - 6)));
         while (random > 0) {
-            for (int i = 3; i <= model.getHeight() - 4; i++) {
-                for (int j = 4; j <= model.getWidth() - 7; j++) {
-                    if (!model.hasImpermeableTileAt(j, i)) {
+
+            for (int i = Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x;
+                 i <= Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y; i++) {
+                for (int j = Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x + 1;
+                     j <= Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x - 1; j++) {
+                    if (!model.hasIndestructibleTileAt(j, i)) {
                         random--;
                         if (random <= 0) {
                             return new Point(j, i);

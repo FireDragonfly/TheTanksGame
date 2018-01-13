@@ -29,6 +29,7 @@ public class MainMenuScreen extends ScreenAdapter{
 
     private MOLabel hiScore;
     private MOLabel title;
+    private MOLabel titleShadow;
     private MOButton onePlayer;
     private MOButton twoPlayers;
     private MOButton threePlayers;
@@ -55,6 +56,7 @@ public class MainMenuScreen extends ScreenAdapter{
         //float colorValue = 0.00390625f * 63;
         Gdx.gl.glClearColor(0 ,0, 0, 1);
         command = 0;
+        resourcesHandler.updateExternalMaps();
     }
 
     @Override
@@ -115,6 +117,7 @@ public class MainMenuScreen extends ScreenAdapter{
     @Override
     public void dispose() {
         super.dispose();
+        constructionScreen.dispose();
         hiScore.dispose();
         title.dispose();
         onePlayer.dispose();
@@ -122,6 +125,7 @@ public class MainMenuScreen extends ScreenAdapter{
         threePlayers.dispose();
         fourPlayers.dispose();
         exit.dispose();
+
     }
 
     private boolean newGame(int playersNumber) {
@@ -140,63 +144,70 @@ public class MainMenuScreen extends ScreenAdapter{
 
     private void initUi() {
         hiScore = new MOLabel(resourcesHandler.font32,"HI SCORE >    " + statistic.getHiScore());
-        title = new MOLabel(resourcesHandler.font32,"THE TANKS\nGAME");
-        onePlayer = new MOButton(resourcesHandler.font32, "1 PLAYER");
-        twoPlayers = new MOButton(resourcesHandler.font32, "2 PLAYERS");
-        threePlayers = new MOButton(resourcesHandler.font32, "3 PLAYERS");
-        fourPlayers = new MOButton(resourcesHandler.font32, "4 PLAYERS");
-        construction = new MOButton(resourcesHandler.font32, "CONSTRUCTION");
-        exit = new MOButton(resourcesHandler.font32, "EXIT");
-
-
-        onePlayer.setTextAlignment(Align.center);
-        twoPlayers.setTextAlignment(Align.center);
-        threePlayers.setTextAlignment(Align.center);
-        fourPlayers.setTextAlignment(Align.center);
-        construction.setTextAlignment(Align.center);
         hiScore.setTextAlignment(Align.center);
-        title.setTextAlignment(Align.center);
-        exit.setTextAlignment(Align.center);
-
         hiScore.setPosition(8, 16 * 13, Align.left);
-        title.setPosition(Resolution.SCREEN_WIDTH/2, 16 * 8, Align.center);
-        onePlayer.setPosition(Resolution.SCREEN_WIDTH/2, 8 * 12, Align.center);
-        twoPlayers.setPosition(Resolution.SCREEN_WIDTH/2, 8 * 10, Align.center);
-        threePlayers.setPosition(Resolution.SCREEN_WIDTH/2, 8 * 8, Align.center);
-        fourPlayers.setPosition(Resolution.SCREEN_WIDTH/2, 8 * 6, Align.center);
-        construction.setPosition(Resolution.SCREEN_WIDTH/2, 8 * 4, Align.center);
-        exit.setPosition(Resolution.SCREEN_WIDTH - 16, 16, Align.right);
-
         hiScore.setScale(0.25f);
-        title.setScale(1);
-        onePlayer.setScale(0.25f);
-        twoPlayers.setScale(0.25f);
-        threePlayers.setScale(0.25f);
-        fourPlayers.setScale(0.25f);
-        construction.setScale(0.25f);
-        exit.setScale(0.25f);
-
         hiScore.setColor(Color.ORANGE);
+
+        titleShadow = new MOLabel(resourcesHandler.font32,"THE TANKS\nGAME");
+        titleShadow.setTextAlignment(Align.center);
+        titleShadow.setPosition(Resolution.SCREEN_WIDTH/2 - 2, 16 * 8 - 1, Align.center);
+        titleShadow.setScale(1);
+        titleShadow.setColor(Color.WHITE);
+
+        title = new MOLabel(resourcesHandler.font32,"THE TANKS\nGAME");
+        title.setTextAlignment(Align.center);
+        title.setPosition(Resolution.SCREEN_WIDTH/2, 16 * 8, Align.center);
+        title.setScale(1);
         title.setColor(UiColors.TTG_RED);
 
+        onePlayer = new MOButton(resourcesHandler.font32, "1 PLAYER");
+        onePlayer.setTextAlignment(Align.center);
+        onePlayer.setPosition(Resolution.SCREEN_WIDTH/2, 8 * 12, Align.center);
+        onePlayer.setScale(0.25f);
         onePlayer.setColor(UiColors.TTG_GREY);
-        twoPlayers.setColor(UiColors.TTG_GREY);
-        threePlayers.setColor(UiColors.TTG_GREY);
-        fourPlayers.setColor(UiColors.TTG_GREY);
-        construction.setColor(UiColors.TTG_GREY);
-
         onePlayer.setHoverColor(Color.WHITE);
+
+        twoPlayers = new MOButton(resourcesHandler.font32, "2 PLAYERS");
+        twoPlayers.setTextAlignment(Align.center);
+        twoPlayers.setPosition(Resolution.SCREEN_WIDTH/2, 8 * 10, Align.center);
+        twoPlayers.setScale(0.25f);
+        twoPlayers.setColor(UiColors.TTG_GREY);
         twoPlayers.setHoverColor(Color.WHITE);
+
+        threePlayers = new MOButton(resourcesHandler.font32, "3 PLAYERS");
+        threePlayers.setTextAlignment(Align.center);
+        threePlayers.setPosition(Resolution.SCREEN_WIDTH/2, 8 * 8, Align.center);
+        threePlayers.setScale(0.25f);
+        threePlayers.setColor(UiColors.TTG_GREY);
         threePlayers.setHoverColor(Color.WHITE);
+
+        fourPlayers = new MOButton(resourcesHandler.font32, "4 PLAYERS");
+        fourPlayers.setTextAlignment(Align.center);
+        fourPlayers.setPosition(Resolution.SCREEN_WIDTH/2, 8 * 6, Align.center);
+        fourPlayers.setScale(0.25f);
+        fourPlayers.setColor(UiColors.TTG_GREY);
         fourPlayers.setHoverColor(Color.WHITE);
+
+
+        construction = new MOButton(resourcesHandler.font32, "CONSTRUCTION");
+        construction.setTextAlignment(Align.center);
+        construction.setPosition(Resolution.SCREEN_WIDTH/2, 8 * 4, Align.center);
+        construction.setScale(0.25f);
+        construction.setColor(UiColors.TTG_GREY);
         construction.setHoverColor(Color.WHITE);
 
+        exit = new MOButton(resourcesHandler.font32, "EXIT");
+        exit.setTextAlignment(Align.center);
+        exit.setPosition(Resolution.SCREEN_WIDTH - 16, 16, Align.right);
+        exit.setScale(0.25f);
         exit.setColor(Color.ORANGE);
         exit.setHoverColor(UiColors.TTG_RED);
     }
 
     private void drawUi() {
         hiScore.draw(batch);
+        titleShadow.draw(batch);
         title.draw(batch);
         onePlayer.draw(batch);
         twoPlayers.draw(batch);

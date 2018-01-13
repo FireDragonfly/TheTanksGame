@@ -7,14 +7,20 @@ import com.hvitalii.thetanksgame.Constants.GameConstants;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Model.BotTankModel;
 
+import java.util.Date;
+
 public class BotTankView {
 
     private TextureAtlas atlas;
     private Sprite[] sprites;
+    private Sprite[] shieldSprites;
     private BotTankModel model;
+    private int frame;
 
     public BotTankView(TextureAtlas atlas, BotTankModel model) {
         sprites = new Sprite[2];
+        shieldSprites = new Sprite[2];
+        frame = 0;
         this.atlas = atlas;
         this.model = model;
         for (int i = 0; i < 2; i++) {
@@ -27,13 +33,20 @@ public class BotTankView {
             }
             sprites[i].setOriginCenter();
             sprites[i].setRotation(model.getDirection());
+
+            shieldSprites[i] = new Sprite(atlas.findRegion("shield", i));
+            shieldSprites[i].setBounds(model.x, model.y, model.width, model.height);
+            shieldSprites[i].setOriginCenter();
         }
     }
 
     public void draw(SpriteBatch batch) {
+        updateFrame();
         updateSprites();
         sprites[model.getAnimationFrame()].draw(batch);
-
+        if (model.getShieldActiveTime() >= new Date().getTime()) {
+            shieldSprites[frame % 2].draw(batch);
+        }
     }
 
     public void armourAmountChanged() {
@@ -48,14 +61,22 @@ public class BotTankView {
                 sprites[i].setRotation(model.getDirection());
             }
         }
-
         for (int i = 0; i < 2; i++) {
             sprites[i].setX(model.getX());
             sprites[i].setY(model.getY());
+            shieldSprites[i].setX(model.getX());
+            shieldSprites[i].setY(model.getY());
         }
     }
 
     public TextureAtlas getAtlas() {
         return atlas;
+    }
+
+    private void updateFrame() {
+        frame++;
+        if (frame > 4) {
+            frame = 0;
+        }
     }
 }

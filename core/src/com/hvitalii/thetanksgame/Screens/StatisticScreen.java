@@ -59,6 +59,8 @@ public class StatisticScreen extends ScreenAdapter{
         super.show();
         Gdx.gl.glClearColor(0 ,0, 0, 1);
 
+        resourcesHandler.updateExternalMaps();
+
         Array<Player> players = gameController.getPlayers();
         for (int i = 0; i < players.size; i++) {
             statistic.getPlayersScores()[i] = players.get(i).getScore();

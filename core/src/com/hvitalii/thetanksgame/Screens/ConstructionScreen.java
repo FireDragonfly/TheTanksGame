@@ -38,15 +38,18 @@ public class ConstructionScreen extends ScreenAdapter{
     private GameFieldModel fieldModel;
     private GameFieldView fieldView;
     private Sprite[] sprites;
+    private MainMenuScreen menuScreen;
 
     private MOButton clear;
     private MOButton save;
 //    private MOButton load;
 //    private MOButton play;
+    private MOButton exit;
 
     private int activeId;
 
     public ConstructionScreen(ResourcesHandler resourcesHandler, TheTanksGame game, MainMenuScreen menuScreen) {
+        this.menuScreen = menuScreen;
         this.resourcesHandler = resourcesHandler;
         this.game = game;
         batch = new SpriteBatch();
@@ -119,21 +122,9 @@ public class ConstructionScreen extends ScreenAdapter{
         if (clear.justTouched()) {
             fieldModel.clearVisibleLayers();
         } else if (save.justTouched()) {
-            byte[][] map = fieldModel.getMapLayer();
-            if (Gdx.files.isExternalStorageAvailable()) {
-                String mapName = "map_" + Math.abs(map.hashCode());
-                if (!Gdx.files.external(Files.EXTERNAL_MAPS_LOCATION + mapName + Files.MAP_SUFFIX).exists()) {
-                    StringBuilder builder = new StringBuilder();
-                    for (int i =  map.length - 1; i >= 0; i--) {
-                        for (int j = 0; j < map[0].length; j++) {
-                            builder.append(map[i][j]);
-                            builder.append(' ');
-                        }
-                        builder.append("\n");
-                    }
-                    Gdx.files.external(Files.EXTERNAL_MAPS_LOCATION + mapName + Files.MAP_SUFFIX).writeString(builder.toString(),false);
-                }
-            }
+            saveMap();
+        } else if (exit.justTouched()) {
+            exit();
         }
 
         draw();
@@ -156,6 +147,8 @@ public class ConstructionScreen extends ScreenAdapter{
         save.draw(batch);
 //        load.draw(batch);
 //        play.draw(batch);
+        exit.draw(batch);
+
         batch.end();
     }
 
@@ -209,6 +202,12 @@ public class ConstructionScreen extends ScreenAdapter{
         save.setHoverColor(Color.GREEN);
         save.setScaleY(0.27f);
         save.setScaleX(0.27f);
+
+        exit = new MOButton(resourcesHandler.font32, "EXIT", Resolution.SCREEN_WIDTH - 2, Size.TILE * 1);
+        exit.setAlignment(Align.right);
+        exit.setColor(Color.BLACK);
+        exit.setHoverColor(UiColors.TTG_RED);
+        exit.setScale(0.3f);
 
         initBlocksButtons(atlas);
     }
@@ -291,5 +290,29 @@ public class ConstructionScreen extends ScreenAdapter{
             buttons.get(i).setActiveColor(Color.WHITE);
             buttons.get(i).setHoverColor(Color.WHITE);
         }
+    }
+
+    private boolean saveMap() {
+        byte[][] map = fieldModel.getMap();
+        if (Gdx.files.isExternalStorageAvailable()) {
+            String mapName = "map_" + Math.abs(map.hashCode());
+            if (!Gdx.files.external(Files.EXTERNAL_MAPS_LOCATION + mapName + Files.MAP_SUFFIX).exists()) {
+                StringBuilder builder = new StringBuilder();
+                for (int i =  map.length - 1; i >= 0; i--) {
+                    for (int j = 0; j < map[0].length; j++) {
+                        builder.append(map[i][j]);
+                        builder.append(' ');
+                    }
+                    builder.append("\n");
+                }
+                Gdx.files.external(Files.EXTERNAL_MAPS_LOCATION + mapName + Files.MAP_SUFFIX).writeString(builder.toString(),false);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void exit() {
+        game.setScreen(menuScreen);
     }
 }

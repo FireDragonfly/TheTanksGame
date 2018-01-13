@@ -20,18 +20,7 @@ public class ResourcesHandler implements Disposable{
     public final FileHandle font64;
 
     public ResourcesHandler() {
-        internalMaps = new FileHandle[Files.MAPS_COUNT];
-        for (int i = 0; i < internalMaps.length; i++) {
-            internalMaps[i] = Gdx.files.internal(Files.LOCAL_MAPS_LOCATION + Files.MAPS_NAMES[i]);
-        }
-        if (Gdx.files.isExternalStorageAvailable()) {
-            if (Gdx.files.external(DEFAULT_EXTERNAL_MAPS_FOLDER).isDirectory()) {
-                externalMaps = Gdx.files.external(DEFAULT_EXTERNAL_MAPS_FOLDER).list(Files.MAP_SUFFIX);
-            } else {
-                Gdx.files.external(DEFAULT_EXTERNAL_MAPS_FOLDER).mkdirs();
-                externalMaps = new FileHandle[0];
-            }
-        }
+        updateMaps();
         assetManager = new AssetManager();
         font16 = Gdx.files.local(Files.FONTS_LOCATION + "font16.fnt");
         font32 = Gdx.files.local(Files.FONTS_LOCATION + "font32.fnt");
@@ -59,6 +48,27 @@ public class ResourcesHandler implements Disposable{
 
     public FileHandle[] getExternalMaps() {
         return externalMaps;
+    }
+
+    public void updateMaps() {
+        internalMaps = new FileHandle[Files.MAPS_COUNT];
+        for (int i = 0; i < internalMaps.length; i++) {
+            internalMaps[i] = Gdx.files.internal(Files.LOCAL_MAPS_LOCATION + Files.MAPS_NAMES[i]);
+        }
+        updateExternalMaps();
+    }
+
+    public void updateExternalMaps() {
+        if (Gdx.files.isExternalStorageAvailable()) {
+            if (Gdx.files.external(DEFAULT_EXTERNAL_MAPS_FOLDER).isDirectory()) {
+                externalMaps = Gdx.files.external(DEFAULT_EXTERNAL_MAPS_FOLDER).list(Files.MAP_SUFFIX);
+            } else {
+                Gdx.files.external(DEFAULT_EXTERNAL_MAPS_FOLDER).mkdirs();
+                externalMaps = new FileHandle[0];
+            }
+        } else {
+            externalMaps = new FileHandle[0];
+        }
     }
 
     @Override
