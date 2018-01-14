@@ -7,13 +7,16 @@ public class MORadioButtonGroup {
 
     private Array<MOImgRadioButton> buttons;
     private MOImgRadioButton currentActive;
+    private boolean changed;
 
     public MORadioButtonGroup() {
         buttons = new Array<MOImgRadioButton>();
+        changed = false;
     }
 
     public MORadioButtonGroup(int size) {
         buttons = new Array<MOImgRadioButton>(size);
+        changed = false;
     }
 
     public void add(MOImgRadioButton button) {
@@ -27,7 +30,7 @@ public class MORadioButtonGroup {
         buttons.removeValue(button, true);
     }
 
-    public void activated(MOImgRadioButton button) {
+    public void activate(MOImgRadioButton button) {
         int index = buttons.indexOf(button, true);
         if (index != -1) {
             if (currentActive != button) {
@@ -41,15 +44,27 @@ public class MORadioButtonGroup {
         }
     }
 
-    public void deactivated(MOImgRadioButton button) {
+    public void deactivate() {
+        if (currentActive != null) {
+            currentActive.deactivate();
+        }
+    }
+
+    public void deactivate(MOImgRadioButton button) {
         if (currentActive == button) {
             currentActive = null;
         }
     }
 
     public void update() {
+        int id = getActivatedId();
         for (int i = 0; i < buttons.size; i++) {
             buttons.get(i).update();
+        }
+        if (id != getActivatedId()) {
+            changed = true;
+        } else {
+            changed = false;
         }
     }
 
@@ -72,6 +87,10 @@ public class MORadioButtonGroup {
 
     public Array<MOImgRadioButton> getButtons() {
         return buttons;
+    }
+
+    public boolean isChanged() {
+        return changed;
     }
 
 }

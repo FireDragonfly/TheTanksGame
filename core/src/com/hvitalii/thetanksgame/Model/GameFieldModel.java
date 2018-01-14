@@ -487,17 +487,7 @@ public class GameFieldModel {
         }
     }
 
-    public static boolean isInBattleField(int x, int y) {
-        if ((x > Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x)
-            ||(x < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x)
-            ||(y > Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y)
-            ||(y < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y)) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isNoBaseAt(int x, int y) {
+    public boolean isNoBaseAt(int x, int y) {
         byte block = get(x, y);
         switch (block) {
             case TilesTypes.EAGLE_0_0:
@@ -524,6 +514,16 @@ public class GameFieldModel {
 //                bulletLayer[i][j] = null;
             }
         }
+    }
+
+    public static boolean isInBattleField(int x, int y) {
+        if ((x > Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x)
+                ||(x < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x)
+                ||(y > Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y)
+                ||(y < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y)) {
+            return false;
+        }
+        return true;
     }
 }
 

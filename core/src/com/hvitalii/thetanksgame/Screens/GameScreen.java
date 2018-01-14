@@ -179,7 +179,7 @@ public class GameScreen implements Screen {
         exit = new MOButton(game.getResourcesHandler().font32, "EXIT");
         exit.setTextAlignment(Align.center);
         exit.setScale(0.25f);
-        exit.setPosition(Resolution.SCREEN_WIDTH / 2, 16, Align.center);
+        exit.setPosition(Resolution.SCREEN_WIDTH - 4, 24, Align.right);
         exit.setColor(Color.ORANGE);
         exit.setHoverColor(UiColors.TTG_RED);
 

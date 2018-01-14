@@ -48,12 +48,12 @@ public class MOImgRadioButton extends MOImgButton {
 
     public void activate() {
         isActive = true;
-        group.activated(this);
+        group.activate(this);
     }
 
     public void deactivate() {
         isActive = false;
-        group.deactivated(this);
+        group.deactivate(this);
     }
 
     public boolean isActive() {

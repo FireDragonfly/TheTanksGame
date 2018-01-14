@@ -585,3 +585,17 @@ spawn
   orig: 16, 16
   offset: 0, 0
   index: 2
+cursor
+  rotate: false
+  xy: 64, 0
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: 0
+cursor
+  rotate: false
+  xy: 64, 10
+  size: 18, 18
+  orig: 18, 18
+  offset: 0, 0
+  index: 1

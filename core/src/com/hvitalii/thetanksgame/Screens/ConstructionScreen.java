@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Model.GameFieldModel;
+import com.hvitalii.thetanksgame.MyOwn.MOAdvancedSprite;
 import com.hvitalii.thetanksgame.MyOwn.MOButton;
 import com.hvitalii.thetanksgame.MyOwn.MOImgRadioButton;
 import com.hvitalii.thetanksgame.MyOwn.MOLabel.*;
@@ -46,6 +47,8 @@ public class ConstructionScreen extends ScreenAdapter{
 //    private MOButton play;
     private MOButton exit;
 
+    private Sprite cursor;
+
     private int activeId;
 
     public ConstructionScreen(ResourcesHandler resourcesHandler, TheTanksGame game, MainMenuScreen menuScreen) {
@@ -66,6 +69,8 @@ public class ConstructionScreen extends ScreenAdapter{
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClearColor(0 ,0, 0, 1);
+        buttonGroup.deactivate();
+//        cursor.setSize(Size.TILE, Size.TILE);
     }
 
     @Override
@@ -79,46 +84,8 @@ public class ConstructionScreen extends ScreenAdapter{
         activeId = buttonGroup.getActivatedId();
         activeId = (activeId == -1) ? 0 : activeId;
 
-        if (Gdx.input.isTouched()) {
-            Vector2 cursorPosition = MathUtils.getCursorPositionForFitViewport();
-            switch (activeId) {
-                case TilesTypes.NULL:
-                case TilesTypes.BRICK:
-                case TilesTypes.DESTROYED_BRICK:
-                case TilesTypes.CONCRETE:
-                case TilesTypes.WATER_1:
-                case TilesTypes.ICE:
-                case TilesTypes.GRASS:
-                    cursorPosition.x = MathUtils.trimToGrid(cursorPosition.x) / 8;
-                    cursorPosition.y = MathUtils.trimToGrid(cursorPosition.y) / 8;
-                    if ((cursorPosition.x >= 2 && cursorPosition.x <= (Resolution.FIELD_WIDTH - 5))
-                        && (cursorPosition.y >= 1 && cursorPosition.y <= (Resolution.FIELD_HEIGHT - 2))){
-                        fieldModel.reset((byte) activeId, (int)cursorPosition.x, (int)cursorPosition.y);
-                    }
-                    break;
-                case TilesTypes.EAGLE_0_0:
-                    cursorPosition.x = MathUtils.clingToGrid(cursorPosition.x) / 8;
-                    cursorPosition.y = MathUtils.clingToGrid(cursorPosition.y) / 8;
-                    if ((cursorPosition.x >= 2 && cursorPosition.x <= (Resolution.FIELD_WIDTH - 5))
-                            && (cursorPosition.y >= 1 && cursorPosition.y <= (Resolution.FIELD_HEIGHT - 2))){
-                        fieldModel.drawBase((int)cursorPosition.x - 1, (int)cursorPosition.y - 1);
-                    }
-                    break;
-                case TilesTypes.BRICK * 10:
-                case TilesTypes.DESTROYED_BRICK * 10:
-                case TilesTypes.CONCRETE * 10:
-                case TilesTypes.WATER_1 * 10:
-                case TilesTypes.ICE * 10:
-                case TilesTypes.GRASS * 10:
-                    cursorPosition.x = MathUtils.clingToGrid(cursorPosition.x) / 8;
-                    cursorPosition.y = MathUtils.clingToGrid(cursorPosition.y) / 8;
-                    if ((cursorPosition.x >= 2 && cursorPosition.x <= (Resolution.FIELD_WIDTH - 5))
-                            && (cursorPosition.y >= 1 && cursorPosition.y <= (Resolution.FIELD_HEIGHT - 2))){
-                        addBlock((byte) (activeId / 10), (int)cursorPosition.x - 1, (int)cursorPosition.y - 1);
-                    }
-                    break;
-            }
-        }
+        drawOnField();
+
         if (clear.justTouched()) {
             fieldModel.clearVisibleLayers();
         } else if (save.justTouched()) {
@@ -130,7 +97,31 @@ public class ConstructionScreen extends ScreenAdapter{
         draw();
     }
 
+
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width, height);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        clear.dispose();
+        exit.dispose();
+        save.dispose();
+//        load.dispose();
+//        play.dispose();
+    }
+
     private void draw() {
+        Vector2 cursorPosition = MathUtils.getCursorPositionForFitViewport();
+        if (activeId < 10) {
+            cursorPosition.x = MathUtils.trimToGrid(cursorPosition.x);
+            cursorPosition.y = MathUtils.trimToGrid(cursorPosition.y);
+        } else {
+            cursorPosition.x = MathUtils.clingToGrid(cursorPosition.x);
+            cursorPosition.y = MathUtils.clingToGrid(cursorPosition.y);
+        }
         batch.begin();
         fieldView.drawBottomLayers(batch);
         fieldView.drawTopLayers(batch);
@@ -149,21 +140,83 @@ public class ConstructionScreen extends ScreenAdapter{
 //        play.draw(batch);
         exit.draw(batch);
 
+        updateCursor();
+        if (GameFieldModel.isInBattleField((int)cursorPosition.x / 8, (int)cursorPosition.y / 8)){
+            cursor.draw(batch);
+        }
+
         batch.end();
     }
 
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height);
+    private void updateCursor() {
+        Vector2 cursorPosition = MathUtils.getCursorPositionForFitViewport();
+        if (activeId < TilesTypes.EAGLE_0_0) {
+            cursorPosition.x = MathUtils.trimToGrid(cursorPosition.x) - 1;
+            cursorPosition.y = MathUtils.trimToGrid(cursorPosition.y) - 1;
+        } else {
+            cursorPosition.x = MathUtils.clingToGrid(cursorPosition.x) - 9;
+            cursorPosition.y = MathUtils.clingToGrid(cursorPosition.y) - 9;
+        }
+        if (buttonGroup.isChanged()) {
+            TextureAtlas atlas = resourcesHandler.getAssetManager().get(Files.ATLASES_LOCATION + Files.ATLAS_NAME);
+            if (activeId < TilesTypes.EAGLE_0_0) {
+                cursor.setRegion(atlas.findRegion("cursor", 0));
+                cursor.setSize(Size.TILE + 2, Size.TILE + 2);
+            } else {
+                cursor.setRegion(atlas.findRegion("cursor", 1));
+                cursor.setSize(Size.BLOCK + 2, Size.BLOCK + 2);
+            }
+        }
+        cursor.setPosition(cursorPosition.x, cursorPosition.y);
     }
 
-    @Override
-    public void dispose() {
-        super.dispose();
-        clear.dispose();
-//        save.dispose();
-//        load.dispose();
-//        play.dispose();
+    private void drawOnField() {
+        if (Gdx.input.isTouched()) {
+            Vector2 cursorPosition = MathUtils.getCursorPositionForFitViewport();
+            switch (activeId) {
+                case TilesTypes.NULL:
+                case TilesTypes.BRICK:
+                case TilesTypes.DESTROYED_BRICK:
+                case TilesTypes.CONCRETE:
+                case TilesTypes.WATER_1:
+                case TilesTypes.ICE:
+                case TilesTypes.GRASS:
+                    cursorPosition.x = MathUtils.trimToGrid(cursorPosition.x) / 8;
+                    cursorPosition.y = MathUtils.trimToGrid(cursorPosition.y) / 8;
+                    if ((cursorPosition.x >= 2 && cursorPosition.x <= (Resolution.FIELD_WIDTH - 5))
+                            && (cursorPosition.y >= 1 && cursorPosition.y <= (Resolution.FIELD_HEIGHT - 2))){
+                        fieldModel.reset((byte) activeId, (int)cursorPosition.x, (int)cursorPosition.y);
+                    }
+                    break;
+                case TilesTypes.EAGLE_0_0:
+                    cursorPosition.x = MathUtils.clingToGrid(cursorPosition.x) / 8;
+                    cursorPosition.y = MathUtils.clingToGrid(cursorPosition.y) / 8;
+                    if (fieldModel.isNoBaseAt((int) cursorPosition.x, (int) cursorPosition.y)
+                            && fieldModel.isNoBaseAt((int) cursorPosition.x - 1, (int) cursorPosition.y)
+                            && fieldModel.isNoBaseAt((int) cursorPosition.x, (int) cursorPosition.y - 1)
+                            && fieldModel.isNoBaseAt((int) cursorPosition.x - 1, (int) cursorPosition.y - 1)) {
+
+                        if ((cursorPosition.x >= 2 && cursorPosition.x <= (Resolution.FIELD_WIDTH - 5))
+                                && (cursorPosition.y >= 1 && cursorPosition.y <= (Resolution.FIELD_HEIGHT - 2))){
+                            fieldModel.drawBase((int)cursorPosition.x - 1, (int)cursorPosition.y - 1);
+                        }
+                    }
+                    break;
+                case TilesTypes.BRICK * 10:
+                case TilesTypes.DESTROYED_BRICK * 10:
+                case TilesTypes.CONCRETE * 10:
+                case TilesTypes.WATER_1 * 10:
+                case TilesTypes.ICE * 10:
+                case TilesTypes.GRASS * 10:
+                    cursorPosition.x = MathUtils.clingToGrid(cursorPosition.x) / 8;
+                    cursorPosition.y = MathUtils.clingToGrid(cursorPosition.y) / 8;
+                    if ((cursorPosition.x >= 2 && cursorPosition.x <= (Resolution.FIELD_WIDTH - 5))
+                            && (cursorPosition.y >= 1 && cursorPosition.y <= (Resolution.FIELD_HEIGHT - 2))){
+                        addBlock((byte) (activeId / 10), (int)cursorPosition.x - 1, (int)cursorPosition.y - 1);
+                    }
+                    break;
+            }
+        }
     }
 
     private void addBlock(byte type, int x, int y) {
@@ -210,6 +263,9 @@ public class ConstructionScreen extends ScreenAdapter{
         exit.setScale(0.3f);
 
         initBlocksButtons(atlas);
+
+        cursor = new Sprite(atlas.findRegion("cursor", 0));
+        cursor.setBounds(0, 0 , Size.TILE + 2, Size.TILE + 2);
     }
 
     private void initBlocksButtons(TextureAtlas atlas) {
