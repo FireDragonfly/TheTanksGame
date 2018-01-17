@@ -67,11 +67,8 @@ public class MOImgButton extends com.hvitalii.thetanksgame.MyOwnUi.MOAdvancedSpr
     public boolean isHover() {
         Vector2 cursorPosition = MathUtils.getCursorPositionForFitViewport();
         float x = getX();
-        if ((cursorPosition.x >= x) && (cursorPosition.x <= (x + getWidth()))
-                && (cursorPosition.y >= getY()) && (cursorPosition.y <= (getY() + getHeight()))) {
-            return true;
-        }
-        return false;
+        return (cursorPosition.x >= x) && (cursorPosition.x <= (x + getWidth()))
+                && (cursorPosition.y >= getY()) && (cursorPosition.y <= (getY() + getHeight()));
     }
 
     public boolean isPressed() {

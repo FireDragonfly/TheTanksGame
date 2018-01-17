@@ -169,40 +169,20 @@ public class BotTankController implements TankController {
         GameFieldController battleField = state.getBattleField();
         if (direction == Direction.UP) {
             float newPosition = model.getY() + model.getSpeed();
-            if (battleField.isPositionFree(model, model.getX(), newPosition + Size.TANK)
-                    && battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition + Size.TANK)
-                    ) {
-                return true;
-            } else {
-                return false;
-            }
+            return battleField.isPositionFree(model, model.getX(), newPosition + Size.TANK)
+                    && battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition + Size.TANK);
         } else if (direction == Direction.DOWN) {
             float newPosition = model.getY() - model.getSpeed();
-            if (battleField.isPositionFree(model, model.getX(), newPosition)
-                    && battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition)
-                    ) {
-                return true;
-            } else {
-                return false;
-            }
+            return battleField.isPositionFree(model, model.getX(), newPosition)
+                    && battleField.isPositionFree(model, model.getX() + Size.TANK - 0.1f, newPosition);
         } else if (direction == Direction.LEFT) {
             float newPosition = model.getX() - model.getSpeed();
-            if (battleField.isPositionFree(model, newPosition, model.getY())
-                    && battleField.isPositionFree(model, newPosition, model.getY() + Size.TANK - 0.1f)
-                    ) {
-                return true;
-            } else {
-                return false;
-            }
+            return battleField.isPositionFree(model, newPosition, model.getY())
+                    && battleField.isPositionFree(model, newPosition, model.getY() + Size.TANK - 0.1f);
         } else if (direction == Direction.RIGHT) {
             float newPosition = model.getX() + model.getSpeed();
-            if (battleField.isPositionFree(model, newPosition  + Size.TANK, model.getY())
-                    && battleField.isPositionFree(model, newPosition + Size.TANK, model.getY() + Size.TANK - 0.1f)
-                    ) {
-                return true;
-            } else {
-                return false;
-            }
+            return battleField.isPositionFree(model, newPosition + Size.TANK, model.getY())
+                    && battleField.isPositionFree(model, newPosition + Size.TANK, model.getY() + Size.TANK - 0.1f);
         }
         return false;
     }

@@ -21,9 +21,9 @@ import com.hvitalii.thetanksgame.MyOwnUi.MOLabel.*;
 
 public class GameScreen implements Screen {
 
-    private static final int[] KEYKODES = new int[] {
-            Input.Keys.NUM_5
-    };
+//    private static final int[] KEY_CODES = new int[] {
+//            Input.Keys.NUM_5
+//    };
 
     TheTanksGame game;
     private SpriteBatch batch;

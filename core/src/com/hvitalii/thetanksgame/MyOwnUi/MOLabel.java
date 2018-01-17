@@ -137,8 +137,7 @@ public class MOLabel implements Disposable{
     }
 
     public void setText(String text) {
-        String[] string = text.split("\n");
-        this.text = string;
+        this.text = text.split("\n");
         update();
     }
 

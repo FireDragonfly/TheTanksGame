@@ -26,6 +26,8 @@ import com.hvitalii.thetanksgame.Utils.MathUtils;
 import com.hvitalii.thetanksgame.Utils.ResourcesHandler;
 import com.hvitalii.thetanksgame.View.GameFieldView;
 
+import java.util.Arrays;
+
 public class ConstructionScreen extends ScreenAdapter{
 
     private ResourcesHandler resourcesHandler;
@@ -350,7 +352,7 @@ public class ConstructionScreen extends ScreenAdapter{
     private boolean saveMap() {
         byte[][] map = fieldModel.getMap();
         if (Gdx.files.isExternalStorageAvailable()) {
-            String mapName = "map_" + Math.abs(map.hashCode());
+            String mapName = "map_" + Math.abs(Arrays.deepHashCode(map));
             if (!Gdx.files.external(Files.EXTERNAL_MAPS_LOCATION + mapName + Files.MAP_SUFFIX).exists()) {
                 StringBuilder builder = new StringBuilder();
                 for (int i =  map.length - 1; i >= 0; i--) {

@@ -62,11 +62,8 @@ public class MOButton extends MOLabel {
                 x = x - getWidth();
                 break;
         }
-        if ((cursorPosition.x >= x) && (cursorPosition.x <= (x + getWidth()))
-            && (cursorPosition.y >= getY()) && (cursorPosition.y <= (getY() + getHeight()))) {
-            return true;
-        }
-        return false;
+        return (cursorPosition.x >= x) && (cursorPosition.x <= (x + getWidth()))
+                && (cursorPosition.y >= getY()) && (cursorPosition.y <= (getY() + getHeight()));
     }
 
     public boolean isPressed() {

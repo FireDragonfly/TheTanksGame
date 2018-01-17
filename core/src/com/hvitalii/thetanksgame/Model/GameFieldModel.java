@@ -307,25 +307,19 @@ public class GameFieldModel {
         if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
             return true;
         }
-        if (((bottomBlocksLayer[y][x] == 0) && (borderLayer[y][x] == 0))
-            || ((bottomBlocksLayer[y][x] == TilesTypes.ICE))) {
-            return false;
-        }
-        return true;
+        return ((bottomBlocksLayer[y][x] != 0) || (borderLayer[y][x] != 0))
+                && ((bottomBlocksLayer[y][x] != TilesTypes.ICE));
     }
 
     public boolean hasIndestructibleTileAt(int x, int y) {
         if ((x > width) || (x < 0) || (y > height) || (y < 0)) {
             return true;
         }
-        if (((bottomBlocksLayer[y][x] == TilesTypes.CONCRETE)
+        return ((bottomBlocksLayer[y][x] == TilesTypes.CONCRETE)
                 || (bottomBlocksLayer[y][x] == TilesTypes.WATER_1)
                 || (bottomBlocksLayer[y][x] == TilesTypes.WATER_2)
                 || (!isNoBaseAt(x, y))
-                || (borderLayer[y][x] != 0))) {
-            return true;
-        }
-        return false;
+                || (borderLayer[y][x] != 0));
     }
 
     public byte getImpermeableForBulletTileAt(int x, int y) {
@@ -517,13 +511,10 @@ public class GameFieldModel {
     }
 
     public static boolean isInBattleField(int x, int y) {
-        if ((x > Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x)
-                ||(x < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x)
-                ||(y > Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y)
-                ||(y < Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y)) {
-            return false;
-        }
-        return true;
+        return (x <= Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.x)
+                && (x >= Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.x)
+                && (y <= Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y)
+                && (y >= Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y);
     }
 }
 

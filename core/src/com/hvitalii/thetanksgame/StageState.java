@@ -7,7 +7,6 @@ import com.hvitalii.thetanksgame.Controller.BulletController;
 import com.hvitalii.thetanksgame.Controller.GameFieldController;
 import com.hvitalii.thetanksgame.Controller.TankController;
 import com.hvitalii.thetanksgame.Model.Bonus;
-import com.hvitalii.thetanksgame.Utils.ResourcesHandler;
 
 public class StageState {
 

@@ -61,11 +61,7 @@ public class MORadioButtonGroup {
         for (int i = 0; i < buttons.size; i++) {
             buttons.get(i).update();
         }
-        if (id != getActivatedId()) {
-            changed = true;
-        } else {
-            changed = false;
-        }
+        changed = id != getActivatedId();
     }
 
     public void draw(SpriteBatch batch) {

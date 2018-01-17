@@ -1,9 +1,7 @@
 package com.hvitalii.thetanksgame.Utils;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 
 public class MathUtils {

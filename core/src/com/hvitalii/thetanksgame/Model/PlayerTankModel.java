@@ -1,9 +1,8 @@
 package com.hvitalii.thetanksgame.Model;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.hvitalii.thetanksgame.Constants.ObjectsConstants;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
-import com.hvitalii.thetanksgame.Constants.PlayerLevelsAtributes;
+import com.hvitalii.thetanksgame.Constants.PlayerLevelsAttributes;
 
 import java.util.Date;
 
@@ -45,7 +44,7 @@ public class PlayerTankModel extends TankModel {
         } else {
             this.level = Levels.FIRST;
         }
-        PlayerLevelsAtributes.levels[level].loadAttributes(this);
+        PlayerLevelsAttributes.levels[level].loadAttributes(this);
         setBulletsAmount(getBulletsMax());
     }
 

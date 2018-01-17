@@ -4,10 +4,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.hvitalii.thetanksgame.Model.TankModel;
 
 public interface TankController extends Controller{
-    public void bulletDestroyed();
-    public Rectangle getBounds();
-    public TankModel getModel();
-    public boolean hitOn(BulletController bullet);
-    public int getType();
+    void bulletDestroyed();
+    Rectangle getBounds();
+    TankModel getModel();
+    boolean hitOn(BulletController bullet);
+    int getType();
 //    public boolean isDestructed();
 }
