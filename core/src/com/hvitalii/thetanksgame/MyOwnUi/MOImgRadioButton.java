@@ -1,4 +1,4 @@
-package com.hvitalii.thetanksgame.MyOwn;
+package com.hvitalii.thetanksgame.MyOwnUi;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,41 +6,41 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class MOImgRadioButton extends MOImgButton {
+public class MOImgRadioButton extends com.hvitalii.thetanksgame.MyOwnUi.MOImgButton {
 
     private boolean isActive;
-    private MORadioButtonGroup group;
+    private com.hvitalii.thetanksgame.MyOwnUi.MORadioButtonGroup group;
     private Color activeColor;
     private int id;
 
-    public MOImgRadioButton(Texture texture, MORadioButtonGroup group) {
+    public MOImgRadioButton(Texture texture, com.hvitalii.thetanksgame.MyOwnUi.MORadioButtonGroup group) {
         super(texture);
         init(group);
     }
 
-    public MOImgRadioButton(Texture texture, MORadioButtonGroup group, int id) {
+    public MOImgRadioButton(Texture texture, com.hvitalii.thetanksgame.MyOwnUi.MORadioButtonGroup group, int id) {
         super(texture);
         init(group);
         this.id = id;
     }
 
-    public MOImgRadioButton(TextureRegion region, MORadioButtonGroup group) {
+    public MOImgRadioButton(TextureRegion region, com.hvitalii.thetanksgame.MyOwnUi.MORadioButtonGroup group) {
         super(region);
         init(group);
     }
 
-    public MOImgRadioButton(TextureRegion region, MORadioButtonGroup group, int id) {
+    public MOImgRadioButton(TextureRegion region, com.hvitalii.thetanksgame.MyOwnUi.MORadioButtonGroup group, int id) {
         super(region);
         init(group);
         this.id = id;
     }
 
-    public MOImgRadioButton(Sprite sprite, MORadioButtonGroup group) {
+    public MOImgRadioButton(Sprite sprite, com.hvitalii.thetanksgame.MyOwnUi.MORadioButtonGroup group) {
         super(sprite);
         init(group);
     }
 
-    public MOImgRadioButton(Sprite sprite, MORadioButtonGroup group, int id) {
+    public MOImgRadioButton(Sprite sprite, com.hvitalii.thetanksgame.MyOwnUi.MORadioButtonGroup group, int id) {
         super(sprite);
         init(group);
         this.id = id;
@@ -88,7 +88,7 @@ public class MOImgRadioButton extends MOImgButton {
         }
     }
 
-    private void init(MORadioButtonGroup group) {
+    private void init(com.hvitalii.thetanksgame.MyOwnUi.MORadioButtonGroup group) {
         isActive = false;
         this.group = group;
         id = -1;

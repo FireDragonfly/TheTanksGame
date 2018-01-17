@@ -59,6 +59,10 @@ public class Player {
         return stageBotsDestroyed;
     }
 
+    public void resetStageBotsDestroyed() {
+        stageBotsDestroyed = new int[BotTypes.COUNT];
+    }
+
     public void setControlKeys(int[] set) {
         controller.setControlKeys(set);
     }

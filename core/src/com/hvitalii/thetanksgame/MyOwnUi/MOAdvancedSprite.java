@@ -1,4 +1,4 @@
-package com.hvitalii.thetanksgame.MyOwn;
+package com.hvitalii.thetanksgame.MyOwnUi;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;

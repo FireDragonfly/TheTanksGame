@@ -322,6 +322,9 @@ public class GameController {
     public void prepareNextStage(boolean choseRandomMap) {
         stageState = new StageState(this, textureAtlas);
         stageState.setBotsRemaining((playersNumber < 3) ? 20 : (playersNumber * 10));
+        for (int i = 0; i < players.size; i++) {
+            players.get(i).resetStageBotsDestroyed();
+        }
 
         int allMapsNumber = resourcesHandler.getInternalMaps().length
                 + resourcesHandler.getExternalMaps().length;

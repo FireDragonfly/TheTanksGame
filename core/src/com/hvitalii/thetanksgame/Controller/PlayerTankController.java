@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.hvitalii.thetanksgame.Constants.GameConstants;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.GameController;
@@ -24,7 +25,6 @@ public class PlayerTankController implements TankController {
     private PlayerTankView view;
     private int[] controlKeys;
     private long lastShotTime;
-    private boolean isFired;
 
     public PlayerTankController(Player player, GameController state, Rectangle rectangle, TextureAtlas atlas, int playerNumber) {
         this(player, state, rectangle, atlas, playerNumber, Levels.FIRST);
@@ -37,7 +37,6 @@ public class PlayerTankController implements TankController {
         view = new PlayerTankView(atlas, model);
         controlKeys = ControlKeys.DEFAULT_PLAYER_KEYS[playerNumber];
         lastShotTime = 0;
-        isFired = false;
     }
 
     @Override
@@ -50,24 +49,14 @@ public class PlayerTankController implements TankController {
                     move(Direction.DOWN);
                 } else if (Gdx.input.isKeyPressed(controlKeys[ControlKeys.KEY_LEFT])) {
                     move(Direction.LEFT);
-                } else if (Gdx.input.isKeyPressed(controlKeys[ControlKeys.KEY_RIGH])) {
+                } else if (Gdx.input.isKeyPressed(controlKeys[ControlKeys.KEY_RIGHT])) {
                     move(Direction.RIGHT);
                 }
             }
 
-            if (Gdx.input.isKeyPressed(controlKeys[ControlKeys.KEY_FIRE])){
-                long time = new Date().getTime();
-
-                if ((time - lastShotTime) > 100 && !isFired) {
-                    isFired = true;
-                    fire();
-                    lastShotTime = time;
-                }
-            } else {
-                isFired = false;
+            if (Gdx.input.isKeyJustPressed(controlKeys[ControlKeys.KEY_FIRE])){
+                fire();
             }
-        } else {
-            isFired = false;
         }
 
     }
@@ -163,7 +152,7 @@ public class PlayerTankController implements TankController {
 
     private void fire() {
         long time = new Date().getTime();
-        if ((time - lastShotTime) > 100) {
+        if ((time - lastShotTime) > GameConstants.FIRE_RATE) {
             if (model.getBulletsAmount() > 0) {
                 model.removeBullet();
                 BulletController bullet = new BulletController(

@@ -15,9 +15,9 @@ import com.hvitalii.thetanksgame.Constants.GameConstants;
 import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Utils.ResourcesHandler;
-import com.hvitalii.thetanksgame.MyOwn.MOButton;
-import com.hvitalii.thetanksgame.MyOwn.MOLabel;
-import com.hvitalii.thetanksgame.MyOwn.MOLabel.*;
+import com.hvitalii.thetanksgame.MyOwnUi.MOButton;
+import com.hvitalii.thetanksgame.MyOwnUi.MOLabel;
+import com.hvitalii.thetanksgame.MyOwnUi.MOLabel.*;
 
 public class StatisticScreen extends ScreenAdapter{
 
@@ -68,7 +68,9 @@ public class StatisticScreen extends ScreenAdapter{
                 statistic.setHiScore(statistic.getPlayersScores()[i]);
             }
         }
+        statistic.write();
         initUi();
+
     }
 
     @Override

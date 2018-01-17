@@ -1,4 +1,4 @@
-package com.hvitalii.thetanksgame.MyOwn;
+package com.hvitalii.thetanksgame.MyOwnUi;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

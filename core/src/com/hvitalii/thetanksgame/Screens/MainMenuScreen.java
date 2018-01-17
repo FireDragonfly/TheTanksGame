@@ -13,9 +13,9 @@ import com.hvitalii.thetanksgame.GameController;
 import com.hvitalii.thetanksgame.Statistic;
 import com.hvitalii.thetanksgame.TheTanksGame;
 import com.hvitalii.thetanksgame.Utils.ResourcesHandler;
-import com.hvitalii.thetanksgame.MyOwn.MOButton;
-import com.hvitalii.thetanksgame.MyOwn.MOLabel;
-import com.hvitalii.thetanksgame.MyOwn.MOLabel.Align;
+import com.hvitalii.thetanksgame.MyOwnUi.MOButton;
+import com.hvitalii.thetanksgame.MyOwnUi.MOLabel;
+import com.hvitalii.thetanksgame.MyOwnUi.MOLabel.Align;
 
 public class MainMenuScreen extends ScreenAdapter{
 

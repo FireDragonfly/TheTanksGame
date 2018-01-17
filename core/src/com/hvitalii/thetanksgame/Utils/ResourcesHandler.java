@@ -14,6 +14,7 @@ public class ResourcesHandler implements Disposable{
     private FileHandle[] internalMaps;
     private FileHandle[] externalMaps;
     private FileHandle[] allMaps;
+    private FileHandle statistic;
 
     public final FileHandle font16;
     public final FileHandle font32;
@@ -21,12 +22,12 @@ public class ResourcesHandler implements Disposable{
 
     public ResourcesHandler() {
         updateMaps();
+        initStatistic();
         assetManager = new AssetManager();
         font16 = Gdx.files.local(Files.FONTS_LOCATION + "font16.fnt");
         font32 = Gdx.files.local(Files.FONTS_LOCATION + "font32.fnt");
         font64 = Gdx.files.local(Files.FONTS_LOCATION + "font64.fnt");
     }
-
     public void loadAssets() {
         assetManager.load(Files.ATLASES_LOCATION + Files.ATLAS_NAME, TextureAtlas.class);
         assetManager.load(Files.ATLASES_LOCATION + Files.DEBUGGING_ATLAS_NAME, TextureAtlas.class);
@@ -70,6 +71,21 @@ public class ResourcesHandler implements Disposable{
             externalMaps = new FileHandle[0];
         }
     }
+
+    private void initStatistic() {
+        if (Gdx.files.isExternalStorageAvailable()) {
+            if (Gdx.files.external(Files.EXTERNAL_FOLDER_LOCATION + "statistic.ttgs").exists()) {
+                statistic = Gdx.files.external(Files.EXTERNAL_FOLDER_LOCATION + "statistic.ttgs");
+            } else {
+                Gdx.files.external(Files.EXTERNAL_FOLDER_LOCATION + "statistic.ttgs").writeString("0", false);
+            }
+        }
+    }
+
+    public FileHandle getStatistic() {
+        return statistic;
+    }
+
 
     @Override
     public void dispose() {

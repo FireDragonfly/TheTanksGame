@@ -10,6 +10,8 @@ import java.awt.*;
 
 public class GameConstants {
 
+    public static final long FIRE_RATE = 100;
+
     public static final String[] PLAYER_TANKS_NAMES = {
             "player_L1",
             "player_L2",
@@ -55,7 +57,7 @@ public class GameConstants {
                     Resolution.SCREEN_HEIGHT - Size.TILE * 3,
                     Size.TANK, Size.TANK)
 
-};
+    };
 
     public static String getLetterRegionName(char letter) {
         switch (letter) {
@@ -102,7 +104,8 @@ public class GameConstants {
         public static final String ATLASES_LOCATION = RESOURCES_LOCATION + "atlases/";
         public static final String FONTS_LOCATION = RESOURCES_LOCATION + "fonts/";
         public static final String LOCAL_MAPS_LOCATION = RESOURCES_LOCATION + "maps/";
-        public static final String EXTERNAL_MAPS_LOCATION = "The Tanks Game/maps/";
+        public static final String EXTERNAL_FOLDER_LOCATION = "The Tanks Game/";
+        public static final String EXTERNAL_MAPS_LOCATION = EXTERNAL_FOLDER_LOCATION + "maps/";
         public static final String MAP_SUFFIX = ".ttgm";
         public static final String ATLAS_NAME = "atlas.atlas";
         public static final String DEBUGGING_ATLAS_NAME = "debugging_atlas.atlas";
@@ -164,7 +167,7 @@ public class GameConstants {
         public static final int KEY_UP = 0;
         public static final int KEY_DOWN = 1;
         public static final int KEY_LEFT = 2;
-        public static final int KEY_RIGH = 3;
+        public static final int KEY_RIGHT = 3;
         public static final int KEY_FIRE = 4;
 
         public static final int[][] DEFAULT_PLAYER_KEYS = {

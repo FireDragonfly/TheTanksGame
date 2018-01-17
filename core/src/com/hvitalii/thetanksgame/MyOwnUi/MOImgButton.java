@@ -1,19 +1,17 @@
-package com.hvitalii.thetanksgame.MyOwn;
+package com.hvitalii.thetanksgame.MyOwnUi;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Utils.MathUtils;
 
-import static com.hvitalii.thetanksgame.MyOwn.MOLabel.*;
+import static com.hvitalii.thetanksgame.MyOwnUi.MOLabel.*;
 
-public class MOImgButton extends MOAdvancedSprite{
+public class MOImgButton extends com.hvitalii.thetanksgame.MyOwnUi.MOAdvancedSprite {
 
     private Color color;
     private Color hoverColor;

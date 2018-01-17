@@ -15,9 +15,9 @@ import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.GameController;
 import com.hvitalii.thetanksgame.Statistic;
 import com.hvitalii.thetanksgame.TheTanksGame;
-import com.hvitalii.thetanksgame.MyOwn.MOButton;
-import com.hvitalii.thetanksgame.MyOwn.MOLabel;
-import com.hvitalii.thetanksgame.MyOwn.MOLabel.*;
+import com.hvitalii.thetanksgame.MyOwnUi.MOButton;
+import com.hvitalii.thetanksgame.MyOwnUi.MOLabel;
+import com.hvitalii.thetanksgame.MyOwnUi.MOLabel.*;
 
 public class GameScreen implements Screen {
 

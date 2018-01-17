@@ -3,6 +3,7 @@ package com.hvitalii.thetanksgame.Controller;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.hvitalii.thetanksgame.Constants.GameConstants;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.GameController;
 import com.hvitalii.thetanksgame.Model.BotTankModel;
@@ -71,7 +72,7 @@ public class BotTankController implements TankController {
 
     private void fire() {
         long time = new Date().getTime();
-        if ((time - lastShotTime) > 100) {
+        if ((time - lastShotTime) > GameConstants.FIRE_RATE) {
             if (model.getBulletsAmount() > 0) {
                 model.removeBullet();
                 BulletController bullet = new BulletController(
