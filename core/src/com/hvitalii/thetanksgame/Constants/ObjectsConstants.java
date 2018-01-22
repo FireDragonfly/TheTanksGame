@@ -9,6 +9,27 @@ public class ObjectsConstants {
 
     public static final int[] BONUS_ARRAY = {0, 1, 2, 3, 4, 5, 6, 0, 4};
 
+    public static int[] intToTiles(int n) {
+        if (n > 0) {
+            Array<Integer> array = new Array<Integer>();
+            while (n > 0) {
+                array.add((n % 10) + TilesTypes.DIGIT_0);
+                n /= 10;
+            }
+            array.reverse();
+            int[] result = new int[array.size];
+            for (int i = 0; i < array.size; i++){
+                result[i] = array.get(i).intValue();
+            }
+            return result;
+        } else {
+            return new int[] { TilesTypes.DIGIT_0 };
+        }
+
+    }
+
+    public static Point DEFAULT_EAGLE_POSITION = new Point(14, 1);
+
     public static class Types {
         public static final int BOT = 0;
         public static final int USER = 1;
@@ -68,7 +89,6 @@ public class ObjectsConstants {
         public static final int GUN = 6;
     }
 
-
     public static class TilesTypes {
         public static final byte NULL = 0;
         public static final byte BORDER = 1;
@@ -113,25 +133,4 @@ public class ObjectsConstants {
         public static final byte LETTER_U = 37;
         public static final byte LETTER_V = 39;
     }
-
-    public static int[] intToTiles(int n) {
-        if (n > 0) {
-            Array<Integer> array = new Array<Integer>();
-            while (n > 0) {
-                array.add((n % 10) + TilesTypes.DIGIT_0);
-                n /= 10;
-            }
-            array.reverse();
-            int[] result = new int[array.size];
-            for (int i = 0; i < array.size; i++){
-                result[i] = array.get(i).intValue();
-            }
-            return result;
-        } else {
-            return new int[] { TilesTypes.DIGIT_0 };
-        }
-
-    }
-
-    public static Point DEFAULT_EAGLE_POSITION = new Point(14, 1);
 }

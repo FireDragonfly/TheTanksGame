@@ -1,11 +1,9 @@
 package com.hvitalii.thetanksgame.Constants;
-
 import com.hvitalii.thetanksgame.Model.BotTankModel;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
-
 public class BotAttributes {
 
-    public static final Attributes[] botTypes = new Attributes[] {
+    public static final Attributes[] BOT_TYPES = new Attributes[] {
             new SmallBot(),
             new APCBot(),
             new FastBot(),

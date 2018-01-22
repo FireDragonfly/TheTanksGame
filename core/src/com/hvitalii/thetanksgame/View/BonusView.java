@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
-import com.hvitalii.thetanksgame.Model.Bonus;
+import com.hvitalii.thetanksgame.Model.BonusModel;
 
 public class BonusView {
 
@@ -18,8 +18,8 @@ public class BonusView {
         }
     }
 
-    public void draw(SpriteBatch batch, Bonus bonus) {
-        sprites[bonus.getType()].setPosition(bonus.x, bonus.y);
-        sprites[bonus.getType()].draw(batch);
+    public void draw(SpriteBatch batch, BonusModel bonusModel) {
+        sprites[bonusModel.getType()].setPosition(bonusModel.x, bonusModel.y);
+        sprites[bonusModel.getType()].draw(batch);
     }
 }

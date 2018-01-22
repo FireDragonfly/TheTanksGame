@@ -28,6 +28,8 @@ public class MainMenuScreen extends ScreenAdapter{
     private ConstructionScreen constructionScreen;
 
     private MOLabel hiScore;
+    private MOLabel owner;
+    private MOLabel ownerShadow;
     private MOLabel title;
     private MOLabel titleShadow;
     private MOButton onePlayer;
@@ -119,6 +121,8 @@ public class MainMenuScreen extends ScreenAdapter{
         super.dispose();
         constructionScreen.dispose();
         hiScore.dispose();
+        owner.dispose();
+        ownerShadow.dispose();
         title.dispose();
         onePlayer.dispose();
         twoPlayers.dispose();
@@ -148,6 +152,18 @@ public class MainMenuScreen extends ScreenAdapter{
         hiScore.setPosition(8, 16 * 13, Align.left);
         hiScore.setScale(0.25f);
         hiScore.setColor(Color.ORANGE);
+
+        owner = new MOLabel(resourcesHandler.font32,"HUSAK V.M. KI>21");
+        owner.setTextAlignment(Align.center);
+        owner.setPosition(Resolution.SCREEN_WIDTH - 8, 16 * 13, Align.right);
+        owner.setScale(0.25f);
+        owner.setColor(UiColors.TTG_RED);
+
+        ownerShadow = new MOLabel(resourcesHandler.font32,"HUSAK V.M. KI>21");
+        ownerShadow.setTextAlignment(Align.center);
+        ownerShadow.setPosition(Resolution.SCREEN_WIDTH - 8.5f, 16 * 13 - 0.5f, Align.right);
+        ownerShadow.setScale(0.25f);
+        ownerShadow.setColor(UiColors.TTG_GREY);
 
         titleShadow = new MOLabel(resourcesHandler.font32,"THE TANKS\nGAME");
         titleShadow.setTextAlignment(Align.center);
@@ -207,6 +223,8 @@ public class MainMenuScreen extends ScreenAdapter{
 
     private void drawUi() {
         hiScore.draw(batch);
+        ownerShadow.draw(batch);
+        owner.draw(batch);
         titleShadow.draw(batch);
         title.draw(batch);
         onePlayer.draw(batch);

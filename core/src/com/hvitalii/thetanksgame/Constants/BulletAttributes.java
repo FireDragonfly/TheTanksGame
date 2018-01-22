@@ -5,7 +5,7 @@ import com.hvitalii.thetanksgame.Model.BulletModel;
 
 public class BulletAttributes {
 
-        public static final Attributes[] bulletTypes = new Attributes[] {
+        public static final Attributes[] BULLET_TYPES = new Attributes[] {
                 new Bullet(),
                 new FastBullet(),
                 new APBullet()

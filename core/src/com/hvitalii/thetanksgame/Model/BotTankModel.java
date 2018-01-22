@@ -25,7 +25,7 @@ public class BotTankModel extends TankModel {
         } else {
             this.botType = BotTypes.SMALL;
         }
-        BotAttributes.botTypes[botType].loadAttributes(this);
+        BotAttributes.BOT_TYPES[botType].loadAttributes(this);
     }
 
     public int getArmourAmount() {

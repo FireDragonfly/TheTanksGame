@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class MOImgRadioButton extends com.hvitalii.thetanksgame.MyOwnUi.MOImgButton {
+public class MOImgRadioButton extends MOImgButton {
 
     private boolean isActive;
     private com.hvitalii.thetanksgame.MyOwnUi.MORadioButtonGroup group;

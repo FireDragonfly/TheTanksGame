@@ -4,7 +4,7 @@ import com.hvitalii.thetanksgame.Model.PlayerTankModel;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants .*;
 
 public class PlayerLevelsAttributes {
-    public static final Attributes[] levels = new Attributes[] {
+    public static final Attributes[] LEVELS = new Attributes[] {
             new FirstLevel(),
             new SecondLevel(),
             new ThirdLevel(),

@@ -11,7 +11,7 @@ import com.hvitalii.thetanksgame.Utils.MathUtils;
 
 import static com.hvitalii.thetanksgame.MyOwnUi.MOLabel.*;
 
-public class MOImgButton extends com.hvitalii.thetanksgame.MyOwnUi.MOAdvancedSprite {
+public class MOImgButton extends MOAdvancedSprite {
 
     private Color color;
     private Color hoverColor;

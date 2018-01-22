@@ -9,7 +9,7 @@ import com.hvitalii.thetanksgame.Constants.GameConstants.*;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants;
 import com.hvitalii.thetanksgame.Constants.ObjectsConstants.*;
 import com.hvitalii.thetanksgame.Controller.*;
-import com.hvitalii.thetanksgame.Model.Bonus;
+import com.hvitalii.thetanksgame.Model.BonusModel;
 import com.hvitalii.thetanksgame.Model.PlayerTankModel;
 import com.hvitalii.thetanksgame.Utils.ResourcesHandler;
 import com.hvitalii.thetanksgame.View.BonusView;
@@ -131,126 +131,6 @@ public class GameController {
 
     }
 
-
-    private void updateBots() {
-        long time = new Date().getTime();
-
-        if ((stageState.getBots().size < 4) && (nextBotSpawnTime < time)) {
-            if (stageState.getBotsRemaining() > 0) {
-                spawnBot();
-                updateBotSpawnTime(time);
-                stageState.setBotsRemaining(stageState.getBotsRemaining() - 1);
-            }
-        }
-
-        if (botFreezeTime < time) {
-            for (int i = 0; i < stageState.getBots().size; i++) {
-                stageState.getBots().get(i).update(frame);
-            }
-        }
-    }
-
-    private void updateBullets() {
-        Array<BulletController> bullets = stageState.getBullets();
-
-        for (int i = 0; i < stageState.getBullets().size; i++) {
-            bullets.get(i).update(frame);
-        }
-    }
-
-    private void updatePlayers() {
-        if (stageState.isEagleAlive() && hasAlivePlayer()) {
-            for (int i = 0; i < stageState.getPlayers().size; i++) {
-                stageState.getPlayers().get(i).update(frame);
-            }
-        }
-    }
-
-    private void updateBonuses() {
-        long time = new Date().getTime();
-
-        if (isShovelActive && (basesSurroundTime < time)) {
-            stageState.getBattleField().surroundBases(TilesTypes.BRICK);
-            isShovelActive = false;
-        }
-
-        if (frame % 16 == 0) {
-            isDrawBonuses = !isDrawBonuses;
-        }
-
-        for (int i = 0; i < stageState.getBonuses().size; i++) {
-            Bonus bonus = stageState.getBonuses().get(i);
-            TankController tank = stageState.getBattleField().getTankAt((int)(bonus.x / 8), (int)(bonus.y / 8));
-            if (tank == null) {
-                tank = stageState.getBattleField().getTankAt((int)(bonus.x / 8) + 1, (int)(bonus.y / 8));
-            }
-            if (tank == null) {
-                tank = stageState.getBattleField().getTankAt((int)(bonus.x / 8), (int)(bonus.y / 8) + 1);
-            }
-            if (tank == null) {
-                tank = stageState.getBattleField().getTankAt((int)(bonus.x / 8) + 1, (int)(bonus.y / 8) + 1);
-            }
-            if (tank == null) {
-                continue;
-            }
-
-            if (tank.getType() == Types.USER) {
-                PlayerTankController player = (PlayerTankController) tank;
-                player.getPlayer().addScore(500);
-                switch (bonus.getType()) {
-
-                    case BonusTypes.SHIELD:
-                        player.getModel().setShieldActiveTime(time + Time.BONUS_SHIELD);
-                        break;
-
-                    case BonusTypes.TIME_STOP:
-                        botFreezeTime = time + Time.BONUS_TIME_STOP;
-                        break;
-
-                    case BonusTypes.SHOVEL:
-                        stageState.getBattleField().surroundBases(TilesTypes.CONCRETE);
-                        basesSurroundTime = time + Time.BONUS_SHOVEL;
-                        isShovelActive = true;
-                        break;
-
-                    case BonusTypes.STAR:
-                        player.upgrade();
-                        break;
-
-                    case BonusTypes.GRENADE:
-                        destructAllBots();
-                        break;
-
-                    case BonusTypes.LIFE:
-                        player.addLive();
-                        break;
-
-                    case BonusTypes.GUN:
-                        player.maxUpgrade();
-                        break;
-                }
-                stageState.getBonuses().removeIndex(i);
-            }
-        }
-    }
-
-    private void checkBulletsCollision() {
-        Array<BulletController> bulletsToRemove = new Array<BulletController>();
-        for (int i = 0; i < stageState.getBullets().size - 1; i++) {
-            for (int j = i + 1; j < stageState.getBullets().size; j++) {
-                if (stageState.getBullets().get(i).getBounds().overlaps(stageState.getBullets().get(j).getBounds())) {
-                    bulletsToRemove.add(stageState.getBullets().get(i));
-                    bulletsToRemove.add(stageState.getBullets().get(j));
-                }
-            }
-        }
-
-        for (int i = 0; i < bulletsToRemove.size; i++) {
-            bulletsToRemove.get(i).destruct();
-        }
-    }
-
-
     public void spawnBullet(BulletController bullet) {
         stageState.getBullets().add(bullet);
     }
@@ -269,7 +149,7 @@ public class GameController {
             position.y = Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y
                     + (int)(Math.random() * (Resolution.BATTLE_FIELD_RIGHT_TOP_POINT.y - 1 - Resolution.BATTLE_FIELD_LEFT_BOTTOM_POINT.y));
         }
-        stageState.getBonuses().add(new Bonus(position.x * 8, position.y * 8, type));
+        stageState.getBonuses().add(new BonusModel(position.x * 8, position.y * 8, type));
     }
 
     public void destructBullet(BulletController bullet) {
@@ -389,9 +269,137 @@ public class GameController {
         return stage;
     }
 
+    public boolean isTimeToExit() {
+        return isTimeToExit;
+    }
+
+    public boolean isPreparingSuccess() {
+        return isPreparingSuccess;
+    }
+
     public long getFrame() {
         return frame;
     }
+
+
+    private void updateBots() {
+        long time = new Date().getTime();
+
+        if ((stageState.getBots().size < 4) && (nextBotSpawnTime < time)) {
+            if (stageState.getBotsRemaining() > 0) {
+                spawnBot();
+                updateBotSpawnTime(time);
+                stageState.setBotsRemaining(stageState.getBotsRemaining() - 1);
+            }
+        }
+
+        if (botFreezeTime < time) {
+            for (int i = 0; i < stageState.getBots().size; i++) {
+                stageState.getBots().get(i).update(frame);
+            }
+        }
+    }
+
+    private void updateBullets() {
+        Array<BulletController> bullets = stageState.getBullets();
+
+        for (int i = 0; i < stageState.getBullets().size; i++) {
+            bullets.get(i).update(frame);
+        }
+    }
+
+    private void updatePlayers() {
+        if (stageState.isEagleAlive() && hasAlivePlayer()) {
+            for (int i = 0; i < stageState.getPlayers().size; i++) {
+                stageState.getPlayers().get(i).update(frame);
+            }
+        }
+    }
+
+    private void updateBonuses() {
+        long time = new Date().getTime();
+
+        if (isShovelActive && (basesSurroundTime < time)) {
+            stageState.getBattleField().surroundBases(TilesTypes.BRICK);
+            isShovelActive = false;
+        }
+
+        if (frame % 16 == 0) {
+            isDrawBonuses = !isDrawBonuses;
+        }
+
+        for (int i = 0; i < stageState.getBonuses().size; i++) {
+            BonusModel bonusModel = stageState.getBonuses().get(i);
+            TankController tank = stageState.getBattleField().getTankAt((int)(bonusModel.x / 8), (int)(bonusModel.y / 8));
+            if (tank == null) {
+                tank = stageState.getBattleField().getTankAt((int)(bonusModel.x / 8) + 1, (int)(bonusModel.y / 8));
+            }
+            if (tank == null) {
+                tank = stageState.getBattleField().getTankAt((int)(bonusModel.x / 8), (int)(bonusModel.y / 8) + 1);
+            }
+            if (tank == null) {
+                tank = stageState.getBattleField().getTankAt((int)(bonusModel.x / 8) + 1, (int)(bonusModel.y / 8) + 1);
+            }
+            if (tank == null) {
+                continue;
+            }
+
+            if (tank.getType() == Types.USER) {
+                PlayerTankController player = (PlayerTankController) tank;
+                player.getPlayer().addScore(500);
+                switch (bonusModel.getType()) {
+
+                    case BonusTypes.SHIELD:
+                        player.getModel().setShieldActiveTime(time + Time.BONUS_SHIELD);
+                        break;
+
+                    case BonusTypes.TIME_STOP:
+                        botFreezeTime = time + Time.BONUS_TIME_STOP;
+                        break;
+
+                    case BonusTypes.SHOVEL:
+                        stageState.getBattleField().surroundBases(TilesTypes.CONCRETE);
+                        basesSurroundTime = time + Time.BONUS_SHOVEL;
+                        isShovelActive = true;
+                        break;
+
+                    case BonusTypes.STAR:
+                        player.upgrade();
+                        break;
+
+                    case BonusTypes.GRENADE:
+                        destructAllBots();
+                        break;
+
+                    case BonusTypes.LIFE:
+                        player.addLive();
+                        break;
+
+                    case BonusTypes.GUN:
+                        player.maxUpgrade();
+                        break;
+                }
+                stageState.getBonuses().removeIndex(i);
+            }
+        }
+    }
+
+    private void checkBulletsCollision() {
+        Array<BulletController> bulletsToRemove = new Array<BulletController>();
+        for (int i = 0; i < stageState.getBullets().size - 1; i++) {
+            for (int j = i + 1; j < stageState.getBullets().size; j++) {
+                if (stageState.getBullets().get(i).getBounds().overlaps(stageState.getBullets().get(j).getBounds())) {
+                    bulletsToRemove.add(stageState.getBullets().get(i));
+                    bulletsToRemove.add(stageState.getBullets().get(j));
+                }
+            }
+        }
+
+        for (int i = 0; i < bulletsToRemove.size; i++) {
+            bulletsToRemove.get(i).destruct();
+        }
+    }
+
 
     private boolean setMap() {
         FileHandle map;
@@ -470,13 +478,5 @@ public class GameController {
 
     private void updateBotSpawnTime(long time) {
         nextBotSpawnTime = time + (long) ((3.17 - stage * 0.07 - (players.size - 1) * 0.34) * 1000);
-    }
-
-    public boolean isTimeToExit() {
-        return isTimeToExit;
-    }
-
-    public boolean isPreparingSuccess() {
-        return isPreparingSuccess;
     }
 }

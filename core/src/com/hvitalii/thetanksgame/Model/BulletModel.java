@@ -29,7 +29,7 @@ public class BulletModel extends Moveable{
         } else {
             this.bulletType = BulletsTypes.NORMAL;
         }
-        BulletAttributes.bulletTypes[bulletType].loadAttributes(this);
+        BulletAttributes.BULLET_TYPES[bulletType].loadAttributes(this);
     }
 
     public TankController getOwner() {

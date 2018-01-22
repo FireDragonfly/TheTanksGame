@@ -44,7 +44,7 @@ public class PlayerTankModel extends TankModel {
         } else {
             this.level = Levels.FIRST;
         }
-        PlayerLevelsAttributes.levels[level].loadAttributes(this);
+        PlayerLevelsAttributes.LEVELS[level].loadAttributes(this);
         setBulletsAmount(getBulletsMax());
     }
 

@@ -137,7 +137,7 @@ public class GameConstants {
 
     public static class Colors {
 
-        public static final Color PLAYERS_COLORS[] = {
+        public static final Color[] PLAYERS_COLORS = {
                 new Color(1, 0.732f, 0.156f, 1),
                 new Color(0, 0.825f, 0.285f, 1),
                 new Color(0.30f, 0.70f, 1, 1),
@@ -146,7 +146,7 @@ public class GameConstants {
 
         public static final Color BONUSED_TANK = new Color(1,0.1f,0.5f,1);
 
-        public static final Color ARMOUR_COLORS[] = {
+        public static final Color[] ARMOUR_COLORS = {
                 new Color(1, 1, 1, 1),
                 new Color(1, 1, 0.7f, 1),
                 new Color(0.5f, 1, 0.7f, 1),
